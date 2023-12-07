@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  front-end:
+    container_name: garage-front-end
+    image: garage/front-end
+    build:
+      context: ./garage-frontend
+      dockerfile: ./Dockerfile
+    ports:
+      - 5111:80
