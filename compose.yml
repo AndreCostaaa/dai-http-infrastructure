@@ -1,7 +1,15 @@
 version: "3.8"
 
 services:
-  front-end:
+  reverse-proxy:
+    image: traefik:v2.10
+    command: --api.insecure=true --providers.docker
+    ports:
+      - 8080:80
+      - 8081:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  frontend:
     container_name: garage-front-end
     image: garage/front-end
     build:
@@ -9,3 +17,15 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 5111:80
+    labels:
+      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+  backend:
+    container_name: garage-back-end
+    image: garage/back-end
+    build:
+      context: ./garage-backend
+      dockerfile: ./Dockerfile
+    ports:
+      - 5111:80
+    labels:
+      - "traefik.http.routers.backend.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"
