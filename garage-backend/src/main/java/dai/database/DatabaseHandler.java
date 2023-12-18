@@ -1,4 +1,4 @@
-package database;
+package dai.database;
 
 public class DatabaseHandler {
 

@@ -1,4 +1,4 @@
-package database;
+package dai.database;
 
 public record ServiceState(int id,
                            String title,

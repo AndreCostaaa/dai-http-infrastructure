@@ -1,4 +1,4 @@
-package database;
+package dai.database;
 
 public record Service(int id,
                       int mechanicId,

@@ -1,4 +1,4 @@
-package database;
+package dai.database;
 
 public record CarPart(int id,
                       int serviceId,
