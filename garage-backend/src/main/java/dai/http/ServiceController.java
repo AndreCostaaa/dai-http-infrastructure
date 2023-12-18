@@ -1,7 +1,7 @@
 package dai.http;
 
-import database.DatabaseHandler;
-import database.Service;
+import dai.database.DatabaseHandler;
+import dai.database.Service;
 import io.javalin.http.Context;
 
 public class ServiceController {

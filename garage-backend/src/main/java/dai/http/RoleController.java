@@ -1,9 +1,8 @@
 package dai.http;
 
-import database.Role;
-import database.DatabaseHandler;
+import dai.database.Role;
+import dai.database.DatabaseHandler;
 import io.javalin.http.Context;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class RoleController {
 
