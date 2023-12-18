@@ -15,13 +15,18 @@ public class App {
 
             //ServiceController
             ServiceController serviceController = new ServiceController();
-            app.get("/api/services", roleController::getAll);
-            app.get("/api/services/{serviceId}", roleController::getOne);
-            app.post("/api/services/", roleController::create);
-            app.patch("/api/services/{serviceId}", roleController::update);
-            app.delete("/api/services/{serviceId}", roleController::delete);
-
-            
+            app.get("/api/services", serviceController::getAll);
+            app.get("/api/services/{serviceId}", serviceController::getOne);
+            app.get("/api/services/{carId}", serviceController::getServiceByCar);
+            app.get("/api/services/{carId}/{stateId}", serviceController::getServiceByCarState);
+            app.get("/api/services/{mechanicId}", serviceController::getServiceByMechanic);
+            app.get("/api/services/{mechanicId}/{stateId}", serviceController::getServiceByMechanicState);
+            app.get("/api/services/{mechanicId}", serviceController::getServiceByMechanicOrFree);
+            app.get("/api/services/{stateId}", serviceController::getServiceByState);
+            app.post("/api/services/", serviceController::create);
+            app.patch("/api/services/{serviceId}", serviceController::update);
+            app.patch("/api/services/incrementState/{serviceId}", serviceController::incrementState);
+            app.delete("/api/services/{serviceId}", serviceController::delete);
         }
     }
 }
