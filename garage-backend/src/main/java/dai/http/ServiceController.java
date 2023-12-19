@@ -1,6 +1,5 @@
 package dai.http;
 
-import dai.database.DatabaseHandler;
 import dai.database.Service;
 import io.javalin.http.Context;
 
@@ -8,10 +7,10 @@ public class ServiceController {
 
     public ServiceController(){}
 
-    public void getOne(Context ctx){
+    public void fetchServiceById(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
-        Service service = DatabaseHandler.getServiceById(id);
+        Service service = Service.fetchById(id);
 
         if(service == null){
             ctx.status(404);
@@ -21,8 +20,8 @@ public class ServiceController {
         ctx.json(service);
     }
 
-    public void getAll(Context ctx){
-        Service[] services = DatabaseHandler.getServices();
+    public void fetchServices(Context ctx){
+        Service[] services = Service.fetchAll();
 
         if (services == null){
             ctx.status(404);
@@ -32,10 +31,10 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void getServiceByCar(Context ctx){
+    public void fetchServiceByCar(Context ctx){
         int carId = Integer.parseInt(ctx.pathParam("carId"));
 
-        Service[] services = DatabaseHandler.getServiceByCar(carId);
+        Service[] services = Service.fetchByCar(carId);
 
         if (services == null){
             ctx.status(404);
@@ -45,11 +44,11 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void getServiceByCarState(Context ctx){
+    public void fetchServiceByCarState(Context ctx){
         int carId = Integer.parseInt(ctx.pathParam("carId"));
         int stateId = Integer.parseInt(ctx.pathParam("stateId"));
 
-        Service[] services = DatabaseHandler.getServiceByCarState(carId, stateId);
+        Service[] services = Service.fetchByCarState(carId, stateId);
 
         if (services == null){
             ctx.status(404);
@@ -59,10 +58,10 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void getServiceByMechanic(Context ctx){
+    public void fetchServiceByMechanic(Context ctx){
         int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
 
-        Service[] services = DatabaseHandler.getServiceByMechanic(mechanicId);
+        Service[] services = Service.fetchByMechanic(mechanicId);
 
         if (services == null){
             ctx.status(404);
@@ -72,11 +71,11 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void getServiceByMechanicState(Context ctx){
+    public void fetchServiceByMechanicState(Context ctx){
         int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
         int stateId = Integer.parseInt(ctx.pathParam("stateId"));
 
-        Service[] services = DatabaseHandler.getServiceByMechanicState(mechanicId, stateId);
+        Service[] services = Service.fetchByMechanicState(mechanicId, stateId);
 
         if (services == null){
             ctx.status(404);
@@ -86,11 +85,11 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void getServiceByMechanicOrFree(Context ctx){
+    public void fetchServiceByMechanicOrFree(Context ctx){
         int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
         int waitingForMechanicState = 1;
 
-        Service[] services = DatabaseHandler.getServiceByMechanicState(mechanicId, waitingForMechanicState);
+        Service[] services = Service.fetchByMechanicState(mechanicId, waitingForMechanicState);
 
         if (services == null){
             ctx.status(404);
@@ -108,7 +107,7 @@ public class ServiceController {
             return;
         }
 
-        Service[] services = DatabaseHandler.getServicesByState(stateId);
+        Service[] services = Service.fetchByState(stateId);
 
         if (services == null){
             ctx.status(404);
@@ -121,7 +120,7 @@ public class ServiceController {
     public void create(Context ctx){
         Service service = ctx.bodyAsClass(Service.class);
 
-        if(DatabaseHandler.createService(service)){
+        if(Service.create(service)){
             ctx.status(201);
             return;
         }
@@ -131,7 +130,7 @@ public class ServiceController {
     public void delete(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
-        if(DatabaseHandler.deleteService(id)){
+        if(Service.delete(id)){
             ctx.status(204);
             return;
         }
@@ -142,7 +141,7 @@ public class ServiceController {
     public void update(Context ctx){
         Service service = ctx.bodyAsClass(Service.class);
 
-        if(DatabaseHandler.updateService(service)){
+        if(Service.update(service)){
             ctx.status(200);
             return;
         }
@@ -152,7 +151,7 @@ public class ServiceController {
     public void incrementState(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
-        if(DatabaseHandler.incrementServiceState(id)){
+        if(Service.incrementState(id)){
             ctx.status(200);
             return;
         }

@@ -1,14 +1,13 @@
 package dai.http;
 
 import dai.database.Role;
-import dai.database.DatabaseHandler;
 import io.javalin.http.Context;
 
 public class RoleController {
 
     public void getOne(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("roleId"));
-        Role role = DatabaseHandler.getRole(id);
+        Role role = Role.fetchOne(id);
         if(role == null) {
             ctx.status(404);
             return;
@@ -17,7 +16,7 @@ public class RoleController {
     }
 
     public void getAll(Context ctx){
-        Role[] roles = DatabaseHandler.getRoles();
+        Role[] roles = Role.fetchAll();
         if(roles == null) {
             ctx.status(404);
             return;
@@ -28,7 +27,7 @@ public class RoleController {
     public void create(Context ctx){
         Role role = ctx.bodyAsClass(Role.class);
 
-        if(DatabaseHandler.createRole(role)){
+        if(Role.create(role)){
             ctx.status(201);
             return;
         }
@@ -39,7 +38,7 @@ public class RoleController {
     public void delete(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("roleId"));
 
-        if(DatabaseHandler.deleteRole(id)){
+        if(Role.delete(id)){
             ctx.status(204);
             return;
         }
@@ -50,7 +49,7 @@ public class RoleController {
     public void update(Context ctx){
         Role role = ctx.bodyAsClass(Role.class);
 
-        if(DatabaseHandler.updateRole(role)){
+        if(Role.update(role)){
             ctx.status(200);
             return;
         }
