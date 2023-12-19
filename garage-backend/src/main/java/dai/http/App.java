@@ -7,33 +7,33 @@ public class App {
 
             //RoleController
             RoleController roleController = new RoleController();
-            app.get("/api/roles", roleController::getAll);
-            app.get("/api/roles/{roleId}", roleController::getOne);
+            app.get("/api/roles", roleController::fetchAll);
+            app.get("/api/roles/{roleId}", roleController::fetchOne);
             app.post("/api/roles/", roleController::create);
-            app.patch("/api/roles/", roleController::update);
+            app.patch("/api/roles/update/", roleController::update);
             app.delete("/api/roles/{roleId}", roleController::delete);
 
             //ServiceController
             ServiceController serviceController = new ServiceController();
-            app.get("/api/services", serviceController::fetchServices);
-            app.get("/api/services/{serviceId}", serviceController::fetchServiceById);
+            app.get("/api/services", serviceController::fetchAll);
+            app.get("/api/services/{serviceId}", serviceController::fetchOne);
             app.get("/api/services/{carId}", serviceController::fetchServiceByCar);
             app.get("/api/services/{carId}/{stateId}", serviceController::fetchServiceByCarState);
             app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanic);
             app.get("/api/services/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
             app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanicOrFree);
-            app.get("/api/services/{stateId}", serviceController::getServiceByState);
+            app.get("/api/services/{stateId}", serviceController::fetchServiceByState);
             app.post("/api/services/", serviceController::create);
-            app.patch("/api/services/", serviceController::update);
+            app.patch("/api/services/update/", serviceController::update);
             app.patch("/api/services/incrementState/{serviceId}", serviceController::incrementState);
             app.delete("/api/services/{serviceId}", serviceController::delete);
 
             //PersonController
             PersonController personController = new PersonController();
-            app.get("/api/person", personController::getAll);
-            app.get("/api/person/{personId}", personController::getOne);
+            app.get("/api/person", personController::fetchAll);
+            app.get("/api/person/{personId}", personController::fetchOne);
             app.post("/api/person/", personController::create);
-            app.patch("/api/person/{personId}", personController::update);
+            app.patch("/api/person/update/", personController::update);
             app.delete("/api/person/{personId}", personController::delete);
         }
     }

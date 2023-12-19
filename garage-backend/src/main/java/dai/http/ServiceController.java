@@ -7,7 +7,7 @@ public class ServiceController {
 
     public ServiceController(){}
 
-    public void fetchServiceById(Context ctx){
+    public void fetchOne(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
         Service service = Service.fetchById(id);
@@ -20,7 +20,7 @@ public class ServiceController {
         ctx.json(service);
     }
 
-    public void fetchServices(Context ctx){
+    public void fetchAll(Context ctx){
         Service[] services = Service.fetchAll();
 
         if (services == null){
@@ -99,7 +99,7 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void getServiceByState(Context ctx){
+    public void fetchServiceByState(Context ctx){
         int stateId = Integer.parseInt(ctx.pathParam("stateId"));
 
         if(stateId > 4 || stateId < 0){

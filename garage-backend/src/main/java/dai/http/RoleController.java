@@ -5,7 +5,7 @@ import io.javalin.http.Context;
 
 public class RoleController {
 
-    public void getOne(Context ctx){
+    public void fetchOne(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("roleId"));
         Role role = Role.fetchOne(id);
         if(role == null) {
@@ -15,7 +15,7 @@ public class RoleController {
         ctx.json(role);
     }
 
-    public void getAll(Context ctx){
+    public void fetchAll(Context ctx){
         Role[] roles = Role.fetchAll();
         if(roles == null) {
             ctx.status(404);

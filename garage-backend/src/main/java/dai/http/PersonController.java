@@ -5,7 +5,7 @@ import io.javalin.http.Context;
 
 public class PersonController {
 
-    public void getOne(Context ctx){
+    public void fetchOne(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
         Person person = Person.fetchOne(id);
@@ -18,7 +18,7 @@ public class PersonController {
         ctx.json(person);
     }
 
-    public void getAll(Context ctx){
+    public void fetchAll(Context ctx){
         Person[] people = Person.fetchAll();
 
         if (people == null){
