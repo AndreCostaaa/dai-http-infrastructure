@@ -30,11 +30,11 @@ public class App {
 
             //PersonController
             PersonController personController = new PersonController();
-            app.get("/api/person", roleController::getAll);
-            app.get("/api/person/{roleId}", roleController::getOne);
-            app.post("/api/person/", roleController::create);
-            app.patch("/api/person/{personId}", roleController::update);
-            app.delete("/api/person/{personId}", roleController::delete);
+            app.get("/api/person", personController::getAll);
+            app.get("/api/person/{personId}", personController::getOne);
+            app.post("/api/person/", personController::create);
+            app.patch("/api/person/{personId}", personController::update);
+            app.delete("/api/person/{personId}", personController::delete);
         }
     }
 }
