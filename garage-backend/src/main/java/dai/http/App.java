@@ -35,6 +35,14 @@ public class App {
             app.post("/api/person/", personController::create);
             app.patch("/api/person/update/", personController::update);
             app.delete("/api/person/{personId}", personController::delete);
+
+            //CarController
+            CarController carController = new CarController();
+            app.get("/api/cars", carController::fetchAll);
+            app.get("/api/cars/{carId}", carController::fetchOne);
+            app.post("/api/cars/", carController::create);
+            app.patch("/api/cars/update/", carController::update);
+            app.delete("/api/cars/{serviceId}", carController::delete);
         }
     }
 }
