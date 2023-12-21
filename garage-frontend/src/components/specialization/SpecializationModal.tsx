@@ -3,7 +3,9 @@ import Specializations from "./Specializations";
 import { Specialization } from "../../services/specialization-service";
 import GenericModal from "../generic/GenericModal";
 
-interface Props extends ModalProps {}
+interface Props extends ModalProps {
+  specializationId: number;
+}
 
 const data: Array<Specialization> = [{ hourlyRate: 20, id: 1, name: "test" }];
 
