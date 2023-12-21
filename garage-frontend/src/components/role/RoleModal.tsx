@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import Roles from "./Roles";
 import { Role } from "../../services/role-service";
+import GenericModal from "../generic/GenericModal";
 
 interface Props extends ModalProps {}
 const data: Role[] = [
@@ -19,16 +20,7 @@ const data: Role[] = [
   },
 ];
 const RoleModal = (props: Props) => {
-  return (
-    <Modal {...props}>
-      <ModalContent>
-        <ModalCloseButton />
-        <ModalBody>
-          <Roles roles={data} />
-        </ModalBody>
-      </ModalContent>
-    </Modal>
-  );
+  return <GenericModal {...props} children={<Roles roles={data} />} />;
 };
 
 export default RoleModal;
