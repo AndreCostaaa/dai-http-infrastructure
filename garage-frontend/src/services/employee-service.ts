@@ -1,10 +1,6 @@
-import { Entity } from "./http-service";
+import { Person } from "./http-service";
 
-export interface Employee extends Entity {
-  fname: string;
-  lname: string;
-  phoneCode: string;
-  phoneNo: string;
+export interface Employee extends Person {
   roleId: number;
   specializationId: number;
 }
