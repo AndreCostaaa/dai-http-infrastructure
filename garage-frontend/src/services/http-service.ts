@@ -4,6 +4,12 @@ import { AxiosRequestConfig } from "axios";
 export interface Entity {
   id: number;
 }
+export interface Person extends Entity {
+  fname: string;
+  lname: string;
+  phoneCode: string;
+  phoneNo: string;
+}
 
 export class HttpService {
   endpoint: string;
