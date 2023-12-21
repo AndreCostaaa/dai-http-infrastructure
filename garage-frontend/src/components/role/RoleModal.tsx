@@ -8,7 +8,9 @@ import {
 import Roles from "./Roles";
 import { Role } from "../../services/role-service";
 
-interface Props extends ModalProps {}
+interface Props extends ModalProps {
+  roleId: number;
+}
 const data: Role[] = [
   {
     canAssignOthers: true,
