@@ -10,7 +10,7 @@ public class ServiceController {
     public void fetchOne(Context ctx){
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
-        Service service = Service.fetchById(id);
+        Service service = Service.fetchOne(id);
 
         if(service == null){
             ctx.status(404);
