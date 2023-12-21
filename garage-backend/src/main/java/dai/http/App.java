@@ -51,7 +51,7 @@ public class App {
             app.patch("/api/carParts/update/", carPartController::update);
             app.delete("/api/carParts/{carPartId}", carPartController::delete);
 
-            
+
         }
     }
 }
