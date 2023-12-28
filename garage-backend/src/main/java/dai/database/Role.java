@@ -1,49 +1,125 @@
 package dai.database;
 
+import java.sql.*;
+
 public record Role(int id,
                    String name,
                    boolean canCreate,
                    boolean canAssignOthers,
                    boolean isMechanic) {
-    //Role requests @TODO
+
+    static Connection con;
+
+    static final String getAllQuery = "SELECT * FROM role;",
+                        getRoleByIdQuery = "SELECT * FROM role WHERE id = :id;",
+                        createRoleQuery = "INSERT INTO role(name, can_create, can_assign_others, is_mechanic) VALUES (:name, :can_create, :can_assign_others, :is_mechanic);",
+                        updateRoleQuery = "UPDATE role SET(name, can_create, can_assign_others, is_mechanic) = (:name, :can_create, :can_assign_others, :is_mechanic) WHERE id = :id;",
+                        deleteRoleQuery = "DELETE FROM role WHERE id = :id;";
 
     /**
      * fetch Role matching given id from database
-     * @return Person or null
+     * @return Role or null
      */
-    static public Role fetchOne(int id){
-        return null;
+    static public Role fetchOne(int id) throws SQLException {
+        try (CallableStatement callableStatement = con.prepareCall(getRoleByIdQuery)) {
+            callableStatement.setInt(1, id);
+
+            try (ResultSet resultSet = callableStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    String name = resultSet.getString("name");
+                    boolean canCreate = resultSet.getBoolean("can_create");
+                    boolean canAssignOthers = resultSet.getBoolean("can_assign_others");
+                    boolean isMechanic = resultSet.getBoolean("is_mechanic");
+
+                    return new Role(id, name, canCreate, canAssignOthers, isMechanic);
+                } else
+                    return null;
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     /**
      * fetch all Roles from database
      * @return Role[] or null
      */
-    static public Role[] fetchAll(){
-        return null;
+    static public Role[] fetchAll() throws SQLException {
+        try (Statement statement = con.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
+                resultSet.last();
+                int count = resultSet.getRow();
+                resultSet.beforeFirst();
+
+                Role[] roles = new Role[count];
+                int i = 0;
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    boolean canCreate = resultSet.getBoolean("can_create");
+                    boolean canAssignOthers = resultSet.getBoolean("can_assign_others");
+                    boolean isMechanic = resultSet.getBoolean("is_mechanic");
+
+                    roles[i++] = new Role(id, name, canCreate, canAssignOthers, isMechanic);
+                }
+
+                return roles;
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     /**
-     * create a new role in the database
+     * save a new Role in the database
      * @return true if successful
      */
-    static public boolean create(Role role){
-        return true;
+    public boolean save() throws SQLException {
+        try (CallableStatement callableStatement = con.prepareCall(createRoleQuery)) {
+            callableStatement.setString(1, name());
+            callableStatement.setBoolean(2, canCreate());
+            callableStatement.setBoolean(3, canAssignOthers());
+            callableStatement.setBoolean(4, isMechanic());
+
+            int rowsCreated = callableStatement.executeUpdate();
+            return rowsCreated > 0;
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     /**
-     * delete role from database matching id
+     * update Role in database matching id of given Role
      * @return true if successful
      */
-    static public boolean delete(int roleId){
-        return true;
+    public boolean update() throws SQLException {
+        try (CallableStatement callableStatement = con.prepareCall(updateRoleQuery)) {
+            callableStatement.setString(1, name());
+            callableStatement.setBoolean(2, canCreate());
+            callableStatement.setBoolean(3, canAssignOthers());
+            callableStatement.setBoolean(4, isMechanic());
+            callableStatement.setInt(5, id());
+
+            int rowsUpdated = callableStatement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 
     /**
-     * update role in database matching id of given role
+     * delete Role from database matching id
      * @return true if successful
      */
-    static public boolean update(Role role){
-        return true;
+    static public boolean delete(int roleId) throws SQLException {
+        try (PreparedStatement preparedStatement = con.prepareStatement(deleteRoleQuery)) {
+            preparedStatement.setInt(1, roleId);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
     }
 }
