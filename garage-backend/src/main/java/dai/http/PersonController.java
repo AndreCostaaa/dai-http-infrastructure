@@ -3,9 +3,11 @@ package dai.http;
 import dai.database.Person;
 import io.javalin.http.Context;
 
+import java.sql.SQLException;
+
 public class PersonController {
 
-    public void fetchOne(Context ctx){
+    public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
         Person person = Person.fetchOne(id);
@@ -18,7 +20,7 @@ public class PersonController {
         ctx.json(person);
     }
 
-    public void fetchAll(Context ctx){
+    public void fetchAll(Context ctx) throws SQLException {
         Person[] people = Person.fetchAll();
 
         if (people == null){
@@ -29,10 +31,10 @@ public class PersonController {
         ctx.json(people);
     }
 
-    public void create(Context ctx){
+    public void create(Context ctx) throws SQLException {
         Person person = ctx.bodyAsClass(Person.class);
 
-        if(Person.create(person)){
+        if(person.save()){
             ctx.status(201);
             return;
         }
@@ -40,10 +42,10 @@ public class PersonController {
         ctx.status(400);
     }
 
-    public void update(Context ctx){
+    public void update(Context ctx) throws SQLException {
         Person person = ctx.bodyAsClass(Person.class);
 
-        if(Person.update(person)){
+        if(person.update()){
             ctx.status(200);
             return;
         }
