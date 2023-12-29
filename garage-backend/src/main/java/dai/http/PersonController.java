@@ -31,7 +31,7 @@ public class PersonController {
         ctx.json(people);
     }
 
-    public void create(Context ctx) throws SQLException {
+    public void save(Context ctx) throws SQLException {
         Person person = ctx.bodyAsClass(Person.class);
 
         if(person.save()){

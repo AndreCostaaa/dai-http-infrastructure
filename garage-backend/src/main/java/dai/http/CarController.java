@@ -26,7 +26,7 @@ public class CarController {
         ctx.json(cars);
     }
 
-    public void create(Context ctx) throws SQLException {
+    public void save(Context ctx) throws SQLException {
         Car car = ctx.bodyAsClass(Car.class);
 
         if(car.save()){

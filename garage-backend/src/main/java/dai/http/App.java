@@ -9,7 +9,7 @@ public class App {
             RoleController roleController = new RoleController();
             app.get("/api/roles", roleController::fetchAll);
             app.get("/api/roles/{roleId}", roleController::fetchOne);
-            app.post("/api/roles/", roleController::create);
+            app.post("/api/roles/", roleController::save);
             app.patch("/api/roles/update/", roleController::update);
             app.delete("/api/roles/{roleId}", roleController::delete);
 
@@ -23,7 +23,7 @@ public class App {
             app.get("/api/services/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
             app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanicOrFree);
             app.get("/api/services/{stateId}", serviceController::fetchServiceByState);
-            app.post("/api/services/", serviceController::create);
+            app.post("/api/services/", serviceController::save);
             app.patch("/api/services/update/", serviceController::update);
             app.patch("/api/services/incrementState/{serviceId}", serviceController::incrementState);
             app.delete("/api/services/{serviceId}", serviceController::delete);
@@ -32,7 +32,7 @@ public class App {
             PersonController personController = new PersonController();
             app.get("/api/person", personController::fetchAll);
             app.get("/api/person/{personId}", personController::fetchOne);
-            app.post("/api/person/", personController::create);
+            app.post("/api/person/", personController::save);
             app.patch("/api/person/update/", personController::update);
             app.delete("/api/person/{personId}", personController::delete);
 
@@ -40,14 +40,14 @@ public class App {
             CarController carController = new CarController();
             app.get("/api/cars", carController::fetchAll);
             app.get("/api/cars/{carId}", carController::fetchOne);
-            app.post("/api/cars/", carController::create);
+            app.post("/api/cars/", carController::save);
             app.patch("/api/cars/update/", carController::update);
             app.delete("/api/cars/{serviceId}", carController::delete);
 
             //CarPartController
             CarPartController carPartController = new CarPartController();
             app.get("/api/carParts/{carPartId}", carPartController::fetchOne);
-            app.post("/api/carParts/", carPartController::create);
+            app.post("/api/carParts/", carPartController::save);
             app.patch("/api/carParts/update/", carPartController::update);
             app.delete("/api/carParts/{carPartId}", carPartController::delete);
 

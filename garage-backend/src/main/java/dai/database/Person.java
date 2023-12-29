@@ -42,12 +42,13 @@ public class Person {
                         deletePersonQuery = "DELETE FROM person WHERE id = :id;";
 
     /**
-     * fetch Person matching given id from database
+     * Fetch a Person from the database matching the given id.
+     * @param id the id of the Person to fetch
      * @return Person or null
      */
-    static public Person fetchOne(int personId) throws SQLException {
+    static public Person fetchOne(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getPersonByIdQuery)) {
-            callableStatement.setInt(1, personId);
+            callableStatement.setInt(1, id);
 
             try (ResultSet resultSet = callableStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -56,7 +57,7 @@ public class Person {
                     String phoneCode = resultSet.getString("phone_code");
                     String phoneNo = resultSet.getString("phone_no");
 
-                    return new Person(personId, firstName, lastName, phoneCode, phoneNo);
+                    return new Person(id, firstName, lastName, phoneCode, phoneNo);
                 } else
                     return null;
             }
@@ -66,7 +67,7 @@ public class Person {
     }
 
     /**
-     * fetch all Persons from database
+     * Fetch all Persons from the database.
      * @return Person[] or null
      */
     static public Person[] fetchAll() throws SQLException {
@@ -97,7 +98,7 @@ public class Person {
     }
 
     /**
-     * save a new Person in the database
+     * Save the Person in the database.
      * @return true if successful
      */
     public boolean save() throws SQLException {
@@ -114,7 +115,7 @@ public class Person {
     }
 
     /**
-     * update Person in database matching id of given Person
+     * Update the Person in the database.
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -132,12 +133,13 @@ public class Person {
     }
 
     /**
-     * delete Person from database matching id
+     * Delete a Person from the database matching the given id.
+     * @param id the id of the Person to delete
      * @return true if successful
      */
-    static public boolean delete(int personId){
+    static public boolean delete(int id){
         try (CallableStatement callableStatement = con.prepareCall(deletePersonQuery)) {
-            callableStatement.setInt(1, personId);
+            callableStatement.setInt(1, id);
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {

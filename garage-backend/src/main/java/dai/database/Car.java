@@ -19,6 +19,11 @@ public record Car(int id,
                         updateCarQuery = "UPDATE car SET owner_id = :owner_id, chassis_no = :chassis_no, rec_type = :rec_type, brand = :brand, model = :model, color = :color WHERE id = :id;",
                         deleteCarQuery = "DELETE FROM car WHERE id = :id;";
 
+    /**
+     * Fetch a Car from the database matching the given id.
+     * @param id the id of the Car to fetch
+     * @return Car or null
+     */
     static public Car fetchOne(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getCarByIdQuery)) {
             callableStatement.setInt(1, id);
@@ -41,6 +46,10 @@ public record Car(int id,
         }
     }
 
+    /**
+     * Fetch all Cars from the database.
+     * @return Car[] or null
+     */
     static public Car[] fetchAll() throws SQLException {
         try (Statement statement = con.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
@@ -70,6 +79,10 @@ public record Car(int id,
         }
     }
 
+    /**
+     * Save the Car in the database.
+     * @return true if successful
+     */
     public boolean save() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(createCarQuery)) {
             callableStatement.setInt(1, ownerId);
@@ -85,6 +98,10 @@ public record Car(int id,
         }
     }
 
+    /**
+     * Update the Car in the database.
+     * @return true if successful
+     */
     public boolean update() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(updateCarQuery)) {
             callableStatement.setInt(1, ownerId);
@@ -101,6 +118,11 @@ public record Car(int id,
         }
     }
 
+    /**
+     * Delete a Car from the database matching the given id.
+     * @param id the id of the Car to delete
+     * @return true if successful
+     */
     static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deleteCarQuery)) {
             callableStatement.setInt(1, id);

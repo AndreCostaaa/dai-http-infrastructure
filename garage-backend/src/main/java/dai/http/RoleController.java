@@ -26,7 +26,7 @@ public class RoleController {
         ctx.json(roles);
     }
 
-    public void create(Context ctx) throws SQLException {
+    public void save(Context ctx) throws SQLException {
         Role role = ctx.bodyAsClass(Role.class);
 
         if(role.save()){

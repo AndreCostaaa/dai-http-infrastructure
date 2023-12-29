@@ -17,7 +17,8 @@ public record Role(int id,
                         deleteRoleQuery = "DELETE FROM role WHERE id = :id;";
 
     /**
-     * fetch Role matching given id from database
+     * Fetch a Role from the database matching the given id.
+     * @param id the id of the Role to fetch
      * @return Role or null
      */
     static public Role fetchOne(int id) throws SQLException {
@@ -41,7 +42,7 @@ public record Role(int id,
     }
 
     /**
-     * fetch all Roles from database
+     * Fetch all Roles from the database.
      * @return Role[] or null
      */
     static public Role[] fetchAll() throws SQLException {
@@ -72,7 +73,7 @@ public record Role(int id,
     }
 
     /**
-     * save a new Role in the database
+     * Save the Role in the database.
      * @return true if successful
      */
     public boolean save() throws SQLException {
@@ -89,7 +90,7 @@ public record Role(int id,
     }
 
     /**
-     * update Role in database matching id of given Role
+     * Update the Role in the database.
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -107,12 +108,13 @@ public record Role(int id,
     }
 
     /**
-     * delete Role from database matching id
+     * Delete a Role from the database matching the given id.
+     * @param id the id of the Role to delete
      * @return true if successful
      */
-    static public boolean delete(int roleId) throws SQLException {
+    static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deleteRoleQuery)) {
-            callableStatement.setInt(1, roleId);
+            callableStatement.setInt(1, id);
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {

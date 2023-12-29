@@ -117,7 +117,7 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void create(Context ctx){
+    public void save(Context ctx){
         Service service = ctx.bodyAsClass(Service.class);
 
         if(Service.create(service)){
