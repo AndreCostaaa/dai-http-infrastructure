@@ -3,9 +3,11 @@ package dai.http;
 import dai.database.CarPart;
 import io.javalin.http.Context;
 
+import java.sql.SQLException;
+
 public class CarPartController {
 
-    public void fetchOne(Context ctx){
+    public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("carPartId"));
 
         CarPart carPart = CarPart.fetchOne(id);
@@ -16,10 +18,10 @@ public class CarPartController {
         ctx.json(carPart);
     }
 
-    public void create(Context ctx){
+    public void save(Context ctx) throws SQLException {
         CarPart carPart = ctx.bodyAsClass(CarPart.class);
 
-        if(CarPart.create(carPart)){
+        if(carPart.save()){
             ctx.status(201);
             return;
         }
@@ -27,7 +29,7 @@ public class CarPartController {
         ctx.status(400);
     }
 
-    public void delete(Context ctx){
+    public void delete(Context ctx) throws SQLException {
         int carPartId = Integer.parseInt(ctx.pathParam("carPartId"));
 
         if(CarPart.delete(carPartId)){
@@ -37,10 +39,10 @@ public class CarPartController {
         ctx.status(400);
     }
 
-    public void update(Context ctx){
+    public void update(Context ctx) throws SQLException {
         CarPart carPart = ctx.bodyAsClass(CarPart.class);
 
-        if(CarPart.update(carPart)){
+        if(carPart.update()){
             ctx.status(200);
             return;
         }
