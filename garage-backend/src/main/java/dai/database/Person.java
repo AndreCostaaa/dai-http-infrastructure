@@ -38,7 +38,7 @@ public class Person {
     static final String getAllQuery = "SELECT * FROM person;",
                         getPersonByIdQuery = "SELECT * FROM person WHERE id = :id;",
                         createPersonQuery = "INSERT INTO person(fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no);",
-                        updatePersonQuery = "UPDATE person SET(fname, lname, phone_code, phone_no) = (:fname, :lname, :phone_code, :phone_no) WHERE id = :id;",
+                        updatePersonQuery = "UPDATE person SET fname = :fname, lname = :lname, phone_code = :phone_code, phone_no = :phone_no WHERE id = :id;",
                         deletePersonQuery = "DELETE FROM person WHERE id = :id;";
 
     /**

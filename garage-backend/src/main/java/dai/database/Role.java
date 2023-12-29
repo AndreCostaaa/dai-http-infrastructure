@@ -13,7 +13,7 @@ public record Role(int id,
     static final String getAllQuery = "SELECT * FROM role;",
                         getRoleByIdQuery = "SELECT * FROM role WHERE id = :id;",
                         createRoleQuery = "INSERT INTO role(name, can_create, can_assign_others, is_mechanic) VALUES (:name, :can_create, :can_assign_others, :is_mechanic);",
-                        updateRoleQuery = "UPDATE role SET(name, can_create, can_assign_others, is_mechanic) = (:name, :can_create, :can_assign_others, :is_mechanic) WHERE id = :id;",
+                        updateRoleQuery = "UPDATE role SET name = :name, can_create = :can_create, can_assign_others = :can_assign_others, is_mechanic = :is_mechanic WHERE id = :id;",
                         deleteRoleQuery = "DELETE FROM role WHERE id = :id;";
 
     /**
