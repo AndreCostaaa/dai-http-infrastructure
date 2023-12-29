@@ -37,8 +37,8 @@ public class Person {
 
     static final String getAllQuery = "SELECT * FROM person;",
                         getPersonByIdQuery = "SELECT * FROM person WHERE id = :id;",
-                        createPersonQuery = "INSERT INTO person(first_name, last_name, phone_code, phone_no) VALUES (:first_name, :last_name, :phone_code, :phone_no);",
-                        updatePersonQuery = "UPDATE person SET(first_name, last_name, phone_code, phone_no) = (:first_name, :last_name, :phone_code, :phone_no) WHERE id = :id;",
+                        createPersonQuery = "INSERT INTO person(fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no);",
+                        updatePersonQuery = "UPDATE person SET(fname, lname, phone_code, phone_no) = (:fname, :lname, :phone_code, :phone_no) WHERE id = :id;",
                         deletePersonQuery = "DELETE FROM person WHERE id = :id;";
 
     /**
@@ -51,8 +51,8 @@ public class Person {
 
             try (ResultSet resultSet = callableStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    String firstName = resultSet.getString("first_name");
-                    String lastName = resultSet.getString("last_name");
+                    String firstName = resultSet.getString("fname");
+                    String lastName = resultSet.getString("lname");
                     String phoneCode = resultSet.getString("phone_code");
                     String phoneNo = resultSet.getString("phone_no");
 
@@ -81,8 +81,8 @@ public class Person {
 
                 while (resultSet.next()) {
                     int id = resultSet.getInt("id");
-                    String firstName = resultSet.getString("first_name");
-                    String lastName = resultSet.getString("last_name");
+                    String firstName = resultSet.getString("fname");
+                    String lastName = resultSet.getString("lname");
                     String phoneCode = resultSet.getString("phone_code");
                     String phoneNo = resultSet.getString("phone_no");
 
