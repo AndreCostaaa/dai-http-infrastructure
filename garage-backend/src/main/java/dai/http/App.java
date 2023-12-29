@@ -3,7 +3,7 @@ package dai.http;
 import io.javalin.*;
 public class App {
     public static void main(String[] args){
-        try(Javalin app = Javalin.create().start(7000);){
+        try(Javalin app = Javalin.create().start(7000)){
 
             //RoleController
             RoleController roleController = new RoleController();
@@ -46,12 +46,11 @@ public class App {
 
             //CarPartController
             CarPartController carPartController = new CarPartController();
+            app.get("/api/carParts", carPartController::fetchAll);
             app.get("/api/carParts/{carPartId}", carPartController::fetchOne);
             app.post("/api/carParts/", carPartController::save);
             app.patch("/api/carParts/update/", carPartController::update);
             app.delete("/api/carParts/{carPartId}", carPartController::delete);
-
-
         }
     }
 }

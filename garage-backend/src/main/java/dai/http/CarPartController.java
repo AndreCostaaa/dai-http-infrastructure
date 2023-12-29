@@ -18,6 +18,17 @@ public class CarPartController {
         ctx.json(carPart);
     }
 
+    public void fetchAll(Context ctx) throws SQLException {
+        CarPart[] carParts = CarPart.fetchAll();
+
+        if(carParts == null) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(carParts);
+    }
+
     public void save(Context ctx) throws SQLException {
         CarPart carPart = ctx.bodyAsClass(CarPart.class);
 
