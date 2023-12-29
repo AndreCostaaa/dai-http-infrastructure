@@ -107,8 +107,7 @@ public class Person {
             callableStatement.setString(3, getPhoneCode());
             callableStatement.setString(4, getPhoneNo());
 
-            int rowsCreated = callableStatement.executeUpdate();
-            return rowsCreated > 0;
+            return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -126,8 +125,7 @@ public class Person {
             callableStatement.setString(4, getPhoneNo());
             callableStatement.setInt(5, id());
 
-            int rowsUpdated = callableStatement.executeUpdate();
-            return rowsUpdated > 0;
+            return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -141,8 +139,7 @@ public class Person {
         try (CallableStatement callableStatement = con.prepareCall(deletePersonQuery)) {
             callableStatement.setInt(1, personId);
 
-            int rowsDeleted = callableStatement.executeUpdate();
-            return rowsDeleted > 0;
+            return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             return false;
         }

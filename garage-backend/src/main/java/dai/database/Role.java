@@ -82,8 +82,7 @@ public record Role(int id,
             callableStatement.setBoolean(3, canAssignOthers());
             callableStatement.setBoolean(4, isMechanic());
 
-            int rowsCreated = callableStatement.executeUpdate();
-            return rowsCreated > 0;
+            return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -101,8 +100,7 @@ public record Role(int id,
             callableStatement.setBoolean(4, isMechanic());
             callableStatement.setInt(5, id());
 
-            int rowsUpdated = callableStatement.executeUpdate();
-            return rowsUpdated > 0;
+            return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -113,11 +111,10 @@ public record Role(int id,
      * @return true if successful
      */
     static public boolean delete(int roleId) throws SQLException {
-        try (PreparedStatement preparedStatement = con.prepareStatement(deleteRoleQuery)) {
-            preparedStatement.setInt(1, roleId);
+        try (CallableStatement callableStatement = con.prepareCall(deleteRoleQuery)) {
+            callableStatement.setInt(1, roleId);
 
-            int rowsDeleted = preparedStatement.executeUpdate();
-            return rowsDeleted > 0;
+            return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
             throw new SQLException(e);
         }
