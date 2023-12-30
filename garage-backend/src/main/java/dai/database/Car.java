@@ -26,7 +26,7 @@ public record Car(int id,
      */
     static public Car fetchOne(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getCarByIdQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             try (ResultSet resultSet = callableStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -85,12 +85,12 @@ public record Car(int id,
      */
     public boolean save() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(createCarQuery)) {
-            callableStatement.setInt(1, ownerId);
-            callableStatement.setString(2, chassisNo);
-            callableStatement.setString(3, recType);
-            callableStatement.setString(4, brand);
-            callableStatement.setString(5, model);
-            callableStatement.setString(6, color);
+            callableStatement.setInt("owner_id", ownerId());
+            callableStatement.setString("chassis_no", chassisNo());
+            callableStatement.setString("rec_type", recType());
+            callableStatement.setString("brand", brand());
+            callableStatement.setString("model", model());
+            callableStatement.setString("color", color());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -104,13 +104,13 @@ public record Car(int id,
      */
     public boolean update() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(updateCarQuery)) {
-            callableStatement.setInt(1, ownerId);
-            callableStatement.setString(2, chassisNo);
-            callableStatement.setString(3, recType);
-            callableStatement.setString(4, brand);
-            callableStatement.setString(5, model);
-            callableStatement.setString(6, color);
-            callableStatement.setInt(7, id);
+            callableStatement.setInt("owner_id", ownerId());
+            callableStatement.setString("chassis_no", chassisNo());
+            callableStatement.setString("rec_type", recType());
+            callableStatement.setString("brand", brand());
+            callableStatement.setString("model", model());
+            callableStatement.setString("color", color());
+            callableStatement.setInt("id", id());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -125,7 +125,7 @@ public record Car(int id,
      */
     static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deleteCarQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {

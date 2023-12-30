@@ -27,7 +27,7 @@ public record CarPart(int id,
      */
     static public CarPart fetchOne(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getCarPartByIdQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             try (ResultSet resultSet = callableStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -88,13 +88,13 @@ public record CarPart(int id,
      */
     public boolean save() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(createCarPartQuery)) {
-            callableStatement.setInt(1, serviceId());
-            callableStatement.setString(2, supplier());
-            callableStatement.setInt(3, supplierRef());
-            callableStatement.setString(4, name());
-            callableStatement.setString(5, description());
-            callableStatement.setDouble(6, buyPrice());
-            callableStatement.setDouble(7, sellPrice());
+            callableStatement.setInt("service_id", serviceId());
+            callableStatement.setString("supplier", supplier());
+            callableStatement.setInt("supplier_ref", supplierRef());
+            callableStatement.setString("name", name());
+            callableStatement.setString("description", description());
+            callableStatement.setDouble("buy_price", buyPrice());
+            callableStatement.setDouble("sell_price", sellPrice());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -108,14 +108,15 @@ public record CarPart(int id,
      */
     public boolean update() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(updateCarPartQuery)) {
-            callableStatement.setInt(1, serviceId());
-            callableStatement.setString(2, supplier());
-            callableStatement.setInt(3, supplierRef());
-            callableStatement.setString(4, name());
-            callableStatement.setString(5, description());
-            callableStatement.setDouble(6, buyPrice());
-            callableStatement.setDouble(7, sellPrice());
-            callableStatement.setInt(8, id());
+            callableStatement.setInt("service_id", serviceId());
+            callableStatement.setString("supplier", supplier());
+            callableStatement.setInt("supplier_ref", supplierRef());
+            callableStatement.setString("name", name());
+            callableStatement.setString("description", description());
+            callableStatement.setDouble("buy_price", buyPrice());
+            callableStatement.setDouble("sell_price", sellPrice());
+            callableStatement.setInt("id", id());
+
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -130,7 +131,7 @@ public record CarPart(int id,
      */
     static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deleteCarPartQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {

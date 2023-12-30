@@ -22,16 +22,16 @@ public class Person {
     public int id(){
         return id;
     }
-    public String getFirstName(){
+    public String firstName(){
         return firstName;
     }
-    public String getLastName(){
+    public String lastName(){
         return lastName;
     }
-    public String getPhoneCode(){
+    public String phoneCode(){
         return phoneCode;
     }
-    public String getPhoneNo(){
+    public String phoneNo(){
         return phoneNo;
     }
 
@@ -48,7 +48,7 @@ public class Person {
      */
     static public Person fetchOne(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getPersonByIdQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             try (ResultSet resultSet = callableStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -103,10 +103,10 @@ public class Person {
      */
     public boolean save() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(createPersonQuery)) {
-            callableStatement.setString(1, getFirstName());
-            callableStatement.setString(2, getLastName());
-            callableStatement.setString(3, getPhoneCode());
-            callableStatement.setString(4, getPhoneNo());
+            callableStatement.setString("fname", firstName());
+            callableStatement.setString("lname", lastName());
+            callableStatement.setString("phone_code", phoneCode());
+            callableStatement.setString("phone_no", phoneNo());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -120,11 +120,11 @@ public class Person {
      */
     public boolean update() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(updatePersonQuery)) {
-            callableStatement.setString(1, getFirstName());
-            callableStatement.setString(2, getLastName());
-            callableStatement.setString(3, getPhoneCode());
-            callableStatement.setString(4, getPhoneNo());
-            callableStatement.setInt(5, id());
+            callableStatement.setString("fname", firstName());
+            callableStatement.setString("lname", lastName());
+            callableStatement.setString("phone_code", phoneCode());
+            callableStatement.setString("phone_no", phoneNo());
+            callableStatement.setInt("id", id());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -139,7 +139,7 @@ public class Person {
      */
     static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deletePersonQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {

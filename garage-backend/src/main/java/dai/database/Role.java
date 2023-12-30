@@ -23,7 +23,7 @@ public record Role(int id,
      */
     static public Role fetchOne(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getRoleByIdQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             try (ResultSet resultSet = callableStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -78,10 +78,10 @@ public record Role(int id,
      */
     public boolean save() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(createRoleQuery)) {
-            callableStatement.setString(1, name());
-            callableStatement.setBoolean(2, canCreate());
-            callableStatement.setBoolean(3, canAssignOthers());
-            callableStatement.setBoolean(4, isMechanic());
+            callableStatement.setString("name", name());
+            callableStatement.setBoolean("can_create", canCreate());
+            callableStatement.setBoolean("can_assign_others", canAssignOthers());
+            callableStatement.setBoolean("is_mechanic", isMechanic());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -95,11 +95,11 @@ public record Role(int id,
      */
     public boolean update() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(updateRoleQuery)) {
-            callableStatement.setString(1, name());
-            callableStatement.setBoolean(2, canCreate());
-            callableStatement.setBoolean(3, canAssignOthers());
-            callableStatement.setBoolean(4, isMechanic());
-            callableStatement.setInt(5, id());
+            callableStatement.setString("name", name());
+            callableStatement.setBoolean("can_create", canCreate());
+            callableStatement.setBoolean("can_assign_others", canAssignOthers());
+            callableStatement.setBoolean("is_mechanic", isMechanic());
+            callableStatement.setInt("id", id());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -114,7 +114,7 @@ public record Role(int id,
      */
     static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deleteRoleQuery)) {
-            callableStatement.setInt(1, id);
+            callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
