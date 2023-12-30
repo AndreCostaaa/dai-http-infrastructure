@@ -8,7 +8,7 @@ public class ServiceController {
     public void fetchAll(Context ctx) {
         Service[] services = Service.fetchAll();
 
-        if (services == null) {
+        if (services.length == 0) {
             ctx.status(404);
             return;
         }

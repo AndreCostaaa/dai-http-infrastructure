@@ -9,7 +9,7 @@ public class RoleController {
     public void fetchAll(Context ctx) throws SQLException {
         Role[] roles = Role.fetchAll();
 
-        if (roles == null) {
+        if (roles.length == 0) {
             ctx.status(404);
             return;
         }

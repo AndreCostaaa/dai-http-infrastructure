@@ -9,7 +9,7 @@ public class CarController {
     public void fetchAll(Context ctx) throws SQLException {
         Car[] cars = Car.fetchAll();
 
-        if (cars == null) {
+        if (cars.length == 0) {
             ctx.status(404);
             return;
         }

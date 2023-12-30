@@ -10,7 +10,7 @@ public class PersonController {
     public void fetchAll(Context ctx) throws SQLException {
         Person[] people = Person.fetchAll();
 
-        if (people == null) {
+        if (people.length == 0) {
             ctx.status(404);
             return;
         }
