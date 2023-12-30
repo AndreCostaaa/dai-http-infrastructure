@@ -49,6 +49,43 @@ public class Client extends Person {
                         createClientKnowingIdQuery = "INSERT INTO client (id, email, street, street_no, npa, country) VALUES (:id, :email, :street, :street_no, :npa, :country);",
                         updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
                         deleteClientQuery = "DELETE FROM client WHERE id = :id;";
+    
+    /**
+     * Fetch all Clients from the database.
+     * @return Client[] or null
+     */
+    static public Client[] fetchAll() throws SQLException {
+        try (Statement statement = con.createStatement()) {
+            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
+                resultSet.last();
+                int count = resultSet.getRow();
+                resultSet.beforeFirst();
+
+                Client[] clients = new Client[count];
+                int i = 0;
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String firstName = resultSet.getString("fname");
+                    String lastName = resultSet.getString("lname");
+                    String phoneCode = resultSet.getString("phone_code");
+                    String phoneNo = resultSet.getString("phone_no");
+                    String email = resultSet.getString("email");
+                    String street = resultSet.getString("street");
+                    int streetNo = resultSet.getInt("street_no");
+                    int npa = resultSet.getInt("npa");
+                    String country = resultSet.getString("country");
+
+                    clients[i++] = new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa, country);
+                }
+
+                return clients;
+            }
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+    }
+
 
     /**
      * Fetch a Client from the database matching the given id.
@@ -104,42 +141,6 @@ public class Client extends Person {
                     return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa, country);
                 } else
                     return null;
-            }
-        } catch (SQLException e) {
-            throw new SQLException(e);
-        }
-    }
-
-    /**
-     * Fetch all Clients from the database.
-     * @return Client[] or null
-     */
-    static public Client[] fetchAll() throws SQLException {
-        try (Statement statement = con.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Client[] clients = new Client[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String firstName = resultSet.getString("fname");
-                    String lastName = resultSet.getString("lname");
-                    String phoneCode = resultSet.getString("phone_code");
-                    String phoneNo = resultSet.getString("phone_no");
-                    String email = resultSet.getString("email");
-                    String street = resultSet.getString("street");
-                    int streetNo = resultSet.getInt("street_no");
-                    int npa = resultSet.getInt("npa");
-                    String country = resultSet.getString("country");
-
-                    clients[i++] = new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa, country);
-                }
-
-                return clients;
             }
         } catch (SQLException e) {
             throw new SQLException(e);
