@@ -66,11 +66,16 @@ public class App {
             app.get("/api/services/{carId}/{stateId}", serviceController::fetchServiceByCarState);
             app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanic);
             app.get("/api/services/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
-            app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanicOrFree);
             app.get("/api/services/{stateId}", serviceController::fetchServiceByState);
+            app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanicProcessing);
+            app.get("/api/services/0", serviceController::fetchServiceCreated);
+            app.get("/api/services/1", serviceController::fetchServiceWaiting);
+            app.get("/api/services/2", serviceController::fetchServiceProcessing);
+            app.get("/api/services/3", serviceController::fetchServiceDone);
+            app.get("/api/services/4", serviceController::fetchServiceLeft);
             app.post("/api/services/", serviceController::save);
             app.patch("/api/services/update/", serviceController::update);
-            app.patch("/api/services/incrementState/{serviceId}", serviceController::incrementState);
+            app.patch("/api/services/incrementState/", serviceController::incrementState);
             app.delete("/api/services/{serviceId}", serviceController::delete);
         }
     }
