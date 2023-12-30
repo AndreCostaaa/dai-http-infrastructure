@@ -41,10 +41,10 @@ public class Client extends Person {
         return country;
     }
 
-    static final String getAllQuery = "SELECT * FROM client JOIN person ON person.id = client.id;",
+    static final String getAllQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id;",
 
-                        getClientByIdQuery = "SELECT * FROM client JOIN person ON person.id = client.id WHERE client.id = :id;",
-                        getClientByPhoneNoQuery = "SELECT * FROM client JOIN person ON person.id = client.id WHERE person.phone_no = :phone_no;",
+                        getClientByIdQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id WHERE c.id = :id;",
+                        getClientByPhoneNoQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id WHERE p.phone_no = :phone_no;",
                         createClientNotKnowingIdQuery = "WITH person_id AS (INSERT INTO person (fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no) RETURNING id) INSERT INTO client (id, email, street, street_no, npa, country) VALUES (person_id, :email, :street, :street_no, :npa, :country);",
                         createClientKnowingIdQuery = "INSERT INTO client (id, email, street, street_no, npa, country) VALUES (:id, :email, :street, :street_no, :npa, :country);",
                         updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
