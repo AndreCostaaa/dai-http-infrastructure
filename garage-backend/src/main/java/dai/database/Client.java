@@ -2,7 +2,6 @@ package dai.database;
 
 import java.sql.*;
 
-@SuppressWarnings("DuplicatedCode")
 public class Client extends Person {
     private final String email, street, country;
     private final int streetNo, npa;
@@ -49,7 +48,7 @@ public class Client extends Person {
                         createClientKnowingIdQuery = "INSERT INTO client (id, email, street, street_no, npa, country) VALUES (:id, :email, :street, :street_no, :npa, :country);",
                         updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
                         deleteClientQuery = "DELETE FROM client WHERE id = :id;";
-    
+
     /**
      * Fetch all Clients from the database.
      * @return Client[] or null
@@ -170,17 +169,18 @@ public class Client extends Person {
     }
 
     /**
-     * Save the Client in the database knowing the id.
+     * Common method for saveKnowingId() and update().
+     * @param query the query to execute
      * @return true if successful
      */
-    public boolean saveKnowingId() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(createClientKnowingIdQuery)) {
-            callableStatement.setInt("id", id());
+    private boolean saveOrUpdate(String query) throws SQLException {
+        try (CallableStatement callableStatement = con.prepareCall(query)) {
             callableStatement.setString("email", email());
             callableStatement.setString("street", street());
             callableStatement.setInt("street_no", streetNo());
             callableStatement.setInt("npa", npa());
             callableStatement.setString("country", country());
+            callableStatement.setInt("id", id());
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
@@ -189,22 +189,19 @@ public class Client extends Person {
     }
 
     /**
+     * Save the Client in the database knowing the id.
+     * @return true if successful
+     */
+    public boolean saveKnowingId() throws SQLException {
+        return saveOrUpdate(createClientKnowingIdQuery);
+    }
+
+    /**
      * Update the Client in the database.
      * @return true if successful
      */
     public boolean update() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(updateClientQuery)) {
-            callableStatement.setString("email", email());
-            callableStatement.setString("street", street());
-            callableStatement.setInt("street_no", streetNo());
-            callableStatement.setInt("npa", npa());
-            callableStatement.setString("country", country());
-            callableStatement.setInt("id", id());
-
-            return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
-        }
+        return saveOrUpdate(updateClientQuery);
     }
 
     /**
