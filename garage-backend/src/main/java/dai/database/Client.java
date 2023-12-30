@@ -50,6 +50,11 @@ public class Client extends Person {
                         updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
                         deleteClientQuery = "DELETE FROM client WHERE id = :id;";
 
+    /**
+     * Fetch a Client from the database matching the given id.
+     * @param id the id of the Client to fetch
+     * @return Client or null
+     */
     static public Client fetchOneById(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getClientByIdQuery)) {
             callableStatement.setInt("id", id);
@@ -75,6 +80,11 @@ public class Client extends Person {
         }
     }
 
+    /**
+     * Fetch a Client from the database matching the given phone_number.
+     * @param phoneNo the phone_number of the Client to fetch
+     * @return Client or null
+     */
     static public Client fetchOneByPhoneNo(String phoneNo) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(getClientByPhoneNoQuery)) {
             callableStatement.setString("phone_no", phoneNo);
@@ -100,6 +110,10 @@ public class Client extends Person {
         }
     }
 
+    /**
+     * Fetch all Clients from the database.
+     * @return Client[] or null
+     */
     static public Client[] fetchAll() throws SQLException {
         try (Statement statement = con.createStatement()) {
             try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
@@ -132,6 +146,10 @@ public class Client extends Person {
         }
     }
 
+    /**
+     * Save the Client in the database without knowing the id.
+     * @return true if successful
+     */
     public boolean saveNotKnowingId() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(createClientNotKnowingIdQuery)) {
             callableStatement.setString("fname", firstName());
@@ -150,6 +168,10 @@ public class Client extends Person {
         }
     }
 
+    /**
+     * Save the Client in the database knowing the id.
+     * @return true if successful
+     */
     public boolean saveKnowingId() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(createClientKnowingIdQuery)) {
             callableStatement.setInt("id", id());
@@ -165,6 +187,10 @@ public class Client extends Person {
         }
     }
 
+    /**
+     * Update the Client in the database.
+     * @return true if successful
+     */
     public boolean update() throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(updateClientQuery)) {
             callableStatement.setString("email", email());
@@ -180,6 +206,11 @@ public class Client extends Person {
         }
     }
 
+    /**
+     * Delete a Client from the database matching the given id.
+     * @param id the id of the Client to delete
+     * @return true if successful
+     */
     static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deleteClientQuery)) {
             callableStatement.setInt("id", id);
