@@ -51,6 +51,16 @@ public class App {
             app.post("/api/carParts/", carPartController::save);
             app.patch("/api/carParts/update/", carPartController::update);
             app.delete("/api/carParts/{carPartId}", carPartController::delete);
+
+            //ClientController
+            ClientController clientController = new ClientController();
+            app.get("/api/clients", clientController::fetchAll);
+            app.get("/api/clients/{clientId}", clientController::fetchOneById);
+            app.get("/api/clients/{phoneNo}", clientController::fetchOneByPhoneNo);
+            app.post("/api/clients/", clientController::saveNotKnowingId);
+            app.post("/api/clients/", clientController::saveKnowingId);
+            app.patch("/api/clients/update/", clientController::update);
+            app.delete("/api/clients/{clientId}", clientController::delete);
         }
     }
 }

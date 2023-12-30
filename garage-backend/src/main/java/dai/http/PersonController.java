@@ -2,7 +2,6 @@ package dai.http;
 
 import dai.database.Person;
 import io.javalin.http.Context;
-
 import java.sql.SQLException;
 
 public class PersonController {
