@@ -32,6 +32,16 @@ public class App {
             app.patch("/api/clients/update/", clientController::update);
             app.delete("/api/clients/{clientId}", clientController::delete);
 
+            //EmployeeController
+            EmployeeController employeeController = new EmployeeController();
+            app.get("/api/employees", employeeController::fetchAll);
+            app.get("/api/employees/{employeeId}", employeeController::fetchOne);
+            app.get("/api/employees/{employeeId}", employeeController::fetchEveryMechanic);
+            app.post("/api/employees/", employeeController::saveNotKnowingId);
+            app.post("/api/employees/", employeeController::saveKnowingId);
+            app.patch("/api/employees/update/", employeeController::update);
+            app.delete("/api/employees/{employeeId}", employeeController::delete);
+
             //PersonController
             PersonController personController = new PersonController();
             app.get("/api/person", personController::fetchAll);
