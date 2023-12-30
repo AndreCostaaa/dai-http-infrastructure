@@ -53,7 +53,7 @@ public class PersonController {
         ctx.status(400);
     }
 
-    public void delete(Context ctx){
+    public void delete(Context ctx) throws SQLException {
         int personId = Integer.parseInt(ctx.pathParam("personId"));
 
         if(Person.delete(personId)){
@@ -62,6 +62,4 @@ public class PersonController {
         }
         ctx.status(400);
     }
-
-
 }

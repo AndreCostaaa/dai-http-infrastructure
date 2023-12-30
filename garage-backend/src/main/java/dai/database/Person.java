@@ -137,13 +137,13 @@ public class Person {
      * @param id the id of the Person to delete
      * @return true if successful
      */
-    static public boolean delete(int id){
+    static public boolean delete(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(deletePersonQuery)) {
             callableStatement.setInt(1, id);
 
             return callableStatement.executeUpdate() == 1;
         } catch (SQLException e) {
-            return false;
+            throw new SQLException(e);
         }
     }
 }
