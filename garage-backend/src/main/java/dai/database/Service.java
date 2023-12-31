@@ -19,17 +19,17 @@ public record Service(int id,
     static Connection con;
 
     static final String getAllQuery = "SELECT * FROM service;",
-            getServiceByIdQuery = "SELECT * FROM service WHERE id = :id;",
-            getServiceByCarQuery = "SELECT * FROM service WHERE car_id = :car_id;",
-            getServiceByCarStateQuery = "SELECT * FROM service WHERE car_id = :car_id AND state_id = :state_id;",
-            getServiceByMechanicQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id;",
-            getServiceByMechanicStateQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id AND state_id = :state_id;",
-            getServiceByStateQuery = "SELECT * FROM service WHERE state_id = :state_id;",
-            getServiceByMechanicProcessingQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id AND state_id = 2;",
-            createServiceQuery = "INSERT INTO service (mechanic_id, client_id, car_id, hours_worked, comments, has_pictures, state_id, date_car_arrival, date_car_processing, date_car_done, date_car_left) VALUES (:mechanic_id, :client_id, :car_id, 0, '', false, 0, now(), NULL, NULL, NULL);",
-            updateServiceQuery = "UPDATE service SET mechanic_id  = :mechanic_id, hours_worked = :hours_worked, comments = :comments, has_pictures = :has_pictures WHERE id = :id;",
-            incrementStateQuery = "WITH service_state AS (SELECT state_id FROM service WHERE id = :id) UPDATE service SET state_id = service_state + 1 WHERE id = :id;",
-            deleteServiceQuery = "DELETE FROM service WHERE id = :id;";
+                        getServiceByIdQuery = "SELECT * FROM service WHERE id = :id;",
+                        getServiceByCarQuery = "SELECT * FROM service WHERE car_id = :car_id;",
+                        getServiceByCarStateQuery = "SELECT * FROM service WHERE car_id = :car_id AND state_id = :state_id;",
+                        getServiceByMechanicQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id;",
+                        getServiceByMechanicStateQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id AND state_id = :state_id;",
+                        getServiceByStateQuery = "SELECT * FROM service WHERE state_id = :state_id;",
+                        getServiceByMechanicProcessingQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id AND state_id = 2;",
+                        createServiceQuery = "INSERT INTO service (mechanic_id, client_id, car_id, hours_worked, comments, has_pictures, state_id, date_car_arrival, date_car_processing, date_car_done, date_car_left) VALUES (:mechanic_id, :client_id, :car_id, 0, '', false, 0, now(), NULL, NULL, NULL);",
+                        updateServiceQuery = "UPDATE service SET mechanic_id  = :mechanic_id, hours_worked = :hours_worked, comments = :comments, has_pictures = :has_pictures WHERE id = :id;",
+                        incrementStateQuery = "WITH service_state AS (SELECT state_id FROM service WHERE id = :id) UPDATE service SET state_id = service_state + 1 WHERE id = :id;",
+                        deleteServiceQuery = "DELETE FROM service WHERE id = :id;";
 
     /**
      * Fetch all Services from the database.
