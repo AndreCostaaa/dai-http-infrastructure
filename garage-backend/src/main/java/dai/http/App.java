@@ -77,6 +77,13 @@ public class App {
             app.patch("/api/services/update/", serviceController::update);
             app.patch("/api/services/incrementState/", serviceController::incrementState);
             app.delete("/api/services/{serviceId}", serviceController::delete);
+                    
+            //ServiceBillController
+            ServiceBillController serviceBillController = new ServiceBillController();
+            app.get("/api/serviceBills", serviceBillController::fetchAll);
+            app.get("/api/serviceBills/{serviceBillId}", serviceBillController::fetchOne);
+            app.post("/api/serviceBills/update", serviceBillController::update);
+            app.delete("/api/serviceBills/{serviceBillId}", serviceBillController::delete);
         }
     }
 }
