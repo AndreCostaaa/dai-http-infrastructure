@@ -53,40 +53,29 @@ public class Client extends Person {
             updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
             deleteClientQuery = "DELETE FROM client WHERE id = :id;";
 
+    static private Client fetchNext(ResultSet resultSet) throws SQLException
+    {
+        int id = resultSet.getInt("id");
+        String firstName = resultSet.getString("fname");
+        String lastName = resultSet.getString("lname");
+        String phoneCode = resultSet.getString("phone_code");
+        String phoneNo = resultSet.getString("phone_no");
+        String email = resultSet.getString("email");
+        String street = resultSet.getString("street");
+        int streetNo = resultSet.getInt("street_no");
+        int npa = resultSet.getInt("npa");
+        String country = resultSet.getString("country");
+
+        return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
+                country);
+    }
     /**
      * Fetch all Clients from the database.
      * 
      * @return Client[] or null
      */
     static public Client[] fetchAll() throws SQLException {
-        try (Statement statement = con.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Client[] clients = new Client[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String firstName = resultSet.getString("fname");
-                    String lastName = resultSet.getString("lname");
-                    String phoneCode = resultSet.getString("phone_code");
-                    String phoneNo = resultSet.getString("phone_no");
-                    String email = resultSet.getString("email");
-                    String street = resultSet.getString("street");
-                    int streetNo = resultSet.getInt("street_no");
-                    int npa = resultSet.getInt("npa");
-                    String country = resultSet.getString("country");
-
-                    clients[i++] = new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
-                            country);
-                }
-
-                return clients;
-            }
-        }
+        return DatabaseHandler.fetchAll(getAllQuery, Client::fetchNext);
     }
 
     /**
@@ -95,28 +84,8 @@ public class Client extends Person {
      * @param id the id of the Client to fetch
      * @return Client or null
      */
-    static public Client fetchOneById(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getClientByIdQuery)) {
-            callableStatement.setInt("id", id);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    String firstName = resultSet.getString("fname");
-                    String lastName = resultSet.getString("lname");
-                    String phoneCode = resultSet.getString("phone_code");
-                    String phoneNo = resultSet.getString("phone_no");
-                    String email = resultSet.getString("email");
-                    String street = resultSet.getString("street");
-                    int streetNo = resultSet.getInt("street_no");
-                    int npa = resultSet.getInt("npa");
-                    String country = resultSet.getString("country");
-
-                    return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
-                            country);
-                } else
-                    return null;
-            }
-        }
+    static public Client fetchById(int id) throws SQLException {
+        return DatabaseHandler.fetchById(getAllQuery, id, Client::fetchNext);
     }
 
     /**
@@ -126,27 +95,7 @@ public class Client extends Person {
      * @return Client or null
      */
     static public Client fetchOneByPhoneNo(String phoneNo) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getClientByPhoneNoQuery)) {
-            callableStatement.setString("phone_no", phoneNo);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String firstName = resultSet.getString("fname");
-                    String lastName = resultSet.getString("lname");
-                    String phoneCode = resultSet.getString("phone_code");
-                    String email = resultSet.getString("email");
-                    String street = resultSet.getString("street");
-                    int streetNo = resultSet.getInt("street_no");
-                    int npa = resultSet.getInt("npa");
-                    String country = resultSet.getString("country");
-
-                    return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
-                            country);
-                } else
-                    return null;
-            }
-        }
+        return DatabaseHandler.fetchBy(getClientByPhoneNoQuery, "phone_no", phoneNo, Client::fetchNext);
     }
 
     /**
@@ -214,10 +163,6 @@ public class Client extends Person {
      * @return true if successful
      */
     static public boolean delete(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(deleteClientQuery)) {
-            callableStatement.setInt("id", id);
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.deleteById(deleteClientQuery, id);
     }
 }
