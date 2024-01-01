@@ -4,17 +4,17 @@ import java.sql.*;
 import java.util.concurrent.Callable;
 
 public record ServiceBill(int id,
-                          int price,
-                          boolean delivered,
-                          boolean paid,
-                          int discountPercentage) {
+        int price,
+        boolean delivered,
+        boolean paid,
+        int discountPercentage) {
 
     static Connection con;
 
     static final String getAllQuery = "SELECT * FROM service_bill",
-                        getByIdQuery = "SELECT * FROM service_bill WHERE id = :id",
-                        updateQuery = "UPDATE service_bill SET price = :price, delivered = :delivered, paid = :paid, discount_percentage = :discount_percentage WHERE id = :id",
-                        deleteQuery = "DELETE FROM service_bill WHERE id = :id";
+            getByIdQuery = "SELECT * FROM service_bill WHERE id = :id",
+            updateQuery = "UPDATE service_bill SET price = :price, delivered = :delivered, paid = :paid, discount_percentage = :discount_percentage WHERE id = :id",
+            deleteQuery = "DELETE FROM service_bill WHERE id = :id";
 
     static public ServiceBill[] fetchAll() throws SQLException {
         try (Statement statement = con.createStatement()) {
@@ -38,8 +38,6 @@ public record ServiceBill(int id,
 
                 return serviceBills;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
@@ -58,8 +56,6 @@ public record ServiceBill(int id,
                 } else
                     return null;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
@@ -72,8 +68,6 @@ public record ServiceBill(int id,
             callableStatement.setInt("discountPercentage", discountPercentage());
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
@@ -82,8 +76,6 @@ public record ServiceBill(int id,
             callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 }

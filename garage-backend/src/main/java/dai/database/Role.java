@@ -3,21 +3,22 @@ package dai.database;
 import java.sql.*;
 
 public record Role(int id,
-                   String name,
-                   boolean canCreate,
-                   boolean canAssignOthers,
-                   boolean isMechanic) {
+        String name,
+        boolean canCreate,
+        boolean canAssignOthers,
+        boolean isMechanic) {
 
     static Connection con;
 
     static final String getAllQuery = "SELECT * FROM role;",
-                        getRoleByIdQuery = "SELECT * FROM role WHERE id = :id;",
-                        createRoleQuery = "INSERT INTO role(name, can_create, can_assign_others, is_mechanic) VALUES (:name, :can_create, :can_assign_others, :is_mechanic);",
-                        updateRoleQuery = "UPDATE role SET name = :name, can_create = :can_create, can_assign_others = :can_assign_others, is_mechanic = :is_mechanic WHERE id = :id;",
-                        deleteRoleQuery = "DELETE FROM role WHERE id = :id;";
+            getRoleByIdQuery = "SELECT * FROM role WHERE id = :id;",
+            createRoleQuery = "INSERT INTO role(name, can_create, can_assign_others, is_mechanic) VALUES (:name, :can_create, :can_assign_others, :is_mechanic);",
+            updateRoleQuery = "UPDATE role SET name = :name, can_create = :can_create, can_assign_others = :can_assign_others, is_mechanic = :is_mechanic WHERE id = :id;",
+            deleteRoleQuery = "DELETE FROM role WHERE id = :id;";
 
     /**
      * Fetch a Role from the database matching the given id.
+     * 
      * @param id the id of the Role to fetch
      * @return Role or null
      */
@@ -36,13 +37,12 @@ public record Role(int id,
                 } else
                     return null;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Fetch all Roles from the database.
+     * 
      * @return Role[] or null
      */
     static public Role[] fetchAll() throws SQLException {
@@ -67,13 +67,12 @@ public record Role(int id,
 
                 return roles;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Save the Role in the database.
+     * 
      * @return true if successful
      */
     public boolean save() throws SQLException {
@@ -84,13 +83,12 @@ public record Role(int id,
             callableStatement.setBoolean("is_mechanic", isMechanic());
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Update the Role in the database.
+     * 
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -102,13 +100,12 @@ public record Role(int id,
             callableStatement.setInt("id", id());
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Delete a Role from the database matching the given id.
+     * 
      * @param id the id of the Role to delete
      * @return true if successful
      */
@@ -117,8 +114,6 @@ public record Role(int id,
             callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 }

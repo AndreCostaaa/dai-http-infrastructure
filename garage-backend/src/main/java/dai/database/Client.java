@@ -7,15 +7,15 @@ public class Client extends Person {
     private final int streetNo, npa;
 
     public Client(int id,
-                  String firstName,
-                  String lastName,
-                  String phoneCode,
-                  String phoneNo,
-                  String email,
-                  String street,
-                  int streetNo,
-                  int npa,
-                  String country) {
+            String firstName,
+            String lastName,
+            String phoneCode,
+            String phoneNo,
+            String email,
+            String street,
+            int streetNo,
+            int npa,
+            String country) {
         super(id, firstName, lastName, phoneCode, phoneNo);
         this.email = email;
         this.street = street;
@@ -24,33 +24,38 @@ public class Client extends Person {
         this.country = country;
     }
 
-    public String email(){
+    public String email() {
         return email;
     }
-    public String street(){
+
+    public String street() {
         return street;
     }
-    public int streetNo(){
+
+    public int streetNo() {
         return streetNo;
     }
-    public int npa(){
+
+    public int npa() {
         return npa;
     }
-    public String country(){
+
+    public String country() {
         return country;
     }
 
     static final String getAllQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id;",
 
-                        getClientByIdQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id WHERE c.id = :id;",
-                        getClientByPhoneNoQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id WHERE p.phone_no = :phone_no;",
-                        createClientNotKnowingIdQuery = "WITH person_id AS (INSERT INTO person (fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no) RETURNING id) INSERT INTO client (id, email, street, street_no, npa, country) VALUES (person_id, :email, :street, :street_no, :npa, :country);",
-                        createClientKnowingIdQuery = "INSERT INTO client (id, email, street, street_no, npa, country) VALUES (:id, :email, :street, :street_no, :npa, :country);",
-                        updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
-                        deleteClientQuery = "DELETE FROM client WHERE id = :id;";
+            getClientByIdQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id WHERE c.id = :id;",
+            getClientByPhoneNoQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id WHERE p.phone_no = :phone_no;",
+            createClientNotKnowingIdQuery = "WITH person_id AS (INSERT INTO person (fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no) RETURNING id) INSERT INTO client (id, email, street, street_no, npa, country) VALUES (person_id, :email, :street, :street_no, :npa, :country);",
+            createClientKnowingIdQuery = "INSERT INTO client (id, email, street, street_no, npa, country) VALUES (:id, :email, :street, :street_no, :npa, :country);",
+            updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
+            deleteClientQuery = "DELETE FROM client WHERE id = :id;";
 
     /**
      * Fetch all Clients from the database.
+     * 
      * @return Client[] or null
      */
     static public Client[] fetchAll() throws SQLException {
@@ -75,19 +80,18 @@ public class Client extends Person {
                     int npa = resultSet.getInt("npa");
                     String country = resultSet.getString("country");
 
-                    clients[i++] = new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa, country);
+                    clients[i++] = new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
+                            country);
                 }
 
                 return clients;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
-
     /**
      * Fetch a Client from the database matching the given id.
+     * 
      * @param id the id of the Client to fetch
      * @return Client or null
      */
@@ -107,17 +111,17 @@ public class Client extends Person {
                     int npa = resultSet.getInt("npa");
                     String country = resultSet.getString("country");
 
-                    return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa, country);
+                    return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
+                            country);
                 } else
                     return null;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Fetch a Client from the database matching the given phone_number.
+     * 
      * @param phoneNo the phone_number of the Client to fetch
      * @return Client or null
      */
@@ -137,17 +141,17 @@ public class Client extends Person {
                     int npa = resultSet.getInt("npa");
                     String country = resultSet.getString("country");
 
-                    return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa, country);
+                    return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
+                            country);
                 } else
                     return null;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Save the Client in the database without knowing the id.
+     * 
      * @return true if successful
      */
     public boolean saveNotKnowingId() throws SQLException {
@@ -163,13 +167,12 @@ public class Client extends Person {
             callableStatement.setString("country", country());
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Common method for saveKnowingId() and update().
+     * 
      * @param query the query to execute
      * @return true if successful
      */
@@ -183,13 +186,12 @@ public class Client extends Person {
             callableStatement.setInt("id", id());
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Save the Client in the database knowing the id.
+     * 
      * @return true if successful
      */
     public boolean saveKnowingId() throws SQLException {
@@ -198,6 +200,7 @@ public class Client extends Person {
 
     /**
      * Update the Client in the database.
+     * 
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -206,6 +209,7 @@ public class Client extends Person {
 
     /**
      * Delete a Client from the database matching the given id.
+     * 
      * @param id the id of the Client to delete
      * @return true if successful
      */
@@ -214,8 +218,6 @@ public class Client extends Person {
             callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 }

@@ -8,10 +8,10 @@ public class Person {
     static Connection con;
 
     public Person(int id,
-                  String firstName,
-                  String lastName,
-                  String phoneCode,
-                  String phoneNo){
+            String firstName,
+            String lastName,
+            String phoneCode,
+            String phoneNo) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -19,30 +19,35 @@ public class Person {
         this.phoneNo = phoneNo;
     }
 
-    public int id(){
+    public int id() {
         return id;
     }
-    public String firstName(){
+
+    public String firstName() {
         return firstName;
     }
-    public String lastName(){
+
+    public String lastName() {
         return lastName;
     }
-    public String phoneCode(){
+
+    public String phoneCode() {
         return phoneCode;
     }
-    public String phoneNo(){
+
+    public String phoneNo() {
         return phoneNo;
     }
 
     static final String getAllQuery = "SELECT * FROM person;",
-                        getPersonByIdQuery = "SELECT * FROM person WHERE id = :id;",
-                        createPersonQuery = "INSERT INTO person(fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no);",
-                        updatePersonQuery = "UPDATE person SET fname = :fname, lname = :lname, phone_code = :phone_code, phone_no = :phone_no WHERE id = :id;",
-                        deletePersonQuery = "DELETE FROM person WHERE id = :id;";
+            getPersonByIdQuery = "SELECT * FROM person WHERE id = :id;",
+            createPersonQuery = "INSERT INTO person(fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no);",
+            updatePersonQuery = "UPDATE person SET fname = :fname, lname = :lname, phone_code = :phone_code, phone_no = :phone_no WHERE id = :id;",
+            deletePersonQuery = "DELETE FROM person WHERE id = :id;";
 
     /**
      * Fetch a Person from the database matching the given id.
+     * 
      * @param id the id of the Person to fetch
      * @return Person or null
      */
@@ -61,13 +66,12 @@ public class Person {
                 } else
                     return null;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Fetch all Persons from the database.
+     * 
      * @return Person[] or null
      */
     static public Person[] fetchAll() throws SQLException {
@@ -92,13 +96,12 @@ public class Person {
 
                 return persons;
             }
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Save the Person in the database.
+     * 
      * @return true if successful
      */
     public boolean save() throws SQLException {
@@ -109,13 +112,12 @@ public class Person {
             callableStatement.setString("phone_no", phoneNo());
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Update the Person in the database.
+     * 
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -127,13 +129,12 @@ public class Person {
             callableStatement.setInt("id", id());
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 
     /**
      * Delete a Person from the database matching the given id.
+     * 
      * @param id the id of the Person to delete
      * @return true if successful
      */
@@ -142,8 +143,6 @@ public class Person {
             callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            throw new SQLException(e);
         }
     }
 }
