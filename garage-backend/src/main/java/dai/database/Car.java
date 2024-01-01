@@ -8,7 +8,7 @@ public record Car(int id,
         String recType,
         String brand,
         String model,
-        String color) {
+        String color) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM car;",
             getCarByIdQuery = "SELECT * FROM car WHERE id = :id;",
@@ -18,14 +18,10 @@ public record Car(int id,
 
     /**
      * 
-     * @param resultSet
-     * @return
+     * @param resultSet resultset returned from the execution of the query
+     * @return the car currently pointed at by result set
      */
-    static private Car fetchNext(ResultSet resultSet) {
-        if (!resultSet.next()) {
-            return null;
-        }
-
+     private static Car fetchNext(ResultSet resultSet) throws SQLException{
         int id = resultSet.getInt("id");
         int ownerId = resultSet.getInt("owner_id");
         String chassisNo = resultSet.getString("chassis_no");
@@ -35,6 +31,26 @@ public record Car(int id,
         String color = resultSet.getString("color");
 
         return new Car(id, ownerId, chassisNo, recType, brand, model, color);
+    }
+    private void completeStatementCommon(CallableStatement statement) throws SQLException{
+        statement.setInt("owner_id", ownerId());
+        statement.setString("chassis_no", chassisNo());
+        statement.setString("rec_type", recType());
+        statement.setString("brand", brand());
+        statement.setString("model", model());
+        statement.setString("color", color());
+
+    }
+    @Override
+    public void completeUpdateStatement(CallableStatement statement)  throws SQLException{
+
+        completeStatementCommon( statement);
+        statement.setInt("id", id());
+    }
+    @Override
+    public void completeCreateStatement(CallableStatement statement) throws SQLException
+    {
+        completeStatementCommon(statement);
     }
 
     /**
@@ -63,22 +79,7 @@ public record Car(int id,
      * @return Car[] with all cars in the database
      */
     static public Car[] fetchAll() throws SQLException {
-        try (Statement statement = con.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Car[] cars = new Car[count];
-                int i = 0;
-                Car car;
-                while ((car = fetchNext(resultSet)) != null) {
-                    cars[i++] = car;
-                }
-
-                return cars;
-            }
-        }
+        return DatabaseHandler.fetchAll(getAllQuery, Car::fetchNext);
     }
 
     /**
@@ -87,16 +88,7 @@ public record Car(int id,
      * @return true if successful
      */
     public boolean save() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(createCarQuery)) {
-            callableStatement.setInt("owner_id", ownerId());
-            callableStatement.setString("chassis_no", chassisNo());
-            callableStatement.setString("rec_type", recType());
-            callableStatement.setString("brand", brand());
-            callableStatement.setString("model", model());
-            callableStatement.setString("color", color());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.executeCreateStatement(createCarQuery, this);
     }
 
     /**
@@ -105,17 +97,7 @@ public record Car(int id,
      * @return true if successful
      */
     public boolean update() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(updateCarQuery)) {
-            callableStatement.setInt("owner_id", ownerId());
-            callableStatement.setString("chassis_no", chassisNo());
-            callableStatement.setString("rec_type", recType());
-            callableStatement.setString("brand", brand());
-            callableStatement.setString("model", model());
-            callableStatement.setString("color", color());
-            callableStatement.setInt("id", id());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.executeUpdateStatement(updateCarQuery, this);
     }
 
     /**
@@ -125,10 +107,8 @@ public record Car(int id,
      * @return true if successful
      */
     static public boolean delete(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(deleteCarQuery)) {
-            callableStatement.setInt("id", id);
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.deleteById(deleteCarQuery, id);
     }
+
+
 }
