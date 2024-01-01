@@ -19,7 +19,7 @@ public class ClientController {
 
     public void fetchOneById(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("clientId"));
-        Client client = Client.fetchOneById(id);
+        Client client = Client.fetchById(id);
 
         if (client == null) {
             ctx.status(404);
