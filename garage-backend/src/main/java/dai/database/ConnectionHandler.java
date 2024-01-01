@@ -11,7 +11,7 @@ public class ConnectionHandler {
 
     }
 
-    public static Connection getConnection() {
+    public static Connection getConnection() throws SQLException {
 
         if (connection == null) {
             connection = DriverManager.getConnection(
