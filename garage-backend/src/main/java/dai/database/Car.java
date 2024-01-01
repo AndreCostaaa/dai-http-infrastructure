@@ -17,7 +17,7 @@ public record Car(int id,
             deleteCarQuery = "DELETE FROM car WHERE id = :id;";
 
     /**
-     * 
+     *
      * @param resultSet resultset returned from the execution of the query
      * @return the car currently pointed at by result set
      */
@@ -59,18 +59,8 @@ public record Car(int id,
      * @param id the id of the Car to fetch
      * @return Car or null
      */
-    static public Car fetchOne(int id) throws SQLException {
-
-        final Connection con = ConnectionHandler.getConnection();
-
-        try (CallableStatement callableStatement = con.prepareCall(getCarByIdQuery)) {
-            callableStatement.setInt("id", id);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                return fetchNext(resultSet);
-            }
-
-        }
+    static public Car fetchById(int id) throws SQLException {
+        return DatabaseHandler.fetchById(getCarByIdQuery, id, Car::fetchNext);
     }
 
     /**
