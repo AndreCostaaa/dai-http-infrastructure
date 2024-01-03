@@ -4,7 +4,6 @@ import dai.database.Service;
 import io.javalin.http.Context;
 import java.sql.SQLException;
 
-
 public class ServiceController {
 
     public void fetchAll(Context ctx) throws SQLException {
@@ -20,7 +19,7 @@ public class ServiceController {
 
     public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
-        Service service = Service.fetchOne(id);
+        Service service = Service.fetchById(id);
 
         if (service == null) {
             ctx.status(404);
