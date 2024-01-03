@@ -1,24 +1,19 @@
 package dai.database;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CarTest {
+import java.sql.SQLException;
 
-    @BeforeEach
-    void setUp() {
-
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
+class CarTest extends GarageTest {
 
     @Test
-    void fetchOne() {
+    void fetchOne() throws SQLException {
+        Car car = Car.fetchById(1);
+
+        assertNotNull(car);
+        assertEquals(1, car.id());
     }
 
     @Test
