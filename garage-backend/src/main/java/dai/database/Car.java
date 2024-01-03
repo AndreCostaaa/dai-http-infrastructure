@@ -1,33 +1,104 @@
 package dai.database;
 
+import java.sql.*;
+
 public record Car(int id,
-                  int ownerId,
-                  String chassisNo,
-                  String recType,
-                  String brand,
-                  String model,
-                  String color) {
+        int ownerId,
+        String chassisNo,
+        String recType,
+        String brand,
+        String model,
+        String color) implements IEntity {
 
-    static public Car fetchOne(int id){
-        return null;
+    static final String getAllQuery = "SELECT * FROM car;",
+            getCarByIdQuery = "SELECT * FROM car WHERE id = :id;",
+            createCarQuery = "INSERT INTO car(owner_id, chassis_no, rec_type, brand, model, color) VALUES (:owner_id, :chassis_no, :rec_type, :brand, :model, :color);",
+            updateCarQuery = "UPDATE car SET owner_id = :owner_id, chassis_no = :chassis_no, rec_type = :rec_type, brand = :brand, model = :model, color = :color WHERE id = :id;",
+            deleteCarQuery = "DELETE FROM car WHERE id = :id;";
+
+    /**
+     *
+     * @param resultSet resultset returned from the execution of the query
+     * @return the car currently pointed at by result set
+     */
+     private static Car fetchNext(ResultSet resultSet) throws SQLException{
+        int id = resultSet.getInt("id");
+        int ownerId = resultSet.getInt("owner_id");
+        String chassisNo = resultSet.getString("chassis_no");
+        String recType = resultSet.getString("rec_type");
+        String brand = resultSet.getString("brand");
+        String model = resultSet.getString("model");
+        String color = resultSet.getString("color");
+
+        return new Car(id, ownerId, chassisNo, recType, brand, model, color);
+    }
+    private void completeStatementCommon(CallableStatement statement) throws SQLException{
+        statement.setInt("owner_id", ownerId());
+        statement.setString("chassis_no", chassisNo());
+        statement.setString("rec_type", recType());
+        statement.setString("brand", brand());
+        statement.setString("model", model());
+        statement.setString("color", color());
+
+    }
+    @Override
+    public void completeUpdateStatement(CallableStatement statement)  throws SQLException{
+
+        completeStatementCommon( statement);
+        statement.setInt("id", id());
+    }
+    @Override
+    public void completeCreateStatement(CallableStatement statement) throws SQLException
+    {
+        completeStatementCommon(statement);
     }
 
-    static public Car[] fetchAll(){
-        return null;
+    /**
+     * Fetch a Car from the database matching the given id.
+     * 
+     * @param id the id of the Car to fetch
+     * @return Car or null
+     */
+    static public Car fetchById(int id) throws SQLException {
+        return DatabaseHandler.fetchById(getCarByIdQuery, id, Car::fetchNext);
     }
 
-    static public boolean create(Car car){
-        return true;
+    /**
+     * Fetch all Cars from the database.
+     * 
+     * @return Car[] with all cars in the database
+     */
+    static public Car[] fetchAll() throws SQLException {
+        return DatabaseHandler.fetchAll(getAllQuery, Car::fetchNext);
     }
 
-    static public boolean update(Car car){
-        return true;
+    /**
+     * Save the Car in the database.
+     * 
+     * @return true if successful
+     */
+    public boolean save() throws SQLException {
+        return DatabaseHandler.executeCreateStatement(createCarQuery, this);
     }
 
-    static public boolean delete(int id){
-        return true;
+    /**
+     * Update the Car in the database.
+     * 
+     * @return true if successful
+     */
+    public boolean update() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(updateCarQuery, this);
     }
+
+    /**
+     * Delete a Car from the database matching the given id.
+     * 
+     * @param id the id of the Car to delete
+     * @return true if successful
+     */
+    static public boolean delete(int id) throws SQLException {
+        return DatabaseHandler.deleteById(deleteCarQuery, id);
+    }
+
+
 }
-
-//car requests @TODO
-
