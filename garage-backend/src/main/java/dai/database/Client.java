@@ -7,15 +7,15 @@ public class Client extends Person {
     private final int streetNo, npa;
 
     public Client(int id,
-            String firstName,
-            String lastName,
-            String phoneCode,
-            String phoneNo,
-            String email,
-            String street,
-            int streetNo,
-            int npa,
-            String country) {
+                  String firstName,
+                  String lastName,
+                  String phoneCode,
+                  String phoneNo,
+                  String email,
+                  String street,
+                  int streetNo,
+                  int npa,
+                  String country) {
         super(id, firstName, lastName, phoneCode, phoneNo);
         this.email = email;
         this.street = street;
@@ -53,8 +53,10 @@ public class Client extends Person {
             updateClientQuery = "UPDATE client SET email = :email, street = :street, street_no = :street_no, npa = :npa, country = :country WHERE id = :id;",
             deleteClientQuery = "DELETE FROM client WHERE id = :id;";
 
-    static private Client fetchNext(ResultSet resultSet) throws SQLException
-    {
+    static private Client fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next())
+            return null;
+
         int id = resultSet.getInt("id");
         String firstName = resultSet.getString("fname");
         String lastName = resultSet.getString("lname");
@@ -69,9 +71,10 @@ public class Client extends Person {
         return new Client(id, firstName, lastName, phoneCode, phoneNo, email, street, streetNo, npa,
                 country);
     }
+
     /**
      * Fetch all Clients from the database.
-     * 
+     *
      * @return Client[] or null
      */
     static public Client[] fetchAll() throws SQLException {
@@ -80,7 +83,7 @@ public class Client extends Person {
 
     /**
      * Fetch a Client from the database matching the given id.
-     * 
+     *
      * @param id the id of the Client to fetch
      * @return Client or null
      */
@@ -90,7 +93,7 @@ public class Client extends Person {
 
     /**
      * Fetch a Client from the database matching the given phone_number.
-     * 
+     *
      * @param phoneNo the phone_number of the Client to fetch
      * @return Client or null
      */
@@ -100,7 +103,7 @@ public class Client extends Person {
 
     /**
      * Save the Client in the database without knowing the id.
-     * 
+     *
      * @return true if successful
      */
     public boolean saveNotKnowingId() throws SQLException {
@@ -121,7 +124,7 @@ public class Client extends Person {
 
     /**
      * Common method for saveKnowingId() and update().
-     * 
+     *
      * @param query the query to execute
      * @return true if successful
      */
@@ -140,7 +143,7 @@ public class Client extends Person {
 
     /**
      * Save the Client in the database knowing the id.
-     * 
+     *
      * @return true if successful
      */
     public boolean saveKnowingId() throws SQLException {
@@ -149,7 +152,7 @@ public class Client extends Person {
 
     /**
      * Update the Client in the database.
-     * 
+     *
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -158,7 +161,7 @@ public class Client extends Person {
 
     /**
      * Delete a Client from the database matching the given id.
-     * 
+     *
      * @param id the id of the Client to delete
      * @return true if successful
      */

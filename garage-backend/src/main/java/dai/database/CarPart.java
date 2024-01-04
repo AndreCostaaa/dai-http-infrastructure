@@ -1,14 +1,15 @@
 package dai.database;
+
 import java.sql.*;
 
 public record CarPart(int id,
-        int serviceId,
-        String supplier,
-        int supplierRef,
-        String name,
-        String description,
-        double buyPrice,
-        double sellPrice) implements IEntity {
+                      int serviceId,
+                      String supplier,
+                      int supplierRef,
+                      String name,
+                      String description,
+                      double buyPrice,
+                      double sellPrice) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM car_part;",
             getCarPartByIdQuery = "SELECT * FROM car_part WHERE id = :id;",
@@ -16,7 +17,10 @@ public record CarPart(int id,
             updateCarPartQuery = "UPDATE car_part SET service_id = :service_id, supplier = :supplier, supplier_ref = :supplier_ref, name = :name, description = :description, buy_price = :buy_price, sell_price = :sell_price WHERE id = :id;",
             deleteCarPartQuery = "DELETE FROM car_part WHERE id = :id;";
 
-    static private CarPart fetchNext(ResultSet resultSet) throws SQLException{
+    static private CarPart fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next())
+            return null;
+
         int id = resultSet.getInt("id");
         int serviceId = resultSet.getInt("service_id");
         String supplier = resultSet.getString("supplier");
@@ -28,7 +32,8 @@ public record CarPart(int id,
 
         return new CarPart(id, serviceId, supplier, supplierRef, name, description, buyPrice, sellPrice);
     }
-    private void completeStatementCommon(CallableStatement statement) throws SQLException{
+
+    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
         statement.setInt("service_id", serviceId());
         statement.setString("supplier", supplier());
         statement.setInt("supplier_ref", supplierRef());
@@ -37,19 +42,19 @@ public record CarPart(int id,
         statement.setDouble("buy_price", buyPrice());
         statement.setDouble("sell_price", sellPrice());
     }
-    public void completeUpdateStatement(CallableStatement statement)  throws SQLException{
 
-       completeStatementCommon(statement);
-       statement.setInt("id", id());
+    public void completeUpdateStatement(NamedParameterStatement wrapper) throws SQLException {
+        completeStatementCommon(wrapper);
+        wrapper.setInt("id", id());
     }
-    public void completeCreateStatement(CallableStatement statement) throws SQLException
-    {
-        completeStatementCommon(statement);
+
+    public void completeCreateStatement(NamedParameterStatement wrapper) throws SQLException {
+        completeStatementCommon(wrapper);
     }
 
     /**
      * Fetch a CarPart from the database matching the given id.
-     * 
+     *
      * @param id the id of the CarPart to fetch
      * @return CarPart or null
      */
@@ -59,7 +64,7 @@ public record CarPart(int id,
 
     /**
      * Fetch all CarParts from the database.
-     * 
+     *
      * @return CarPart[] or null
      */
     static public CarPart[] fetchAll() throws SQLException {
@@ -68,7 +73,7 @@ public record CarPart(int id,
 
     /**
      * Save the CarPart in the database.
-     * 
+     *
      * @return true if successful
      */
     public boolean save() throws SQLException {
@@ -78,7 +83,7 @@ public record CarPart(int id,
 
     /**
      * Update the CarPart in the database.
-     * 
+     *
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -87,7 +92,7 @@ public record CarPart(int id,
 
     /**
      * Delete a CarPart from the database matching the given id.
-     * 
+     *
      * @param id the id of the CarPart to delete
      * @return true if successful
      */

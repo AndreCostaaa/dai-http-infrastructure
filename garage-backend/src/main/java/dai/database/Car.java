@@ -3,12 +3,12 @@ package dai.database;
 import java.sql.*;
 
 public record Car(int id,
-        int ownerId,
-        String chassisNo,
-        String recType,
-        String brand,
-        String model,
-        String color) implements IEntity {
+                  int ownerId,
+                  String chassisNo,
+                  String recType,
+                  String brand,
+                  String model,
+                  String color) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM car;",
             getCarByIdQuery = "SELECT * FROM car WHERE id = :id;",
@@ -17,11 +17,13 @@ public record Car(int id,
             deleteCarQuery = "DELETE FROM car WHERE id = :id;";
 
     /**
-     *
      * @param resultSet resultset returned from the execution of the query
      * @return the car currently pointed at by result set
      */
-     private static Car fetchNext(ResultSet resultSet) throws SQLException{
+    private static Car fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next())
+            return null;
+
         int id = resultSet.getInt("id");
         int ownerId = resultSet.getInt("owner_id");
         String chassisNo = resultSet.getString("chassis_no");
@@ -32,30 +34,30 @@ public record Car(int id,
 
         return new Car(id, ownerId, chassisNo, recType, brand, model, color);
     }
-    private void completeStatementCommon(CallableStatement statement) throws SQLException{
-        statement.setInt("owner_id", ownerId());
-        statement.setString("chassis_no", chassisNo());
-        statement.setString("rec_type", recType());
-        statement.setString("brand", brand());
-        statement.setString("model", model());
-        statement.setString("color", color());
+
+    private void completeStatementCommon(NamedParameterStatement wrapper) throws SQLException {
+        wrapper.setInt("owner_id", ownerId());
+        wrapper.setString("chassis_no", chassisNo());
+        wrapper.setString("rec_type", recType());
+        wrapper.setString("brand", brand());
+        wrapper.setString("model", model());
+        wrapper.setString("color", color());
 
     }
-    @Override
-    public void completeUpdateStatement(CallableStatement statement)  throws SQLException{
 
-        completeStatementCommon( statement);
-        statement.setInt("id", id());
+    public void completeUpdateStatement(NamedParameterStatement wrapper) throws SQLException {
+
+        completeStatementCommon(wrapper);
+        wrapper.setInt("id", id());
     }
-    @Override
-    public void completeCreateStatement(CallableStatement statement) throws SQLException
-    {
-        completeStatementCommon(statement);
+
+    public void completeCreateStatement(NamedParameterStatement wrapper) throws SQLException {
+        completeStatementCommon(wrapper);
     }
 
     /**
      * Fetch a Car from the database matching the given id.
-     * 
+     *
      * @param id the id of the Car to fetch
      * @return Car or null
      */
@@ -65,7 +67,7 @@ public record Car(int id,
 
     /**
      * Fetch all Cars from the database.
-     * 
+     *
      * @return Car[] with all cars in the database
      */
     static public Car[] fetchAll() throws SQLException {
@@ -74,7 +76,7 @@ public record Car(int id,
 
     /**
      * Save the Car in the database.
-     * 
+     *
      * @return true if successful
      */
     public boolean save() throws SQLException {
@@ -83,7 +85,7 @@ public record Car(int id,
 
     /**
      * Update the Car in the database.
-     * 
+     *
      * @return true if successful
      */
     public boolean update() throws SQLException {
@@ -92,13 +94,12 @@ public record Car(int id,
 
     /**
      * Delete a Car from the database matching the given id.
-     * 
+     *
      * @param id the id of the Car to delete
      * @return true if successful
      */
     static public boolean delete(int id) throws SQLException {
         return DatabaseHandler.deleteById(deleteCarQuery, id);
     }
-
 
 }
