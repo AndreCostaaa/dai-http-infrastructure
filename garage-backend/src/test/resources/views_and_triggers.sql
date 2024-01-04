@@ -81,7 +81,7 @@ ELSEIF NEW.state_id = 3 THEN NEW.date_car_done = now();
 ELSEIF NEW.state_id = 4 THEN NEW.date_car_left = now();
 END IF;
 RETURN NEW;
-END $$ LANGUAGE plpgsql;
+END; $$ LANGUAGE plpgsql;
 CREATE TRIGGER service_auto_update_date_trigger BEFORE
 UPDATE ON service FOR EACH ROW EXECUTE FUNCTION service_auto_update_date();
 CREATE OR REPLACE FUNCTION calculate_service_total_cost(target_service_id INT) RETURNS DECIMAL(8, 2) AS $$ BEGIN RETURN calculate_service_material_cost(target_service_id) + calculate_service_labour_cost(target_service_id);
