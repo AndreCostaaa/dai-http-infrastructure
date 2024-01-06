@@ -8,8 +8,6 @@ import java.sql.SQLException;
 
 class CarTest extends GarageTest {
 
-    private static final int ghostId = 0;
-
     @Test
     void fetchOne() throws SQLException {
         Car car = Car.fetchById(1);

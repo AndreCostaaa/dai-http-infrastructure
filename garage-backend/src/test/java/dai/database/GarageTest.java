@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 class GarageTest {
 
     static protected Connection connection;
+    static protected final int ghostId = 0;
 
     @BeforeAll
     static void createDbConnection() throws SQLException {
