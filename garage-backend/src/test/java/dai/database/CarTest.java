@@ -42,8 +42,8 @@ class CarTest extends GarageTest {
 
         Car savedCar = car.save();
         assertNotNull(savedCar);
-        assertTrue(savedCar.equals(
-                new Car(13, car.ownerId(), car.chassisNo(), car.recType(), car.brand(), car.model(), car.color())));
+        assertEquals(savedCar,
+                new Car(13, car.ownerId(), car.chassisNo(), car.recType(), car.brand(), car.model(), car.color()));
     }
 
     @Test
@@ -52,13 +52,13 @@ class CarTest extends GarageTest {
         Car updatedCar = new Car(originalCar.id(), originalCar.ownerId(), originalCar.chassisNo(),
                 originalCar.recType(), originalCar.brand(), originalCar.model(),
                 "green");
-        assertFalse(updatedCar.equals(originalCar));
-        assertTrue(updatedCar.update().equals(updatedCar));
+        assertNotEquals(updatedCar, originalCar);
+        assertEquals(updatedCar.update(), updatedCar);
 
         Car retrievedCar = Car.fetchById(10);
         assertNotNull(retrievedCar);
-        assertTrue(updatedCar.equals(retrievedCar));
-        assertFalse(retrievedCar.equals(originalCar));
+        assertEquals(updatedCar, retrievedCar);
+        assertNotEquals(retrievedCar, originalCar);
     }
 
     @Test
