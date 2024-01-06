@@ -183,7 +183,7 @@ VALUES (
                 4,
                 'YV1MS382652074550',
                 '2UY391',
-                'Volkswage',
+                'Volkswagen',
                 'Tiguan',
                 'white'
         ),
