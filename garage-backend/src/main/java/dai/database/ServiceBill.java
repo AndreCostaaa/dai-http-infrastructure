@@ -1,7 +1,6 @@
 package dai.database;
 
 import java.sql.*;
-import java.util.concurrent.Callable;
 
 public record ServiceBill(int id,
         int price,
