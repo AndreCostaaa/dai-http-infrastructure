@@ -1,12 +1,15 @@
 package dai.database;
 
 import java.sql.*;
-import java.util.HashMap;
 
 public class DatabaseHandler {
 
     public interface IStatement<T> {
         void completeStatement(T element, NamedParameterStatement statement) throws SQLException;
+    }
+
+    static private String addReturningToQuery(String query) {
+        return query.replace(";", " RETURNING *;");
     }
 
     static public boolean deleteById(String stringQuery, int id) throws SQLException {
@@ -53,30 +56,31 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T extends IEntity> boolean executeUpdateStatement(String stringQuery, T element)
+    static public <T extends IEntity> T executeUpdateStatement(String stringQuery, T element,
+            ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {
+        stringQuery = addReturningToQuery(stringQuery);
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             element.completeUpdateStatement(statement);
 
-            return statement.executeUpdate() == 1;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return iresultSetHandler.fetchNext(resultSet);
+            }
         }
     }
 
-    static public <T extends IEntity> T executeCreateStatement(String stringQuery, T element, ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
+    static public <T extends IEntity> T executeCreateStatement(String stringQuery, T element,
+            ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {
+        stringQuery = addReturningToQuery(stringQuery);
+
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             element.completeCreateStatement(statement);
 
-            String preparedStatementQuery = statement.getStatement().toString();
-            statement.executeUpdate(preparedStatementQuery, Statement.RETURN_GENERATED_KEYS);
-
-            try (ResultSet generatedKeys = statement.getStatement().getGeneratedKeys()) {
-                generatedKeys.next();
-                int primaryKey = generatedKeys.getInt(1);
-
-                return null;
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return iresultSetHandler.fetchNext(resultSet);
             }
         }
     }
