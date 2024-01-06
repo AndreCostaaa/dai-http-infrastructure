@@ -88,8 +88,8 @@ public record Car(int id,
      *
      * @return true if successful
      */
-    public boolean update() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(updateCarQuery, this);
+    public Car update() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(updateCarQuery, this, Car::fetchNext);
     }
 
     /**
