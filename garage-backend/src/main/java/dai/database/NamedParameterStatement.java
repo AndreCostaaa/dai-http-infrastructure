@@ -54,12 +54,12 @@ public class NamedParameterStatement implements AutoCloseable {
      * prepareStatement}.
      * This constructor is useful if the PreparedStatement needs to be created with
      * extra values
-     * 
+     *
+     * @param connection           the database connection
      * @param query                the query that was used to create the statement
-     * @param statement            the statement
      * @param prepareStatementArgs the arguments to be passed to the
-     *                             {@link Connection#prepareStatement()}
-     * @throws SQLException
+     *                             {@link Connection#prepareStatement(java.lang.String)}
+     * @throws SQLException if the statement could not be created
      */
     public NamedParameterStatement(Connection connection, String query, int... prepareStatementArgs)
             throws SQLException {
