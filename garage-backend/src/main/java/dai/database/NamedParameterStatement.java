@@ -4,11 +4,18 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * Credit: <a href="https://www.infoworld.com/article/2077706/named-parameters-for-preparedstatement.amp.html">
- * InfoWorld, Named Parameters for PreparedStatement Making JDBC code easier to read and write</a><p></p>
- * This class wraps around a {@link PreparedStatement} and allows the programmer to set
- * parameters by name instead of by index.  This eliminates any confusion as to which
- * parameter index represents what. This also means that rearranging the SQL statement
+ * Credit: <a href=
+ * "https://www.infoworld.com/article/2077706/named-parameters-for-preparedstatement.amp.html">
+ * InfoWorld, Named Parameters for PreparedStatement Making JDBC code easier to
+ * read and write</a>
+ * <p>
+ * </p>
+ * This class wraps around a {@link PreparedStatement} and allows the programmer
+ * to set
+ * parameters by name instead of by index. This eliminates any confusion as to
+ * which
+ * parameter index represents what. This also means that rearranging the SQL
+ * statement
  * or adding a parameter doesn't involve renumbering your indices.
  *
  * @author adam_crume
@@ -24,24 +31,48 @@ public class NamedParameterStatement implements AutoCloseable {
      */
     private final Map<String, int[]> indexMap;
 
+    // /**
+    // * Creates a NamedParameterStatement. Wraps a call to
+    // * c.{@link Connection#prepareStatement(java.lang.String)
+    // * prepareStatement}.
+    // *
+    // * @param connection the database connection
+    // * @param query the parameterized query
+    // * @throws SQLException if the statement could not be created
+    // */
+    // public NamedParameterStatement(Connection connection, String query) throws
+    // SQLException {
+    // indexMap = new HashMap<>();
+    // String parsedQuery = parse(query, indexMap);
+
+    // statement = connection.prepareStatement(parsedQuery);
+    // }
+
     /**
-     * Creates a NamedParameterStatement.  Wraps a call to
+     * * Creates a NamedParameterStatement. Wraps a call to
      * c.{@link Connection#prepareStatement(java.lang.String)
      * prepareStatement}.
-     *
-     * @param connection the database connection
-     * @param query      the parameterized query
-     * @throws SQLException if the statement could not be created
+     * This constructor is useful if the PreparedStatement needs to be created with
+     * extra values
+     * 
+     * @param query                the query that was used to create the statement
+     * @param statement            the statement
+     * @param prepareStatementArgs the arguments to be passed to the
+     *                             {@link Connection#prepareStatement()}
+     * @throws SQLException
      */
-    public NamedParameterStatement(Connection connection, String query) throws SQLException {
+    public NamedParameterStatement(Connection connection, String query, int... prepareStatementArgs)
+            throws SQLException {
         indexMap = new HashMap<>();
         String parsedQuery = parse(query, indexMap);
-        statement = connection.prepareStatement(parsedQuery);
+        statement = connection.prepareStatement(parsedQuery, prepareStatementArgs);
     }
 
     /**
-     * Parses a query with named parameters. The parameter-index mappings are put into the map,
-     * and the parsed query is returned. DO NOT CALL FROM CLIENT CODE. This method is non-private
+     * Parses a query with named parameters. The parameter-index mappings are put
+     * into the map,
+     * and the parsed query is returned. DO NOT CALL FROM CLIENT CODE. This method
+     * is non-private
      * so JUnit code can test it.
      *
      * @param query    query to parse
@@ -49,8 +80,11 @@ public class NamedParameterStatement implements AutoCloseable {
      * @return the parsed query
      */
     static final String parse(String query, Map<String, int[]> paramMap) {
-        /* I was originally using regular expressions, but they didn't work well for ignoring
-           parameter-like strings inside quotes. */
+        /*
+         * I was originally using regular expressions, but they didn't work well for
+         * ignoring
+         * parameter-like strings inside quotes.
+         */
         int length = query.length();
         StringBuilder parsedQuery = new StringBuilder(length);
         boolean inSingleQuote = false;
@@ -179,7 +213,6 @@ public class NamedParameterStatement implements AutoCloseable {
         }
     }
 
-
     /**
      * Sets a parameter.
      *
@@ -259,14 +292,17 @@ public class NamedParameterStatement implements AutoCloseable {
     }
 
     /**
-     * Executes the given SQL statement, which must be an SQL INSERT, UPDATE or DELETE
+     * Executes the given SQL statement, which must be an SQL INSERT, UPDATE or
+     * DELETE
      * statement;
-     * or an SQL statement that returns nothing, such as a DDL statement, and signals
+     * or an SQL statement that returns nothing, such as a DDL statement, and
+     * signals
      * the driver with the given flag about whether the auto-generated keys produced
      * by this Statement object should be made available for retrieval.
      *
      * @param stringQuery       SQL statement to be sent to the database
-     * @param autoGeneratedKeys a flag indicating whether auto-generated keys should be
+     * @param autoGeneratedKeys a flag indicating whether auto-generated keys should
+     *                          be
      * @return number of rows affected
      * @throws SQLException if an error occurred
      * @see PreparedStatement#executeUpdate(String sql, int autoGeneratedKeys)
