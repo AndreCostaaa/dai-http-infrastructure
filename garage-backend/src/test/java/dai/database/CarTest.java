@@ -15,7 +15,7 @@ class CarTest extends GarageTest {
         Car car = Car.fetchById(1);
 
         assertNotNull(car);
-        assertTrue(car.equals(new Car(1, 2, "3VWAX7AJ1AM117565", "1M4011", "Citroën", "C3", "red")));
+        assertEquals(car, new Car(1, 2, "3VWAX7AJ1AM117565", "1M4011", "Citroën", "C3", "red"));
     }
 
     @Test
