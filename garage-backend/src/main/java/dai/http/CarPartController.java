@@ -32,7 +32,7 @@ public class CarPartController {
     public void save(Context ctx) throws SQLException {
         CarPart carPart = ctx.bodyAsClass(CarPart.class);
 
-        if (carPart.save()) {
+        if (carPart.save() != null) {
             ctx.status(201);
             return;
         }

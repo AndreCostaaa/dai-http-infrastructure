@@ -63,13 +63,21 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T extends IEntity> boolean executeCreateStatement(String stringQuery, T element)
+    static public <T extends IEntity> T executeCreateStatement(String stringQuery, T element, ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             element.completeCreateStatement(statement);
 
-            return statement.executeUpdate() == 1;
+            String preparedStatementQuery = statement.getStatement().toString();
+            statement.executeUpdate(preparedStatementQuery, Statement.RETURN_GENERATED_KEYS);
+
+            try (ResultSet generatedKeys = statement.getStatement().getGeneratedKeys()) {
+                generatedKeys.next();
+                int primaryKey = generatedKeys.getInt(1);
+
+                return null;
+            }
         }
     }
 

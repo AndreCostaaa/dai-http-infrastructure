@@ -76,9 +76,8 @@ public record CarPart(int id,
      *
      * @return true if successful
      */
-    public boolean save() throws SQLException {
-        return DatabaseHandler.executeCreateStatement(updateCarPartQuery, this);
-
+    public CarPart save() throws SQLException {
+        return DatabaseHandler.executeCreateStatement(updateCarPartQuery, this, CarPart::fetchNext);
     }
 
     /**

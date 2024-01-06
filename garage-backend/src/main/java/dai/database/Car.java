@@ -79,8 +79,8 @@ public record Car(int id,
      *
      * @return true if successful
      */
-    public boolean save() throws SQLException {
-        return DatabaseHandler.executeCreateStatement(createCarQuery, this);
+    public Car save() throws SQLException {
+        return DatabaseHandler.executeCreateStatement(createCarQuery, this, Car::fetchNext);
     }
 
     /**

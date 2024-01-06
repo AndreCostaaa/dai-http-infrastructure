@@ -8,18 +8,24 @@ import java.sql.SQLException;
 
 class CarTest extends GarageTest {
 
+    private static final int ghostId = 0;
+
+    void checkAttributes(Car car, int id, int ownerId, String chassisNo, String recType, String brand, String model, String color) {
+        assertEquals(car.id(), id);
+        assertEquals(car.ownerId(), ownerId);
+        assertEquals(car.chassisNo(), chassisNo);
+        assertEquals(car.recType(), recType);
+        assertEquals(car.brand(), brand);
+        assertEquals(car.model(), model);
+        assertEquals(car.color(), color);
+    }
+
     @Test
     void fetchOne() throws SQLException {
         Car car = Car.fetchById(1);
 
         assertNotNull(car);
-        assertEquals(1, car.id());
-        assertEquals(2, car.ownerId());
-        assertEquals("3VWAX7AJ1AM117565", car.chassisNo());
-        assertEquals("1M4011", car.recType());
-        assertEquals("Citroën", car.brand());
-        assertEquals("C3", car.model());
-        assertEquals("red", car.color());
+        checkAttributes(car, 1, 2, "3VWAX7AJ1AM117565", "1M4011", "Citroën", "C3", "red");
     }
 
     @Test
@@ -42,24 +48,26 @@ class CarTest extends GarageTest {
 
     @Test
     void save() throws SQLException {
-        Car car = new Car(13, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "grey");
+        Car car = new Car(ghostId, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "grey");
 
-        assertTrue(car.save());
-
-        Car retrievedCar = Car.fetchById(13);
-
-        assertNotNull(retrievedCar);
-        assertEquals(13, retrievedCar.id());
-        assertEquals(3, retrievedCar.ownerId());
-        assertEquals("8AFA8EFZH9FWFH9FW", retrievedCar.chassisNo());
-        assertEquals("FH8239", retrievedCar.recType());
-        assertEquals("Mercedes", retrievedCar.brand());
-        assertEquals("AMG GT Coupé", retrievedCar.model());
-        assertEquals("grey", retrievedCar.color());
+        Car savedCar = car.save();
+        assertNotNull(savedCar);
+        checkAttributes(savedCar, 13, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "grey");
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
+        Car car = Car.fetchById(13);
+
+        assertNotNull(car);
+        checkAttributes(car, 13, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "grey");
+
+        Car updatedCar = new Car(car.id(), car.ownerId(), car.chassisNo(), car.recType(), car.brand(), car.model(), "green");
+        assertTrue(updatedCar.update());
+
+        Car retrievedCar = Car.fetchById(13);
+        assertNotNull(retrievedCar);
+        checkAttributes(retrievedCar, 13, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "green");
     }
 
     @Test
