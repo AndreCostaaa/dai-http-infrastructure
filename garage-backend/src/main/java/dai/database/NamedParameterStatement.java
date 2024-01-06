@@ -31,23 +31,6 @@ public class NamedParameterStatement implements AutoCloseable {
      */
     private final Map<String, int[]> indexMap;
 
-    // /**
-    // * Creates a NamedParameterStatement. Wraps a call to
-    // * c.{@link Connection#prepareStatement(java.lang.String)
-    // * prepareStatement}.
-    // *
-    // * @param connection the database connection
-    // * @param query the parameterized query
-    // * @throws SQLException if the statement could not be created
-    // */
-    // public NamedParameterStatement(Connection connection, String query) throws
-    // SQLException {
-    // indexMap = new HashMap<>();
-    // String parsedQuery = parse(query, indexMap);
-
-    // statement = connection.prepareStatement(parsedQuery);
-    // }
-
     /**
      * * Creates a NamedParameterStatement. Wraps a call to
      * c.{@link Connection#prepareStatement(java.lang.String)
