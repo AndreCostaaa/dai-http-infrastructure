@@ -3,13 +3,13 @@ package dai.database;
 import java.sql.*;
 
 public record CarPart(int id,
-                      int serviceId,
-                      String supplier,
-                      int supplierRef,
-                      String name,
-                      String description,
-                      double buyPrice,
-                      double sellPrice) implements IEntity {
+        int serviceId,
+        String supplier,
+        int supplierRef,
+        String name,
+        String description,
+        double buyPrice,
+        double sellPrice) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM car_part;",
             getCarPartByIdQuery = "SELECT * FROM car_part WHERE id = :id;",
@@ -43,13 +43,13 @@ public record CarPart(int id,
         statement.setDouble("sell_price", sellPrice());
     }
 
-    public void completeUpdateStatement(NamedParameterStatement wrapper) throws SQLException {
-        completeStatementCommon(wrapper);
-        wrapper.setInt("id", id());
+    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+        statement.setInt("id", id());
     }
 
-    public void completeCreateStatement(NamedParameterStatement wrapper) throws SQLException {
-        completeStatementCommon(wrapper);
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
     }
 
     /**

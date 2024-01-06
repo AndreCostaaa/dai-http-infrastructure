@@ -3,12 +3,12 @@ package dai.database;
 import java.sql.*;
 
 public record Car(int id,
-                  int ownerId,
-                  String chassisNo,
-                  String recType,
-                  String brand,
-                  String model,
-                  String color) implements IEntity {
+        int ownerId,
+        String chassisNo,
+        String recType,
+        String brand,
+        String model,
+        String color) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM car;",
             getCarByIdQuery = "SELECT * FROM car WHERE id = :id;",
@@ -35,24 +35,24 @@ public record Car(int id,
         return new Car(id, ownerId, chassisNo, recType, brand, model, color);
     }
 
-    private void completeStatementCommon(NamedParameterStatement wrapper) throws SQLException {
-        wrapper.setInt("owner_id", ownerId());
-        wrapper.setString("chassis_no", chassisNo());
-        wrapper.setString("rec_type", recType());
-        wrapper.setString("brand", brand());
-        wrapper.setString("model", model());
-        wrapper.setString("color", color());
+    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
+        statement.setInt("owner_id", ownerId());
+        statement.setString("chassis_no", chassisNo());
+        statement.setString("rec_type", recType());
+        statement.setString("brand", brand());
+        statement.setString("model", model());
+        statement.setString("color", color());
 
     }
 
-    public void completeUpdateStatement(NamedParameterStatement wrapper) throws SQLException {
+    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
 
-        completeStatementCommon(wrapper);
-        wrapper.setInt("id", id());
+        completeStatementCommon(statement);
+        statement.setInt("id", id());
     }
 
-    public void completeCreateStatement(NamedParameterStatement wrapper) throws SQLException {
-        completeStatementCommon(wrapper);
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
     }
 
     /**
