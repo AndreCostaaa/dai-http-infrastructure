@@ -43,7 +43,7 @@ public class CarController {
     public void update(Context ctx) throws SQLException {
         Car car = ctx.bodyAsClass(Car.class);
 
-        if (car.update()) {
+        if (car.update() != null) {
             ctx.status(200);
             return;
         }
