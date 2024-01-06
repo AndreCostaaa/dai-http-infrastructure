@@ -28,6 +28,16 @@ class CarTest extends GarageTest {
 
         assertNotNull(cars);
         assertEquals(12, cars.length);
+        for (Car car : cars) {
+            assertNotNull(car);
+            assertInstanceOf(Car.class, car);
+            assertTrue(car.id() > 0);
+            assertTrue(car.ownerId() > 0);
+            assertNotNull(car.chassisNo());
+            assertEquals(17, car.chassisNo().length());
+            assertNotNull(car.recType());
+            assertEquals(6, car.recType().length());
+        }
     }
 
     @Test
