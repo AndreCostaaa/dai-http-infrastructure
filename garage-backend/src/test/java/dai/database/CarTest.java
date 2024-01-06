@@ -10,22 +10,12 @@ class CarTest extends GarageTest {
 
     private static final int ghostId = 0;
 
-    void checkAttributes(Car car, int id, int ownerId, String chassisNo, String recType, String brand, String model, String color) {
-        assertEquals(car.id(), id);
-        assertEquals(car.ownerId(), ownerId);
-        assertEquals(car.chassisNo(), chassisNo);
-        assertEquals(car.recType(), recType);
-        assertEquals(car.brand(), brand);
-        assertEquals(car.model(), model);
-        assertEquals(car.color(), color);
-    }
-
     @Test
     void fetchOne() throws SQLException {
         Car car = Car.fetchById(1);
 
         assertNotNull(car);
-        checkAttributes(car, 1, 2, "3VWAX7AJ1AM117565", "1M4011", "Citroën", "C3", "red");
+        assertTrue(car.equals(new Car(1, 2, "3VWAX7AJ1AM117565", "1M4011", "Citroën", "C3", "red")));
     }
 
     @Test
@@ -52,25 +42,31 @@ class CarTest extends GarageTest {
 
         Car savedCar = car.save();
         assertNotNull(savedCar);
-        checkAttributes(savedCar, 13, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "grey");
+        assertTrue(savedCar.equals(
+                new Car(13, car.ownerId(), car.chassisNo(), car.recType(), car.brand(), car.model(), car.color())));
     }
 
     @Test
     void update() throws SQLException {
-        Car car = Car.fetchById(13);
+        Car originalCar = Car.fetchById(10);
+        Car updatedCar = new Car(originalCar.id(), originalCar.ownerId(), originalCar.chassisNo(),
+                originalCar.recType(), originalCar.brand(), originalCar.model(),
+                "green");
+        assertFalse(updatedCar.equals(originalCar));
+        assertTrue(updatedCar.update().equals(updatedCar));
 
-        assertNotNull(car);
-        checkAttributes(car, 13, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "grey");
-
-        Car updatedCar = new Car(car.id(), car.ownerId(), car.chassisNo(), car.recType(), car.brand(), car.model(), "green");
-        assertTrue(updatedCar.update());
-
-        Car retrievedCar = Car.fetchById(13);
+        Car retrievedCar = Car.fetchById(10);
         assertNotNull(retrievedCar);
-        checkAttributes(retrievedCar, 13, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "green");
+        assertTrue(updatedCar.equals(retrievedCar));
+        assertFalse(retrievedCar.equals(originalCar));
     }
 
     @Test
-    void delete() {
+    void delete() throws SQLException {
+        save();
+        Car originalCar = Car.fetchById(13);
+        assertNotNull(originalCar);
+        assertTrue(Car.delete(13));
+        assertNull(Car.fetchById(13));
     }
 }
