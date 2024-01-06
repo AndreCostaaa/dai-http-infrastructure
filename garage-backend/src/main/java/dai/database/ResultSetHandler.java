@@ -2,6 +2,7 @@ package dai.database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.lang.reflect.Array;
 
 public class ResultSetHandler<T> {
 
@@ -17,12 +18,13 @@ public class ResultSetHandler<T> {
         this.resultSetHandler = resultSetHandler;
     }
 
-    public T[] fetchAll() throws SQLException{
+    public T[] fetchAll() throws SQLException {
         ArrayList<T> entities = new ArrayList<>();
-        while (resultSet.next()) {
+        while (!resultSet.isLast())
             entities.add(resultSetHandler.fetchNext(resultSet));
-        }
-        return (T[]) entities.toArray();
+
+        T[] resultArray = (T[]) Array.newInstance(entities.getFirst().getClass(), entities.size());
+        return entities.toArray(resultArray);
     }
 
 }

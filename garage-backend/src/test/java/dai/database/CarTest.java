@@ -17,7 +17,11 @@ class CarTest extends GarageTest {
     }
 
     @Test
-    void fetchAll() {
+    void fetchAll() throws SQLException {
+        Car[] cars = Car.fetchAll();
+
+        assertNotNull(cars);
+        assertEquals(12, cars.length);
     }
 
     @Test
