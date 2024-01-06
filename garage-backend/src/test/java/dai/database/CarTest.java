@@ -14,6 +14,12 @@ class CarTest extends GarageTest {
 
         assertNotNull(car);
         assertEquals(1, car.id());
+        assertEquals(2, car.ownerId());
+        assertEquals("3VWAX7AJ1AM117565", car.chassisNo());
+        assertEquals("1M4011", car.recType());
+        assertEquals("Citroën", car.brand());
+        assertEquals("C3", car.model());
+        assertEquals("red", car.color());
     }
 
     @Test
