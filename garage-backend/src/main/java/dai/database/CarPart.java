@@ -85,8 +85,8 @@ public record CarPart(int id,
      *
      * @return true if successful
      */
-    public boolean update() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(updateCarPartQuery, this);
+    public CarPart update() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(updateCarPartQuery, this, CarPart::fetchNext);
     }
 
     /**
@@ -98,4 +98,5 @@ public record CarPart(int id,
     static public boolean delete(int id) throws SQLException {
         return DatabaseHandler.deleteById(deleteCarPartQuery, id);
     }
+
 }
