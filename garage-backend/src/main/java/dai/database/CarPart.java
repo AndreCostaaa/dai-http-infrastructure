@@ -3,9 +3,9 @@ package dai.database;
 import java.sql.*;
 
 public record CarPart(int id,
-        int serviceId,
+        Integer serviceId,
         String supplier,
-        int supplierRef,
+        String supplierRef,
         String name,
         String description,
         double buyPrice,
@@ -22,9 +22,9 @@ public record CarPart(int id,
             return null;
 
         int id = resultSet.getInt("id");
-        int serviceId = resultSet.getInt("service_id");
+    Integer serviceId = resultSet.getObject("service_id", Integer.class);
         String supplier = resultSet.getString("supplier");
-        int supplierRef = resultSet.getInt("supplier_ref");
+        String supplierRef = resultSet.getString("supplier_ref");
         String name = resultSet.getString("name");
         String description = resultSet.getString("description");
         double buyPrice = resultSet.getDouble("buy_price");
@@ -34,9 +34,12 @@ public record CarPart(int id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        statement.setInt("service_id", serviceId());
+        if (serviceId() == null)
+            statement.setNull("service_id", Types.INTEGER);
+        else
+            statement.setInt("service_id", serviceId());
         statement.setString("supplier", supplier());
-        statement.setInt("supplier_ref", supplierRef());
+        statement.setString("supplier_ref", supplierRef());
         statement.setString("name", name());
         statement.setString("description", description());
         statement.setDouble("buy_price", buyPrice());
@@ -74,16 +77,16 @@ public record CarPart(int id,
     /**
      * Save the CarPart in the database.
      *
-     * @return true if successful
+     * @return CarPart or null
      */
     public CarPart save() throws SQLException {
-        return DatabaseHandler.executeCreateStatement(updateCarPartQuery, this, CarPart::fetchNext);
+        return DatabaseHandler.executeCreateStatement(createCarPartQuery, this, CarPart::fetchNext);
     }
 
     /**
      * Update the CarPart in the database.
      *
-     * @return true if successful
+     * @return CarPart or null
      */
     public CarPart update() throws SQLException {
         return DatabaseHandler.executeUpdateStatement(updateCarPartQuery, this, CarPart::fetchNext);

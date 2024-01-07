@@ -77,7 +77,7 @@ public record Car(int id,
     /**
      * Save the Car in the database.
      *
-     * @return true if successful
+     * @return Car or null
      */
     public Car save() throws SQLException {
         return DatabaseHandler.executeCreateStatement(createCarQuery, this, Car::fetchNext);
@@ -86,7 +86,7 @@ public record Car(int id,
     /**
      * Update the Car in the database.
      *
-     * @return true if successful
+     * @return Car or null
      */
     public Car update() throws SQLException {
         return DatabaseHandler.executeUpdateStatement(updateCarQuery, this, Car::fetchNext);
