@@ -1,6 +1,7 @@
 package dai.database;
 
 import java.sql.*;
+import java.util.Objects;
 
 public record CarPart(int id,
         Integer serviceId,
@@ -10,6 +11,24 @@ public record CarPart(int id,
         String description,
         double buyPrice,
         double sellPrice) implements IEntity {
+
+    public CarPart(int id,
+            Integer serviceId,
+            String supplier,
+            String supplierRef,
+            String name,
+            String description,
+            double buyPrice,
+            double sellPrice) {
+        this.id = id;
+        this.serviceId = Objects.requireNonNullElse(serviceId, 0);
+        this.supplier = supplier;
+        this.supplierRef = supplierRef;
+        this.name = name;
+        this.description = description;
+        this.buyPrice = buyPrice;
+        this.sellPrice = sellPrice;
+    }
 
     static final String getAllQuery = "SELECT * FROM car_part;",
             getCarPartByIdQuery = "SELECT * FROM car_part WHERE id = :id;",
@@ -34,7 +53,7 @@ public record CarPart(int id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        if (serviceId() == null)
+        if (serviceId() == null || serviceId() == 0)
             statement.setNull("service_id", Types.INTEGER);
         else
             statement.setInt("service_id", serviceId());

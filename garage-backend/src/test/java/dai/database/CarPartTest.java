@@ -14,6 +14,7 @@ public class CarPartTest extends GarageTest {
 
         assertNotNull(carPart);
         assertEquals(carPart, new CarPart(1, null, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30", "Motor Oil - 1L", 19.95, 29.95));
+        assertEquals(carPart, new CarPart(1, 0, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30", "Motor Oil - 1L", 19.95, 29.95));
     }
 
     @Test
