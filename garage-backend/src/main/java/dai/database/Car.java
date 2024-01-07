@@ -56,6 +56,15 @@ public record Car(int id,
     }
 
     /**
+     * Fetch all Cars from the database.
+     *
+     * @return Car[] with all cars in the database
+     */
+    static public Car[] fetchAll() throws SQLException {
+        return DatabaseHandler.fetchAll(getAllQuery, Car::fetchNext);
+    }
+
+    /**
      * Fetch a Car from the database matching the given id.
      *
      * @param id the id of the Car to fetch
@@ -63,15 +72,6 @@ public record Car(int id,
      */
     static public Car fetchById(int id) throws SQLException {
         return DatabaseHandler.fetchById(getCarByIdQuery, id, Car::fetchNext);
-    }
-
-    /**
-     * Fetch all Cars from the database.
-     *
-     * @return Car[] with all cars in the database
-     */
-    static public Car[] fetchAll() throws SQLException {
-        return DatabaseHandler.fetchAll(getAllQuery, Car::fetchNext);
     }
 
     /**

@@ -88,7 +88,7 @@ public class Client extends Person {
      * @return Client or null
      */
     static public Client fetchById(int id) throws SQLException {
-        return DatabaseHandler.fetchById(getAllQuery, id, Client::fetchNext);
+        return DatabaseHandler.fetchById(getClientByIdQuery, id, Client::fetchNext);
     }
 
     /**
