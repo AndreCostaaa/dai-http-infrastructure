@@ -53,7 +53,7 @@ public record CarPart(int id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        if (serviceId() == null || serviceId() == 0)
+        if (serviceId() == 0)
             statement.setNull("service_id", Types.INTEGER);
         else
             statement.setInt("service_id", serviceId());
