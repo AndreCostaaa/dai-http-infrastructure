@@ -65,13 +65,13 @@ public record CarPart(int id,
         statement.setDouble("sell_price", sellPrice());
     }
 
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+    }
+
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         completeStatementCommon(statement);
         statement.setInt("id", id());
-    }
-
-    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
-        completeStatementCommon(statement);
     }
 
     /**
