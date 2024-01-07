@@ -230,6 +230,24 @@ public class NamedParameterStatement implements AutoCloseable {
         }
     }
 
+
+    /**
+     * Sets a parameter to NULL in the database.
+     *
+     * @param name  parameter name
+     * @param value SQL type
+     * @throws SQLException             if an error occurred
+     * @throws IllegalArgumentException if the parameter does not exist
+     * @see PreparedStatement#setNull(int, int)
+     */
+    public void setNull(String name, int value) throws SQLException {
+        int[] indexes = getIndexes(name);
+
+        for (int index : indexes) {
+            statement.setNull(index, value);
+        }
+    }
+
     /**
      * Returns the underlying statement.
      *
