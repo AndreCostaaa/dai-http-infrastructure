@@ -1,21 +1,10 @@
-import {
-  Button,
-  Card,
-  CardHeader,
-  Heading,
-  IconButton,
-  VStack,
-  ButtonProps,
-} from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { GrServices } from "react-icons/gr";
 
 import { FaCar, FaTools } from "react-icons/fa";
 
 import { MdDashboard, MdPeople } from "react-icons/md";
 import NavigationBarButton from "./NavigationBarButton";
-interface Props extends ButtonProps {
-  url: string;
-}
 
 const NavigationBar = () => {
   const buttons = [
