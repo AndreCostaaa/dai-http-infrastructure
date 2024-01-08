@@ -28,7 +28,7 @@ public class App {
             app.get("/api/clients/{clientId}", clientController::fetchOneById);
             app.get("/api/clients/{phoneNo}", clientController::fetchOneByPhoneNo);
             app.post("/api/clients/", clientController::saveNotKnowingId);
-            app.post("/api/clients/", clientController::saveKnowingId);
+            app.post("/api/clients/knownId/", clientController::saveKnowingId);
             app.patch("/api/clients/update/", clientController::update);
             app.delete("/api/clients/{clientId}", clientController::delete);
 
@@ -38,7 +38,7 @@ public class App {
             app.get("/api/employees/{employeeId}", employeeController::fetchOne);
             app.get("/api/employees/{employeeId}", employeeController::fetchEveryMechanic);
             app.post("/api/employees/", employeeController::saveNotKnowingId);
-            app.post("/api/employees/", employeeController::saveKnowingId);
+            app.post("/api/employees/knownId/", employeeController::saveKnowingId);
             app.patch("/api/employees/update/", employeeController::update);
             app.delete("/api/employees/{employeeId}", employeeController::delete);
 
