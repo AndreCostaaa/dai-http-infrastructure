@@ -36,7 +36,7 @@ public class App {
             EmployeeController employeeController = new EmployeeController();
             app.get("/api/employees", employeeController::fetchAll);
             app.get("/api/employees/{employeeId}", employeeController::fetchOne);
-            app.get("/api/employees/{employeeId}", employeeController::fetchEveryMechanic);
+            app.get("/api/employees/mechanic/{employeeId}", employeeController::fetchEveryMechanic);
             app.post("/api/employees/", employeeController::saveNotKnowingId);
             app.post("/api/employees/knownId/", employeeController::saveKnowingId);
             app.patch("/api/employees/update/", employeeController::update);
@@ -67,7 +67,7 @@ public class App {
             app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanic);
             app.get("/api/services/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
             app.get("/api/services/{stateId}", serviceController::fetchServiceByState);
-            app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanicProcessing);
+            app.get("/api/services/processing/{mechanicId}", serviceController::fetchServiceByMechanicProcessing);
             app.get("/api/services/0", serviceController::fetchServiceCreated);
             app.get("/api/services/1", serviceController::fetchServiceWaiting);
             app.get("/api/services/2", serviceController::fetchServiceProcessing);
@@ -84,6 +84,14 @@ public class App {
             app.get("/api/serviceBills/{serviceBillId}", serviceBillController::fetchOne);
             app.post("/api/serviceBills/update", serviceBillController::update);
             app.delete("/api/serviceBills/{serviceBillId}", serviceBillController::delete);
+
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
         }
     }
 }
