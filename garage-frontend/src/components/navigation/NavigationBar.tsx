@@ -11,7 +11,7 @@ import { GrServices } from "react-icons/gr";
 
 import { FaCar, FaTools } from "react-icons/fa";
 
-import { MdPeople } from "react-icons/md";
+import { MdDashboard, MdPeople } from "react-icons/md";
 import NavigationBarButton from "./NavigationBarButton";
 interface Props extends ButtonProps {
   url: string;
@@ -19,6 +19,11 @@ interface Props extends ButtonProps {
 
 const NavigationBar = () => {
   const buttons = [
+    {
+      url: "/",
+      text: "Dashboard",
+      icon: MdDashboard,
+    },
     {
       url: "/services",
       text: "Service",
