@@ -6,7 +6,7 @@ import io.javalin.http.Context;
 public class PersonController {
 
     public void fetchOne(Context ctx){
-        int id = Integer.parseInt(ctx.pathParam("serviceId"));
+        int id = Integer.parseInt(ctx.pathParam("personId"));
 
         Person person = Person.fetchOne(id);
 
@@ -60,6 +60,4 @@ public class PersonController {
         }
         ctx.status(400);
     }
-
-
 }

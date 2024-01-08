@@ -39,7 +39,6 @@ public class Client extends Person {
     }
 
     //SQL requests
-
     static public Client fetchOne(int clientId){
         return null;
     }
@@ -48,7 +47,23 @@ public class Client extends Person {
         return null;
     }
 
-    static public Client[] fetchByPhone(){
+    static public Client[] fetchByPhone(String phoneCode, String phoneNo){
         return null;
+    }
+
+    static public boolean create(Client client){
+        return true;
+    }
+
+    static public boolean createAlreadyInPerson(Client client){
+        return true;
+    }
+
+    static public boolean update(Client client){
+        return true;
+    }
+
+    static public boolean delete(int id){
+        return true;
     }
 }
