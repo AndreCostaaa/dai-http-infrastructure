@@ -25,12 +25,7 @@ VALUES ('René', 'Rentsh', '+41', '244303309'),
         ('Ignazio', 'Cassis', '+41', '774452211'),
         ('Karin', 'Keller-Sutter', '+41', '796664258'),
         ('Albert', 'Rösti', '+41', '785632012'),
-        (
-                'Cédric',
-                'Campos Carvalho',
-                '+41',
-                '784207523'
-        ),
+        ('Cédric', 'Campos Carvalho', '+41', '784207523'),
         ('André', 'Costa', '+41', '786308274');
 -- Insert non-mechanic employees
 INSERT INTO employee (id, role_id)
