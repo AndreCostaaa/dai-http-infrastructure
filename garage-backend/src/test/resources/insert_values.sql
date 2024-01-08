@@ -1,39 +1,37 @@
 SET SEARCH_PATH TO "garage-testing";
 INSERT INTO role (
-                id,
                 name,
                 can_create,
                 can_assign_others,
                 is_mechanic
         )
-VALUES (5, 'Janitor', FALSE, FALSE, FALSE),
-        (4, 'Secretary', TRUE, FALSE, FALSE),
-        (2, 'Manager', TRUE, TRUE, TRUE),
-        (1, 'Director', TRUE, TRUE, FALSE),
-        (3, 'Mechanic', FALSE, FALSE, TRUE);
-INSERT INTO specialization (id, name, hourly_rate)
-VALUES (1, 'General', 30.5),
-        (2, 'BodyMechanic', 35.5),
-        (3, 'Mechatronics', 42.9);
-INSERT INTO person (id, fname, lname, phone_code, phone_no)
-VALUES (1, 'René', 'Rentsh', '+41', '244303309'),
-        (2, 'Amir', 'Mouti', '+41', '765594551'),
-        (3, 'Yanis', 'Ouadahi', '+41', '789147182'),
-        (12, 'André', 'Costa', '+41', '786308274'),
-        (4, 'Marc', 'Dikötter', '+41', '786994512'),
-        (5, 'Alain', 'Berset', '+41', '796554545'),
-        (6, 'Viola', 'Amherd', '+41', '764545544'),
-        (7, 'Guy', 'Parmelin', '+41', '797773211'),
-        (8, 'Ignazio', 'Cassis', '+41', '774452211'),
-        (9, 'Karin', 'Keller-Sutter', '+41', '796664258'),
-        (10, 'Albert', 'Rösti', '+41', '785632012'),
+VALUES ('Director', TRUE, TRUE, FALSE),
+        ('Manager', TRUE, TRUE, TRUE),
+        ('Mechanic', FALSE, FALSE, TRUE),
+        ('Secretary', TRUE, FALSE, FALSE),
+        ('Janitor', FALSE, FALSE, FALSE);
+INSERT INTO specialization (name, hourly_rate)
+VALUES ('General', 30.5),
+        ('BodyMechanic', 35.5),
+        ('Mechatronics', 42.9);
+INSERT INTO person (fname, lname, phone_code, phone_no)
+VALUES ('René', 'Rentsh', '+41', '244303309'),
+        ('Amir', 'Mouti', '+41', '765594551'),
+        ('Yanis', 'Ouadahi', '+41', '789147182'),
+        ('Marc', 'Dikötter', '+41', '786994512'),
+        ('Alain', 'Berset', '+41', '796554545'),
+        ('Viola', 'Amherd', '+41', '764545544'),
+        ('Guy', 'Parmelin', '+41', '797773211'),
+        ('Ignazio', 'Cassis', '+41', '774452211'),
+        ('Karin', 'Keller-Sutter', '+41', '796664258'),
+        ('Albert', 'Rösti', '+41', '785632012'),
         (
-                11,
                 'Cédric',
                 'Campos Carvalho',
                 '+41',
                 '784207523'
-        );
+        ),
+        ('André', 'Costa', '+41', '786308274');
 -- Insert non-mechanic employees
 INSERT INTO employee (id, role_id)
 VALUES (1, 5),
