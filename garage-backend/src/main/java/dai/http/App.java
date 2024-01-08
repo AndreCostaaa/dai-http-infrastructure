@@ -4,7 +4,6 @@ import io.javalin.*;
 public class App {
     public static void main(String[] args){
         try(Javalin app = Javalin.create().start(7000);){
-
             //RoleController
             RoleController roleController = new RoleController();
             app.get("/api/roles", roleController::fetchAll);
@@ -51,7 +50,29 @@ public class App {
             app.patch("/api/carParts/update/", carPartController::update);
             app.delete("/api/carParts/{carPartId}", carPartController::delete);
 
+            //ClientController
+            ClientController clientController = new ClientController();
+            app.get("/api/clients/{clientId}", clientController::fetchOne);
+            app.get("/api/clients/", clientController::fetchAll);
+            app.get("/api/clients/{phoneCode}/{phoneNo}", clientController::fetchByPhone);
+            app.post("/api/clients/", clientController::create);
+            app.patch("api/clients/update/", clientController::update);
+            app.delete("api/clients/{clientId}", clientController::update);
 
+            //EmployeeController
+            EmployeeController employeeController = new EmployeeController();
+            app.get("/api/employees/{employeeId}", employeeController::fetchOne);
+            app.get("/api/employees/", employeeController::fetchAll);
+            app.get("/api/employees/mechanics/", employeeController::fetchMechanics);
+            app.post("/api/employees/", employeeController::create);
+            app.patch("/api/employees/update/", employeeController::update);
+            app.delete("/api/employees/{employeeId}", employeeController::delete);
+
+            //ServiceBillController
+            ServiceBillController serviceBillController = new ServiceBillController();
+            app.get("/api/bills/{billId}", serviceBillController::fetchOne);
+            app.patch("/api/bills/update/", serviceBillController::update);
+            app.delete("/api/bills/{billId}", serviceBillController::delete);
         }
     }
 }
