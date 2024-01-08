@@ -1,7 +1,7 @@
-import React from "react";
+import CarParts from "./CarParts";
 
 const CarPartPanel = () => {
-  return <div>CarPart</div>;
+  return <CarParts carPartList={[]} />;
 };
 
 export default CarPartPanel;
