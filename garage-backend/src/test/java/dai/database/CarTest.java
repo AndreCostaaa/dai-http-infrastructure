@@ -10,7 +10,7 @@ class CarTest extends GarageTest {
 
     @Test
     void fetchOne() throws SQLException {
-        Car car = Car.fetchById(1);
+        Car car = Car.fetchOne(1);
 
         assertNotNull(car);
         assertEquals(car, new Car(1, 2, "3VWAX7AJ1AM117565", "1M4011", "Citroën", "C3", "red"));
@@ -46,14 +46,14 @@ class CarTest extends GarageTest {
 
     @Test
     void update() throws SQLException {
-        Car originalCar = Car.fetchById(10);
+        Car originalCar = Car.fetchOne(10);
         Car updatedCar = new Car(originalCar.id(), originalCar.ownerId(), originalCar.chassisNo(),
                 originalCar.recType(), originalCar.brand(), originalCar.model(),
                 "green");
         assertNotEquals(updatedCar, originalCar);
         assertEquals(updatedCar.update(), updatedCar);
 
-        Car retrievedCar = Car.fetchById(10);
+        Car retrievedCar = Car.fetchOne(10);
         assertNotNull(retrievedCar);
         assertEquals(updatedCar, retrievedCar);
         assertNotEquals(retrievedCar, originalCar);
@@ -62,9 +62,9 @@ class CarTest extends GarageTest {
     @Test
     void delete() throws SQLException {
         save();
-        Car originalCar = Car.fetchById(13);
+        Car originalCar = Car.fetchOne(13);
         assertNotNull(originalCar);
         assertTrue(Car.delete(13));
-        assertNull(Car.fetchById(13));
+        assertNull(Car.fetchOne(13));
     }
 }

@@ -10,7 +10,7 @@ public record Car(int id,
         String model,
         String color) implements IEntity {
 
-    static final String getAllQuery = "SELECT * FROM car;",
+    static final String getAllCarsQuery = "SELECT * FROM car;",
             getCarByIdQuery = "SELECT * FROM car WHERE id = :id;",
             createCarQuery = "INSERT INTO car(owner_id, chassis_no, rec_type, brand, model, color) VALUES (:owner_id, :chassis_no, :rec_type, :brand, :model, :color);",
             updateCarQuery = "UPDATE car SET owner_id = :owner_id, chassis_no = :chassis_no, rec_type = :rec_type, brand = :brand, model = :model, color = :color WHERE id = :id;",
@@ -50,7 +50,6 @@ public record Car(int id,
     }
 
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
-
         completeStatementCommon(statement);
         statement.setInt("id", id());
     }
@@ -61,7 +60,7 @@ public record Car(int id,
      * @return Car[] with all cars in the database
      */
     static public Car[] fetchAll() throws SQLException {
-        return DatabaseHandler.fetchAll(getAllQuery, Car::fetchNext);
+        return DatabaseHandler.fetchAll(getAllCarsQuery, Car::fetchNext);
     }
 
     /**
@@ -70,7 +69,7 @@ public record Car(int id,
      * @param id the id of the Car to fetch
      * @return Car or null
      */
-    static public Car fetchById(int id) throws SQLException {
+    static public Car fetchOne(int id) throws SQLException {
         return DatabaseHandler.fetchById(getCarByIdQuery, id, Car::fetchNext);
     }
 

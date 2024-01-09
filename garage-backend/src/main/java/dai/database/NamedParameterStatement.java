@@ -180,6 +180,22 @@ public class NamedParameterStatement implements AutoCloseable {
     }
 
     /**
+     *
+     * @param name parameter name
+     * @param value parameter value
+     * @throws SQLException             if an error occurred
+     * @throws IllegalArgumentException if the parameter does not exist
+     * @see PreparedStatement#setBoolean(int, boolean)
+     */
+    public void setBoolean(String name, boolean value) throws SQLException {
+        int[] indexes = getIndexes(name);
+
+        for (int index : indexes) {
+            statement.setBoolean(index, value);
+        }
+    }
+
+    /**
      * Sets a parameter.
      *
      * @param name  parameter name
@@ -229,6 +245,7 @@ public class NamedParameterStatement implements AutoCloseable {
             statement.setTimestamp(index, value);
         }
     }
+
 
 
     /**

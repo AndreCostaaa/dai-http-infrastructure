@@ -6,7 +6,7 @@ public record ServiceBill(int id,
         int price,
         boolean delivered,
         boolean paid,
-        int discountPercentage) {
+        int discountPercentage) implements IEntity {
 
     static Connection con;
 
@@ -15,66 +15,53 @@ public record ServiceBill(int id,
             updateQuery = "UPDATE service_bill SET price = :price, delivered = :delivered, paid = :paid, discount_percentage = :discount_percentage WHERE id = :id",
             deleteQuery = "DELETE FROM service_bill WHERE id = :id";
 
+    private static ServiceBill fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next())
+            return null;
+
+        int id = resultSet.getInt("id");
+        int price = resultSet.getInt("price");
+        boolean delivered = resultSet.getBoolean("delivered");
+        boolean paid = resultSet.getBoolean("rec_type");
+        int discountPercentage = resultSet.getInt("discount_percentage");
+
+        return new ServiceBill(id, price, delivered, paid, discountPercentage);
+    }
+
+
+    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
+        statement.setInt("price", price());
+        statement.setBoolean("delivered", delivered());
+        statement.setBoolean("paid", paid());
+        statement.setInt("discountPercentage", discountPercentage());
+    }
+
+    @Override
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+    }
+
+    @Override
+    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+        statement.setInt("id", id());
+    }
+
     static public ServiceBill[] fetchAll() throws SQLException {
-        try (Statement statement = con.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                ServiceBill[] serviceBills = new ServiceBill[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int price = resultSet.getInt("price");
-                    boolean delivered = resultSet.getBoolean("delivered");
-                    boolean paid = resultSet.getBoolean("paid");
-                    int discountPercentage = resultSet.getInt("discount_percentage");
-
-                    serviceBills[i++] = new ServiceBill(id, price, delivered, paid, discountPercentage);
-                }
-
-                return serviceBills;
-            }
-        }
+        return DatabaseHandler.fetchAll(getAllQuery, ServiceBill::fetchNext);
     }
 
     static public ServiceBill fetchOne(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getByIdQuery)) {
-            callableStatement.setInt("id", id);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int price = resultSet.getInt("price");
-                    boolean delivered = resultSet.getBoolean("delivered");
-                    boolean paid = resultSet.getBoolean("paid");
-                    int discountPercentage = resultSet.getInt("discount_percentage");
-
-                    return new ServiceBill(id, price, delivered, paid, discountPercentage);
-                } else
-                    return null;
-            }
-        }
+        return DatabaseHandler.fetchById(getByIdQuery, id, ServiceBill::fetchNext);
     }
 
-    public boolean update() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(updateQuery)) {
-            callableStatement.setInt("id", id());
-            callableStatement.setInt("price", price());
-            callableStatement.setBoolean("delivered", delivered());
-            callableStatement.setBoolean("paid", paid());
-            callableStatement.setInt("discountPercentage", discountPercentage());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+    public ServiceBill update() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(updateQuery, this, ServiceBill::fetchNext);
     }
 
     static public boolean delete(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(deleteQuery)) {
-            callableStatement.setInt("id", id);
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.deleteById(deleteQuery, id);
     }
+
+
 }

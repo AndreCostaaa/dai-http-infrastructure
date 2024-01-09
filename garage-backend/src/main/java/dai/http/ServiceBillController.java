@@ -32,8 +32,8 @@ public class ServiceBillController {
     public void update(Context ctx) throws SQLException {
         ServiceBill bill = ctx.bodyAsClass(ServiceBill.class);
 
-        if (bill.update()) {
-            ctx.status(200);
+        if (bill.update() != null) {
+            ctx.json(bill);
             return;
         }
 

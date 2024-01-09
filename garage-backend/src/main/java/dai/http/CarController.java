@@ -19,7 +19,7 @@ public class CarController {
 
     public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("carId"));
-        Car car = Car.fetchById(id);
+        Car car = Car.fetchOne(id);
 
         if (car == null) {
             ctx.status(404);
@@ -33,7 +33,7 @@ public class CarController {
         Car car = ctx.bodyAsClass(Car.class);
 
         if (car.save() != null) {
-            ctx.status(201);
+            ctx.json(car);
             return;
         }
 
@@ -44,7 +44,7 @@ public class CarController {
         Car car = ctx.bodyAsClass(Car.class);
 
         if (car.update() != null) {
-            ctx.status(200);
+            ctx.json(car);
             return;
         }
 
