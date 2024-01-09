@@ -15,7 +15,7 @@ VALUES ('General', 30.5),
         ('BodyMechanic', 35.5),
         ('Mechatronics', 42.9);
 INSERT INTO person (fname, lname, phone_no)
-VALUES ('René', 'Rentsh', '+41244303309'),
+VALUES ('René', 'Rentsch', '+41244303309'),
         ('Amir', 'Mouti', '+41765594551'),
         ('Yanis', 'Ouadahi', '+41789147182'),
         ('Marc', 'Dikötter', '+41786994512'),
