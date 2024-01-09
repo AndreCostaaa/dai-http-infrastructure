@@ -29,7 +29,7 @@ public class EmployeeController {
         ctx.json(employee);
     }
 
-    public void fetchEveryMechanic(Context ctx) throws SQLException {
+    public void fetchMechanics(Context ctx) throws SQLException {
         Employee[] employees = Employee.fetchEveryMechanic();
 
         if (employees.length == 0) {
