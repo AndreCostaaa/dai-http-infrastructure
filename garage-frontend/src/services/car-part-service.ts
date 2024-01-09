@@ -1,4 +1,6 @@
-interface CarPart {
+import create from "./http-service";
+
+export interface CarPart {
   id: number;
   serviceId: number | null;
   supplier: string;
@@ -8,3 +10,5 @@ interface CarPart {
   buyPrice: number;
   sellPrice: number;
 }
+
+export default create("/carParts");

@@ -1,6 +1,7 @@
 import { Car } from "./car-service";
 import { Client } from "./client-service";
 import { Employee } from "./employee-service";
+import create from "./http-service";
 
 export interface ServiceState {
   id: number;
@@ -22,3 +23,5 @@ export interface Service {
   dateCarDone: Date;
   dateCarLeft: Date;
 }
+
+export default create("/services");

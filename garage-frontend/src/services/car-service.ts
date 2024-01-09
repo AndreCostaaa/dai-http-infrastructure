@@ -1,3 +1,5 @@
+import create from "./http-service";
+
 export interface Car {
   id: number;
   ownerId: number;
@@ -7,3 +9,5 @@ export interface Car {
   model: string;
   color: string;
 }
+
+export default create("/cars");

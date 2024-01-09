@@ -1,4 +1,4 @@
-import { Entity } from "./http-service";
+import create, { Entity } from "./http-service";
 
 export interface Role extends Entity {
   name: string;
@@ -6,3 +6,5 @@ export interface Role extends Entity {
   canAssignOthers: boolean;
   isMechanic: boolean;
 }
+
+export default create("roles");
