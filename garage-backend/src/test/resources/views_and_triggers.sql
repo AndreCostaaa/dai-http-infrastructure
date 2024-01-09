@@ -17,7 +17,7 @@ SELECT service.id,
     p.lname AS mechanic_lname,
     p2.fname AS client_fname,
     p2.lname AS client_lname,
-    CONCAT(p2.phone_code, p2.phone_no) AS client_phone_no,
+    p2.phone_no AS client_phone_no,
     cl.email AS client_email
 FROM service
     JOIN car c ON c.id = service.car_id
@@ -50,7 +50,7 @@ SELECT service.id AS service_id,
     color,
     p.fname AS client_fname,
     p.lname AS client_lname,
-    sb.gross_price AS cost
+    sb.price AS cost
 FROM service
     JOIN car c ON c.id = service.car_id
     JOIN person p ON p.id = service.client_id
@@ -67,7 +67,7 @@ SELECT service.id AS service_id,
     color,
     p.fname AS client_fname,
     p.lname AS client_lname,
-    sb.gross_price AS cost
+    sb.price AS cost
 FROM service
     JOIN car c ON c.id = service.car_id
     JOIN person p ON p.id = service.client_id

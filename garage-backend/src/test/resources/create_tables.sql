@@ -27,7 +27,6 @@ CREATE TABLE person (
     id SERIAL,
     fname VARCHAR(15),
     lname VARCHAR(15),
-    phone_code VARCHAR(4),
     phone_no VARCHAR(15),
     PRIMARY KEY (id)
 );
@@ -101,7 +100,7 @@ CREATE TABLE car_part (
 );
 CREATE TABLE service_bill (
     id INT,
-    gross_price DECIMAL(8, 2),
+    price DECIMAL(8, 2),
     delivered BOOLEAN NOT NULL,
     paid BOOLEAN NOT NULL,
     discount_percentage SMALLINT,

@@ -32,14 +32,16 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T> T fetchBy(String stringQuery, String key, String value,
+    static public <T> T[] fetchAllBy(String stringQuery, String key, String value,
             ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             statement.setString(key, value);
 
             try (ResultSet resultSet = statement.executeQuery()) {
-                return iresultSetHandler.fetchNext(resultSet);
+                var resultSetHandler = new ResultSetHandler<>(resultSet, iresultSetHandler);
+
+                return resultSetHandler.fetchAll();
             }
         }
     }

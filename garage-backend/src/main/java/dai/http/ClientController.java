@@ -17,7 +17,7 @@ public class ClientController {
         ctx.json(clients);
     }
 
-    public void fetchOneById(Context ctx) throws SQLException {
+    public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("clientId"));
         Client client = Client.fetchById(id);
 
@@ -29,9 +29,9 @@ public class ClientController {
         ctx.json(client);
     }
 
-    public void fetchOneByPhoneNo(Context ctx) throws SQLException {
+    public void fetchByPhoneNo(Context ctx) throws SQLException {
         String phoneNo = ctx.pathParam("phoneNo");
-        Client client = Client.fetchOneByPhoneNo(phoneNo);
+        Client[] client = Client.fetchByPhoneNo(phoneNo);
 
         if (client == null) {
             ctx.status(404);
@@ -44,8 +44,8 @@ public class ClientController {
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
 
-        if (client.saveNotKnowingId()) {
-            ctx.status(201);
+        if (client.saveNotKnowingId() != null) {
+            ctx.json(client);
             return;
         }
 
@@ -55,8 +55,8 @@ public class ClientController {
     public void saveKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
 
-        if (client.saveKnowingId()) {
-            ctx.status(201);
+        if (client.saveKnowingId() != null) {
+            ctx.json(client);
             return;
         }
 
@@ -67,8 +67,8 @@ public class ClientController {
     public void update(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
 
-        if (client.update()) {
-            ctx.status(200);
+        if (client.update() != null) {
+            ctx.json(client);
             return;
         }
 

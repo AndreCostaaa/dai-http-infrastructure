@@ -1,21 +1,19 @@
 package dai.database;
 
 import java.sql.*;
+import java.util.Objects;
 
-public class Person {
+public class Person implements IEntity {
     private final int id;
-    private final String firstName, lastName, phoneCode, phoneNo;
-    static Connection con;
+    private final String firstName, lastName, phoneNo;
 
     public Person(int id,
             String firstName,
             String lastName,
-            String phoneCode,
             String phoneNo) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.phoneCode = phoneCode;
         this.phoneNo = phoneNo;
     }
 
@@ -31,118 +29,107 @@ public class Person {
         return lastName;
     }
 
-    public String phoneCode() {
-        return phoneCode;
-    }
-
     public String phoneNo() {
         return phoneNo;
     }
 
+    public boolean equals(Object object) {
+        if (this == object)
+            return true;
+        if (object instanceof Person otherPerson) {
+            return id() == otherPerson.id()
+                    && firstName().equals(otherPerson.firstName())
+                    && lastName().equals(otherPerson.lastName())
+                    && phoneNo().equals(otherPerson.phoneNo());
+        }
+        return false;
+    }
+
+    public int hashCode() {
+        return Objects.hash(id(), firstName(), lastName(), phoneNo());
+    }
+
     static final String getAllQuery = "SELECT * FROM person;",
             getPersonByIdQuery = "SELECT * FROM person WHERE id = :id;",
-            createPersonQuery = "INSERT INTO person(fname, lname, phone_code, phone_no) VALUES (:fname, :lname, :phone_code, :phone_no);",
-            updatePersonQuery = "UPDATE person SET fname = :fname, lname = :lname, phone_code = :phone_code, phone_no = :phone_no WHERE id = :id;",
+            createPersonQuery = "INSERT INTO person(fname, lname, phone_no) VALUES (:fname, :lname, :phone_no);",
+            updatePersonQuery = "UPDATE person SET fname = :fname, lname = :lname, phone_no = :phone_no WHERE id = :id;",
             deletePersonQuery = "DELETE FROM person WHERE id = :id;";
 
     /**
-     * Fetch a Person from the database matching the given id.
-     * 
-     * @param id the id of the Person to fetch
+     * @param resultSet resultset returned from the execution of the query
      * @return Person or null
      */
-    static public Person fetchOne(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getPersonByIdQuery)) {
-            callableStatement.setInt("id", id);
+    protected static Person fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next())
+            return null;
 
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    String firstName = resultSet.getString("fname");
-                    String lastName = resultSet.getString("lname");
-                    String phoneCode = resultSet.getString("phone_code");
-                    String phoneNo = resultSet.getString("phone_no");
+        int id = resultSet.getInt("id");
+        String firstName = resultSet.getString("fname");
+        String lastName = resultSet.getString("lname");
+        String phoneNo = resultSet.getString("phone_no");
 
-                    return new Person(id, firstName, lastName, phoneCode, phoneNo);
-                } else
-                    return null;
-            }
-        }
+        return new Person(id, firstName, lastName, phoneNo);
+    }
+
+    public void completeCommonStatement(NamedParameterStatement statement) throws SQLException {
+        statement.setString("fname", firstName());
+        statement.setString("lname", lastName());
+        statement.setString("phone_no", phoneNo());
+    }
+
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeCommonStatement(statement);
+    }
+
+    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
+        completeCommonStatement(statement);
+        statement.setInt("id", id());
     }
 
     /**
      * Fetch all Persons from the database.
-     * 
+     *
      * @return Person[] or null
      */
     static public Person[] fetchAll() throws SQLException {
-        try (Statement statement = con.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
+        return DatabaseHandler.fetchAll(getAllQuery, Person::fetchNext);
+    }
 
-                Person[] persons = new Person[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String firstName = resultSet.getString("fname");
-                    String lastName = resultSet.getString("lname");
-                    String phoneCode = resultSet.getString("phone_code");
-                    String phoneNo = resultSet.getString("phone_no");
-
-                    persons[i++] = new Person(id, firstName, lastName, phoneCode, phoneNo);
-                }
-
-                return persons;
-            }
-        }
+    /**
+     * Fetch a Car from the database matching the given id.
+     *
+     * @param id the id of the Car to fetch
+     * @return Car or null
+     */
+    static public Person fetchById(int id) throws SQLException {
+        return DatabaseHandler.fetchById(getPersonByIdQuery, id, Person::fetchNext);
     }
 
     /**
      * Save the Person in the database.
-     * 
-     * @return true if successful
+     *
+     * @return Person or null
      */
-    public boolean save() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(createPersonQuery)) {
-            callableStatement.setString("fname", firstName());
-            callableStatement.setString("lname", lastName());
-            callableStatement.setString("phone_code", phoneCode());
-            callableStatement.setString("phone_no", phoneNo());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+    public Person save() throws SQLException {
+        return DatabaseHandler.executeCreateStatement(createPersonQuery, this, Person::fetchNext);
     }
 
     /**
      * Update the Person in the database.
-     * 
-     * @return true if successful
+     *
+     * @return Person or null
      */
-    public boolean update() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(updatePersonQuery)) {
-            callableStatement.setString("fname", firstName());
-            callableStatement.setString("lname", lastName());
-            callableStatement.setString("phone_code", phoneCode());
-            callableStatement.setString("phone_no", phoneNo());
-            callableStatement.setInt("id", id());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+    public Person update() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(updatePersonQuery, this, Person::fetchNext);
     }
 
     /**
      * Delete a Person from the database matching the given id.
-     * 
+     *
      * @param id the id of the Person to delete
      * @return true if successful
      */
     static public boolean delete(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(deletePersonQuery)) {
-            callableStatement.setInt("id", id);
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.deleteById(deletePersonQuery, id);
     }
 }

@@ -14,19 +14,19 @@ INSERT INTO specialization (name, hourly_rate)
 VALUES ('General', 30.5),
         ('BodyMechanic', 35.5),
         ('Mechatronics', 42.9);
-INSERT INTO person (fname, lname, phone_code, phone_no)
-VALUES ('René', 'Rentsh', '+41', '244303309'),
-        ('Amir', 'Mouti', '+41', '765594551'),
-        ('Yanis', 'Ouadahi', '+41', '789147182'),
-        ('Marc', 'Dikötter', '+41', '786994512'),
-        ('Alain', 'Berset', '+41', '796554545'),
-        ('Viola', 'Amherd', '+41', '764545544'),
-        ('Guy', 'Parmelin', '+41', '797773211'),
-        ('Ignazio', 'Cassis', '+41', '774452211'),
-        ('Karin', 'Keller-Sutter', '+41', '796664258'),
-        ('Albert', 'Rösti', '+41', '785632012'),
-        ('Cédric', 'Campos Carvalho', '+41', '784207523'),
-        ('André', 'Costa', '+41', '786308274');
+INSERT INTO person (fname, lname, phone_no)
+VALUES ('René', 'Rentsch', '+41244303309'),
+        ('Amir', 'Mouti', '+41765594551'),
+        ('Yanis', 'Ouadahi', '+41789147182'),
+        ('Marc', 'Dikötter', '+41786994512'),
+        ('Alain', 'Berset', '+41796554545'),
+        ('Viola', 'Amherd', '+41764545544'),
+        ('Guy', 'Parmelin', '+41797773211'),
+        ('Ignazio', 'Cassis', '+41774452211'),
+        ('Karin', 'Keller-Sutter', '+41796664258'),
+        ('Albert', 'Rösti', '+41785632012'),
+        ('Cédric', 'Campos Carvalho', '+41784207523'),
+        ('André', 'Costa', '+41786308274');
 -- Insert non-mechanic employees
 INSERT INTO employee (id, role_id)
 VALUES (1, 5),
