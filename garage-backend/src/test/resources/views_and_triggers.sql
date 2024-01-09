@@ -17,7 +17,7 @@ SELECT service.id,
     p.lname AS mechanic_lname,
     p2.fname AS client_fname,
     p2.lname AS client_lname,
-    CONCAT(p2.phone_code, p2.phone_no) AS client_phone_no,
+    p2.phone_code AS client_phone_code,
     cl.email AS client_email
 FROM service
     JOIN car c ON c.id = service.car_id
