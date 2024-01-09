@@ -1,19 +1,16 @@
-import React from "react";
-import { Car } from "../../services/car-service";
+import { Center, Spinner } from "@chakra-ui/react";
 import Cars from "./Cars";
-const data: Car[] = [
-  {
-    brand: "wv",
-    chassisNo: "122332323",
-    color: "white",
-    id: 1,
-    model: "golf",
-    ownerId: 2,
-    recType: "232323",
-  },
-];
+import useCars from "../../hooks/useCars";
+import DataSkeleton from "../generic/DataSkeleton";
+
 const CarPanel = () => {
-  return <Cars carList={data} />;
+  const { data, isLoading } = useCars();
+
+  return (
+    <DataSkeleton isLoading={isLoading} data={data}>
+      {data && <Cars carList={data} />}
+    </DataSkeleton>
+  );
 };
 
 export default CarPanel;

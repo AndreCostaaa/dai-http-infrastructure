@@ -1,6 +1,8 @@
 import React from "react";
 import Employees from "./Employees";
 import { Employee } from "../../services/employee-service";
+import useEmployees from "../../hooks/useEmployees";
+import DataSkeleton from "../generic/DataSkeleton";
 const data: Array<Employee> = [
   {
     fname: "andre",
@@ -13,7 +15,13 @@ const data: Array<Employee> = [
   },
 ];
 const EmployeePanel = () => {
-  return <Employees employeeList={data} />;
+  const { data, isLoading } = useEmployees();
+
+  return (
+    <DataSkeleton isLoading={isLoading} data={data}>
+      {data && <Employees employeeList={data} />}
+    </DataSkeleton>
+  );
 };
 
 export default EmployeePanel;
