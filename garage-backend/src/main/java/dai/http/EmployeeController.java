@@ -19,7 +19,7 @@ public class EmployeeController {
 
     public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("employeeId"));
-        Employee employee = Employee.fetchOne(id);
+        Employee employee = Employee.fetchById(id);
 
         if (employee == null) {
             ctx.status(404);
@@ -30,21 +30,21 @@ public class EmployeeController {
     }
 
     public void fetchMechanics(Context ctx) throws SQLException {
-        Employee[] employees = Employee.fetchEveryMechanic();
+        Employee[] mechanics = Employee.fetchEveryMechanic();
 
-        if (employees.length == 0) {
+        if (mechanics.length == 0) {
             ctx.status(404);
             return;
         }
 
-        ctx.json(employees);
+        ctx.json(mechanics);
     }
 
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
 
-        if (employee.saveNotKnowingId()) {
-            ctx.status(201);
+        if (employee.saveNotKnowingId() != null) {
+            ctx.json(employee);
             return;
         }
 
@@ -54,8 +54,8 @@ public class EmployeeController {
     public void saveKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
 
-        if (employee.saveKnowingId()) {
-            ctx.status(201);
+        if (employee.saveKnowingId() != null) {
+            ctx.json(employee);
             return;
         }
 
@@ -66,8 +66,8 @@ public class EmployeeController {
     public void update(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
 
-        if (employee.update()) {
-            ctx.status(200);
+        if (employee.update() != null) {
+            ctx.json(employee);
             return;
         }
 

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
 
-public class CarPartTest extends GarageTest {
+class CarPartTest extends GarageTest {
 
     @Test
     void fetchOne() throws SQLException {
