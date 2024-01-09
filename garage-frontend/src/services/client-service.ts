@@ -1,4 +1,4 @@
-import { Person } from "./http-service";
+import create, { Person } from "./http-service";
 
 export interface Client extends Person {
   email: string;
@@ -7,3 +7,5 @@ export interface Client extends Person {
   npa: number;
   country: string;
 }
+
+export default create("/clients");
