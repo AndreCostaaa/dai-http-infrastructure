@@ -31,19 +31,39 @@ public class Client extends Person {
         return email;
     }
 
-    public String street() {
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public void setStreetNo(int streetNo) {
+        this.streetNo = streetNo;
+    }
+
+    public void setNpa(int npa) {
+        this.npa = npa;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getStreet() {
         return street;
     }
 
-    public int streetNo() {
+    public int getStreetNo() {
         return streetNo;
     }
 
-    public int npa() {
+    public int getNpa() {
         return npa;
     }
 
-    public String country() {
+    public String getCountry() {
         return country;
     }
 
@@ -62,16 +82,18 @@ public class Client extends Person {
         if (object instanceof Client otherClient) {
             return super.equals(otherClient)
                     && email().equals(otherClient.email())
-                    && street().equals(otherClient.street())
-                    && streetNo() == otherClient.streetNo()
-                    && npa() == otherClient.npa()
-                    && country().equals(otherClient.country());
+                    && getStreet().equals(otherClient.getStreet())
+                    && getStreetNo() == otherClient.getStreetNo()
+                    && getNpa() == otherClient.getNpa()
+                    && getCountry().equals(otherClient.getCountry());
         }
         return false;
     }
 
     public int hashCode() {
-        return Objects.hash(id(), firstName(), lastName(), phoneNo(), email(), street(), streetNo(), npa(), country());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo(), email(), getStreet(), getStreetNo(),
+                getNpa(),
+                getCountry());
     }
 
     /**
@@ -90,30 +112,30 @@ public class Client extends Person {
         int npa = resultSet.getInt("npa");
         String country = resultSet.getString("country");
 
-        return new Client(client.id(), client.firstName(), client.lastName(), client.phoneNo(),
+        return new Client(client.getId(), client.getFirstName(), client.getLastName(), client.getPhoneNo(),
                 email, street, streetNo, npa, country);
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
         statement.setString("email", email());
-        statement.setString("street", street());
-        statement.setInt("street_no", streetNo());
-        statement.setInt("npa", npa());
-        statement.setString("country", country());
+        statement.setString("street", getStreet());
+        statement.setInt("street_no", getStreetNo());
+        statement.setInt("npa", getNpa());
+        statement.setString("country", getCountry());
     }
 
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
         completeStatementCommon(statement);
 
-        if (id() == 0) // saveNotKnowingId()
+        if (getId() == 0) // saveNotKnowingId()
             super.completeCommonStatement(statement);
         else // saveKnowingId()
-            statement.setInt("id", id());
+            statement.setInt("id", getId());
     }
 
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         completeStatementCommon(statement);
-        statement.setInt("id", id());
+        statement.setInt("id", getId());
     }
 
     /**
@@ -153,10 +175,12 @@ public class Client extends Person {
     public Client saveNotKnowingId() throws SQLException {
 
         // create a person first in the db
-        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        Person person = new Person(getId(), getFirstName(), getLastName(), getPhoneNo());
         person = person.save();
 
-        Client client = new Client(person.id(), person.firstName(), person.lastName(), person.phoneNo(), email, street,
+        Client client = new Client(person.getId(), person.getFirstName(), person.getLastName(), person.getPhoneNo(),
+                email,
+                street,
                 streetNo, npa, country);
 
         // we now know the id
@@ -185,10 +209,12 @@ public class Client extends Person {
      */
     public Client update() throws SQLException {
         // create a person first in the db
-        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        Person person = new Person(getId(), getFirstName(), getLastName(), getPhoneNo());
         person = person.update();
 
-        Client client = new Client(person.id(), person.firstName(), person.lastName(), person.phoneNo(), email, street,
+        Client client = new Client(person.getId(), person.getFirstName(), person.getLastName(), person.getPhoneNo(),
+                email,
+                street,
                 streetNo, npa, country);
 
         return DatabaseHandler.executeUpdateStatement(updateClientQuery,

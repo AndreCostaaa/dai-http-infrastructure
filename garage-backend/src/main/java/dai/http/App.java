@@ -6,7 +6,7 @@ public class App {
     public static void main(String[] args) {
         Javalin app = Javalin.create().start(7000);
 
-        //CarController
+        // CarController
         CarController carController = new CarController();
         app.get("/api/cars", carController::fetchAll);
         app.get("/api/cars/{carId}", carController::fetchOne);
@@ -14,7 +14,7 @@ public class App {
         app.patch("/api/cars", carController::update);
         app.delete("/api/cars/{serviceId}", carController::delete);
 
-        //CarPartController
+        // CarPartController
         CarPartController carPartController = new CarPartController();
         app.get("/api/carParts", carPartController::fetchAll);
         app.get("/api/carParts/{carPartId}", carPartController::fetchOne);
@@ -22,7 +22,7 @@ public class App {
         app.patch("/api/carParts", carPartController::update);
         app.delete("/api/carParts/{carPartId}", carPartController::delete);
 
-        //ClientController
+        // ClientController
         ClientController clientController = new ClientController();
         app.get("/api/clients", clientController::fetchAll);
         app.get("/api/clients/{clientId}", clientController::fetchOne);
@@ -32,7 +32,7 @@ public class App {
         app.patch("/api/clients/update", clientController::update);
         app.delete("/api/clients/{clientId}", clientController::delete);
 
-        //EmployeeController
+        // EmployeeController
         EmployeeController employeeController = new EmployeeController();
         app.get("/api/employees", employeeController::fetchAll);
         app.get("/api/employees/{employeeId}", employeeController::fetchOne);
@@ -42,7 +42,7 @@ public class App {
         app.patch("/api/employees", employeeController::update);
         app.delete("/api/employees/{employeeId}", employeeController::delete);
 
-        //PersonController
+        // PersonController
         PersonController personController = new PersonController();
         app.get("/api/person", personController::fetchAll);
         app.get("/api/person/{personId}", personController::fetchOne);
@@ -50,7 +50,7 @@ public class App {
         app.patch("/api/person", personController::update);
         app.delete("/api/person/{personId}", personController::delete);
 
-        //RoleController
+        // RoleController
         RoleController roleController = new RoleController();
         app.get("/api/roles", roleController::fetchAll);
         app.get("/api/roles/{roleId}", roleController::fetchOne);
@@ -58,7 +58,7 @@ public class App {
         app.patch("/api/roles", roleController::update);
         app.delete("/api/roles/{roleId}", roleController::delete);
 
-        //ServiceController
+        // ServiceController
         ServiceController serviceController = new ServiceController();
         app.get("/api/services", serviceController::fetchAll);
         app.get("/api/services/{serviceId}", serviceController::fetchOne);
@@ -73,7 +73,7 @@ public class App {
         app.patch("/api/services/{serviceId}", serviceController::incrementState);
         app.delete("/api/services/{serviceId}", serviceController::delete);
 
-        //ServiceBillController
+        // ServiceBillController
         ServiceBillController serviceBillController = new ServiceBillController();
         app.get("/api/serviceBills", serviceBillController::fetchAll);
         app.get("/api/serviceBills/{serviceBillId}", serviceBillController::fetchOne);

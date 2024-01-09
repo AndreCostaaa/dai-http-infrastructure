@@ -26,9 +26,9 @@ public class ClientTest extends GarageTest {
         for (Client client : clients) {
             assertNotNull(client);
             assertInstanceOf(Client.class, client);
-            assertTrue(client.id() > 0);
-            assertTrue(client.streetNo() > 0);
-            assertTrue(client.npa() > 0);
+            assertTrue(client.getId() > 0);
+            assertTrue(client.getStreetNo() > 0);
+            assertTrue(client.getNpa() > 0);
         }
     }
 
@@ -50,28 +50,31 @@ public class ClientTest extends GarageTest {
         Client savedClient = client.saveNotKnowingId();
         assertNotNull(savedClient);
         assertEquals(savedClient,
-                new Client(13, client.firstName(), client.lastName(), client.phoneNo(), client.email(),
-                        client.street(), client.streetNo(), client.npa(), client.country()));
+                new Client(13, client.getFirstName(), client.getLastName(), client.getPhoneNo(), client.email(),
+                        client.getStreet(), client.getStreetNo(), client.getNpa(), client.getCountry()));
     }
 
     @Test
     void saveKnowingId() throws SQLException {
         Person person = Person.fetchById(1);
-        Client client = new Client(person.id(), person.firstName(), person.lastName(), person.phoneNo(),
+        Client client = new Client(person.getId(), person.getFirstName(), person.getLastName(), person.getPhoneNo(),
                 "rene.rentsch@heig-vd.ch", "Route du Feu", 666, 1666, "Switzerland");
 
         Client savedClient = client.saveKnowingId();
         assertNotNull(savedClient);
-        assertEquals(savedClient, new Client(client.id(), client.firstName(), client.lastName(), client.phoneNo(),
-                client.email(), client.street(), client.streetNo(), client.npa(), client.country()));
+        assertEquals(savedClient,
+                new Client(client.getId(), client.getFirstName(), client.getLastName(), client.getPhoneNo(),
+                        client.email(), client.getStreet(), client.getStreetNo(), client.getNpa(),
+                        client.getCountry()));
     }
 
     @Test
     void update() throws SQLException {
         Client originalClient = Client.fetchById(2);
-        Client updatedClient = new Client(originalClient.id(), originalClient.firstName(), originalClient.lastName(),
-                "+689283742398", originalClient.email(), originalClient.street(), originalClient.streetNo(),
-                originalClient.npa(), originalClient.country());
+        Client updatedClient = new Client(originalClient.getId(), originalClient.getFirstName(),
+                originalClient.getLastName(),
+                "+689283742398", originalClient.email(), originalClient.getStreet(), originalClient.getStreetNo(),
+                originalClient.getNpa(), originalClient.getCountry());
 
         assertNotEquals(updatedClient, originalClient);
         assertEquals(updatedClient.update(), updatedClient);

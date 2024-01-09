@@ -25,7 +25,7 @@ class PersonTest extends GarageTest {
         for (Person person : persons) {
             assertNotNull(person);
             assertInstanceOf(Person.class, person);
-            assertTrue(person.id() > 0);
+            assertTrue(person.getId() > 0);
         }
     }
 
@@ -36,13 +36,14 @@ class PersonTest extends GarageTest {
         Person savedPerson = person.save();
         assertNotNull(savedPerson);
         assertEquals(savedPerson,
-                new Person(13, person.firstName(), person.lastName(), person.phoneNo()));
+                new Person(13, person.getFirstName(), person.getLastName(), person.getPhoneNo()));
     }
 
     @Test
     void update() throws SQLException {
         Person originalPerson = Person.fetchById(2);
-        Person updatedPerson = new Person(originalPerson.id(), originalPerson.firstName(), originalPerson.lastName(),
+        Person updatedPerson = new Person(originalPerson.getId(), originalPerson.getFirstName(),
+                originalPerson.getLastName(),
                 "+689283742398");
         assertNotEquals(updatedPerson, originalPerson);
         assertEquals(updatedPerson.update(), updatedPerson);

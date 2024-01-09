@@ -26,8 +26,8 @@ class EmployeeTest extends GarageTest {
         for (Employee employee : employees) {
             assertNotNull(employee);
             assertInstanceOf(Employee.class, employee);
-            assertTrue(employee.id() > 0);
-            assertTrue(employee.roleId() > 0);
+            assertTrue(employee.getId() > 0);
+            assertTrue(employee.getRoleId() > 0);
         }
     }
 
@@ -40,8 +40,8 @@ class EmployeeTest extends GarageTest {
         for (Employee employee : employees) {
             assertNotNull(employee);
             assertInstanceOf(Employee.class, employee);
-            assertTrue(employee.id() > 0);
-            assertTrue(employee.roleId() > 0);
+            assertTrue(employee.getId() > 0);
+            assertTrue(employee.getRoleId() > 0);
         }
     }
 
@@ -52,28 +52,32 @@ class EmployeeTest extends GarageTest {
         Employee savedEmployee = employee.saveNotKnowingId();
         assertNotNull(savedEmployee);
         assertEquals(savedEmployee,
-                new Employee(13, employee.firstName(), employee.lastName(), employee.phoneNo(), employee.roleId(),
-                        employee.specializationId()));
+                new Employee(13, employee.getFirstName(), employee.getLastName(), employee.getPhoneNo(),
+                        employee.getRoleId(),
+                        employee.getSpecializationId()));
     }
 
     @Test
     void saveKnowingId() throws SQLException {
         Person person = Person.fetchById(4);
-        Employee employee = new Employee(person.id(), person.firstName(), person.lastName(), person.phoneNo(), 5, null);
+        Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(),
+                person.getPhoneNo(),
+                5,
+                null);
 
         Employee savedEmployee = employee.saveKnowingId();
         assertNotNull(savedEmployee);
         assertEquals(savedEmployee,
-                new Employee(person.id(), employee.firstName(), employee.lastName(), employee.phoneNo(),
-                        employee.roleId(), employee.specializationId()));
+                new Employee(person.getId(), employee.getFirstName(), employee.getLastName(), employee.getPhoneNo(),
+                        employee.getRoleId(), employee.getSpecializationId()));
     }
 
     @Test
     void update() throws SQLException {
         Employee originalEmployee = Employee.fetchById(2);
-        Employee updatedEmployee = new Employee(originalEmployee.id(), originalEmployee.firstName(),
-                originalEmployee.lastName(), "+689283742398", originalEmployee.roleId(),
-                originalEmployee.specializationId());
+        Employee updatedEmployee = new Employee(originalEmployee.getId(), originalEmployee.getFirstName(),
+                originalEmployee.getLastName(), "+689283742398", originalEmployee.getRoleId(),
+                originalEmployee.getSpecializationId());
         assertNotEquals(updatedEmployee, originalEmployee);
         assertEquals(updatedEmployee.update(), updatedEmployee);
 

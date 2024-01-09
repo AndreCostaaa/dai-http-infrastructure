@@ -3,8 +3,8 @@ package dai.database;
 import java.sql.*;
 
 public class Employee extends Person {
-    private final int roleId;
-    private final Integer specializationId;
+    private int roleId;
+    private Integer specializationId;
 
     public Employee(int id,
             String firstName,
@@ -17,11 +17,19 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
-    public int roleId() {
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public void setSpecializationId(Integer specializationId) {
+        this.specializationId = specializationId;
+    }
+
+    public int getRoleId() {
         return roleId;
     }
 
-    public Integer specializationId() {
+    public Integer getSpecializationId() {
         return specializationId;
     }
 
@@ -46,30 +54,30 @@ public class Employee extends Person {
         int roleId = resultSet.getInt("role_id");
         Integer specializationId = resultSet.getObject("specialization_id", Integer.class);
 
-        return new Employee(employee.id(), employee.firstName(), employee.lastName(), employee.phoneNo(),
+        return new Employee(employee.getId(), employee.getFirstName(), employee.getLastName(), employee.getPhoneNo(),
                 roleId, specializationId);
     }
 
     public void completeCommonStatement(NamedParameterStatement statement) throws SQLException {
-        statement.setInt("role_id", roleId());
-        if (specializationId == null || specializationId() == 0)
+        statement.setInt("role_id", getRoleId());
+        if (specializationId == null || getSpecializationId() == 0)
             statement.setNull("specialization_id", Types.INTEGER);
         else
-            statement.setInt("specialization_id", specializationId());
+            statement.setInt("specialization_id", getSpecializationId());
     }
 
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
         completeCommonStatement(statement);
 
-        if (id() == 0) // saveNotKnowingId()
+        if (getId() == 0) // saveNotKnowingId()
             super.completeCommonStatement(statement);
         else // saveKnowingId()
-            statement.setInt("id", id());
+            statement.setInt("id", getId());
     }
 
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         completeCommonStatement(statement);
-        statement.setInt("id", id());
+        statement.setInt("id", getId());
     }
 
     /**
@@ -107,10 +115,12 @@ public class Employee extends Person {
      */
     public Employee saveNotKnowingId() throws SQLException {
         // Create a person first
-        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        Person person = new Person(getId(), getFirstName(), getLastName(), getPhoneNo());
         person = person.save();
         // We can know complete the employee with all the values
-        Employee employee = new Employee(person.id(), person.firstName(), person.lastName(), person.phoneNo(), roleId,
+        Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(),
+                person.getPhoneNo(),
+                roleId,
                 specializationId);
 
         // we now know the id
@@ -136,10 +146,12 @@ public class Employee extends Person {
      * @return Employee or null
      */
     public Employee update() throws SQLException {
-        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        Person person = new Person(getId(), getFirstName(), getLastName(), getPhoneNo());
         person = person.update();
 
-        Employee employee = new Employee(person.id(), person.firstName(), person.lastName(), person.phoneNo(), roleId,
+        Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(),
+                person.getPhoneNo(),
+                roleId,
                 specializationId);
 
         return DatabaseHandler.executeUpdateStatement(updateEmployeeQuery,
