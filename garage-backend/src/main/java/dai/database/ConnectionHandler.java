@@ -15,11 +15,11 @@ public class ConnectionHandler {
 
     private static Connection createConnection(String dbms, String ip, String port, String dbName, String user,
             String password, String schema) throws SQLException {
-        return DriverManager.getConnection(String.format(
-                "jdbc:%s://%s:%s/%s?currentSchema=%s",
-                dbms, ip, port, dbName, schema),
-                user,
-                password);
+        String connectionString = String.format(
+                "jdbc:%s://%s:%s/%s?user=%s&password=%s&currentSchema=%s",
+                dbms, ip, port, dbName, user, password, schema);
+
+        return DriverManager.getConnection(connectionString);
     }
 
     public static Connection getConnection() throws SQLException {
@@ -36,6 +36,7 @@ public class ConnectionHandler {
             String schema = dotenv.get("JDBC_SCHEMA");
 
             connection = createConnection(dbms, ip, port, dbName, user, password, schema);
+
         }
         return connection;
     }

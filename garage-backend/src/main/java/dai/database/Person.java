@@ -4,8 +4,8 @@ import java.sql.*;
 import java.util.Objects;
 
 public class Person implements IEntity {
-    private final int id;
-    private final String firstName, lastName, phoneNo;
+    private int id;
+    private String firstName, lastName, phoneNo;
 
     public Person(int id,
             String firstName,
@@ -17,19 +17,36 @@ public class Person implements IEntity {
         this.phoneNo = phoneNo;
     }
 
-    public int id() {
+    public void setId(int id) {
+        this.id = id;
+
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public String firstName() {
+    public String getFirstName() {
         return firstName;
     }
 
-    public String lastName() {
+    public String getLastName() {
         return lastName;
     }
 
-    public String phoneNo() {
+    public String getPhoneNo() {
         return phoneNo;
     }
 
@@ -37,16 +54,16 @@ public class Person implements IEntity {
         if (this == object)
             return true;
         if (object instanceof Person otherPerson) {
-            return id() == otherPerson.id()
-                    && firstName().equals(otherPerson.firstName())
-                    && lastName().equals(otherPerson.lastName())
-                    && phoneNo().equals(otherPerson.phoneNo());
+            return getId() == otherPerson.getId()
+                    && getFirstName().equals(otherPerson.getFirstName())
+                    && getLastName().equals(otherPerson.getLastName())
+                    && getPhoneNo().equals(otherPerson.getPhoneNo());
         }
         return false;
     }
 
     public int hashCode() {
-        return Objects.hash(id(), firstName(), lastName(), phoneNo());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo());
     }
 
     static final String getAllQuery = "SELECT * FROM person;",
@@ -72,9 +89,9 @@ public class Person implements IEntity {
     }
 
     public void completeCommonStatement(NamedParameterStatement statement) throws SQLException {
-        statement.setString("fname", firstName());
-        statement.setString("lname", lastName());
-        statement.setString("phone_no", phoneNo());
+        statement.setString("fname", getFirstName());
+        statement.setString("lname", getLastName());
+        statement.setString("phone_no", getPhoneNo());
     }
 
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
@@ -83,7 +100,7 @@ public class Person implements IEntity {
 
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         completeCommonStatement(statement);
-        statement.setInt("id", id());
+        statement.setInt("id", getId());
     }
 
     /**
