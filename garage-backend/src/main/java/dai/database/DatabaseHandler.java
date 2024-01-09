@@ -46,6 +46,23 @@ public class DatabaseHandler {
         }
     }
 
+    static public <T> T[] fetchAllByTwoParams(String stringQuery, String key1, int value1,
+                                     String key2, int value2,
+                                     ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
+        try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
+                (stringQuery))) {
+            statement.setInt(key1, value1);
+            statement.setInt(key2, value2);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                var resultSetHandler = new ResultSetHandler<>(resultSet, iresultSetHandler);
+
+                return resultSetHandler.fetchAll();
+            }
+        }
+    }
+
+
     static public <T> T fetchById(String stringQuery, int id, ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),

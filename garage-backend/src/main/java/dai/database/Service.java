@@ -14,7 +14,7 @@ public record Service(int id,
         int dateCarArrival,
         int dateCarProcessing,
         int dateCarDone,
-        int dateCarLeft) {
+        int dateCarLeft) implements IEntity {
 
     static Connection con;
 
@@ -31,43 +31,73 @@ public record Service(int id,
             incrementStateQuery = "WITH service_state AS (SELECT state_id FROM service WHERE id = :id) UPDATE service SET state_id = service_state + 1 WHERE id = :id;",
             deleteServiceQuery = "DELETE FROM service WHERE id = :id;";
 
+
+    @Override
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+    }
+
+    @Override
+    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+        statement.setInt("id", id());
+    }
+
+    private static Service fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next())
+            return null;
+
+        int id = resultSet.getInt("id");
+        int mechanicId = resultSet.getInt("mechanic_id");
+        int clientId = resultSet.getInt("client_id");
+        int carId = resultSet.getInt("car_id");
+        int hoursWorked = resultSet.getInt("hours_worked");
+        String comments = resultSet.getString("comments");
+        boolean hasPictures = resultSet.getBoolean("has_pictures");
+        int stateId = resultSet.getInt("state_id");
+        int dateCreated = resultSet.getInt("date_created");
+        int dateCarArrival = resultSet.getInt("date_car_arrival");
+        int dateCarProcessing = resultSet.getInt("date_car_processing");
+        int dateCarDone = resultSet.getInt("date_car_done");
+        int dateCarLeft = resultSet.getInt("date_car_left");
+
+        return new Service(id,
+                mechanicId,
+                clientId,
+                carId,
+                hoursWorked,
+                comments,
+                hasPictures,
+                stateId,
+                dateCreated,
+                dateCarArrival,
+                dateCarProcessing,
+                dateCarDone,
+                dateCarLeft);
+    }
+
+    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
+        statement.setInt("mechanic_id", mechanicId());
+        statement.setInt("client_id", clientId());
+        statement.setInt("car_id", carId());
+        statement.setInt("hours_worked", hoursWorked());
+        statement.setString("comments", comments());
+        statement.setBoolean("has_pictures", hasPictures());
+        statement.setInt("state_id", stateId());
+        statement.setInt("date_created", dateCreated());
+        statement.setInt("date_car_arrival", dateCarArrival());
+        statement.setInt("date_car_processing", dateCarProcessing());
+        statement.setInt("date_car_done", dateCarDone());
+        statement.setInt("date_car_left", dateCarLeft());
+    }
+
     /**
      * Fetch all Services from the database.
      * 
      * @return Service[] or null
      */
     static public Service[] fetchAll() throws SQLException {
-        try (Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Service[] services = new Service[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int mechanicId = resultSet.getInt("mechanic_id");
-                    int clientId = resultSet.getInt("client_id");
-                    int carId = resultSet.getInt("car_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int stateId = resultSet.getInt("state_id");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    services[i++] = new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures,
-                            stateId, dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                }
-
-                return services;
-            }
-        }
+        return DatabaseHandler.fetchAll(getAllQuery, Service::fetchNext);
     }
 
     /**
@@ -77,30 +107,7 @@ public record Service(int id,
      * @return Service or null
      */
     static public Service fetchById(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getServiceByIdQuery)) {
-            callableStatement.setInt("id", id);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int mechanicId = resultSet.getInt("mechanic_id");
-                    int clientId = resultSet.getInt("client_id");
-                    int carId = resultSet.getInt("car_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int stateId = resultSet.getInt("state_id");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    return new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures, stateId,
-                            dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                } else
-                    return null;
-            }
-        }
+        return DatabaseHandler.fetchById(getServiceByIdQuery, id, Service::fetchNext);
     }
 
     /**
@@ -110,38 +117,10 @@ public record Service(int id,
      * @return Service[] or null
      */
     static public Service[] fetchByCar(int carId) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getServiceByCarQuery)) {
-            callableStatement.setInt("car_id", carId);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Service[] services = new Service[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int mechanicId = resultSet.getInt("mechanic_id");
-                    int clientId = resultSet.getInt("client_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int stateId = resultSet.getInt("state_id");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    services[i++] = new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures,
-                            stateId, dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                }
-
-                return services;
-            }
-        }
+        return DatabaseHandler.fetchAllBy(getServiceByCarQuery,
+                "car_id",
+                String.valueOf(carId),
+                Service::fetchNext);
     }
 
     /**
@@ -152,38 +131,12 @@ public record Service(int id,
      * @return Service[] or null
      */
     static public Service[] fetchByCarState(int carId, int stateId) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getServiceByCarStateQuery)) {
-            callableStatement.setInt("car_id", carId);
-            callableStatement.setInt("state_id", stateId);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Service[] services = new Service[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int mechanicId = resultSet.getInt("mechanic_id");
-                    int clientId = resultSet.getInt("client_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    services[i++] = new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures,
-                            stateId, dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                }
-
-                return services;
-            }
-        }
+        return DatabaseHandler.fetchAllByTwoParams(getServiceByCarStateQuery,
+                "car_id",
+                carId,
+                "state_id",
+                stateId,
+                Service::fetchNext);
     }
 
     /**
@@ -193,38 +146,10 @@ public record Service(int id,
      * @return Service[] or null
      */
     static public Service[] fetchByMechanic(int mechanicId) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getServiceByMechanicQuery)) {
-            callableStatement.setInt("mechanic_id", mechanicId);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Service[] services = new Service[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int clientId = resultSet.getInt("client_id");
-                    int carId = resultSet.getInt("car_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int stateId = resultSet.getInt("state_id");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    services[i++] = new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures,
-                            stateId, dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                }
-
-                return services;
-            }
-        }
+        return DatabaseHandler.fetchAllBy(getServiceByMechanicQuery,
+                "mechanic_id",
+                String.valueOf(mechanicId),
+                Service::fetchNext);
     }
 
     /**
@@ -236,38 +161,12 @@ public record Service(int id,
      * @return Service[] or null
      */
     static public Service[] fetchByMechanicState(int mechanicId, int stateId) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getServiceByMechanicStateQuery)) {
-            callableStatement.setInt("mechanic_id", mechanicId);
-            callableStatement.setInt("state_id", stateId);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Service[] services = new Service[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int clientId = resultSet.getInt("client_id");
-                    int carId = resultSet.getInt("car_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    services[i++] = new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures,
-                            stateId, dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                }
-
-                return services;
-            }
-        }
+        return DatabaseHandler.fetchAllByTwoParams(getServiceByMechanicStateQuery,
+                "mechanic_id",
+                mechanicId,
+                "state_id",
+                stateId,
+                Service::fetchNext);
     }
 
     /**
@@ -277,38 +176,10 @@ public record Service(int id,
      * @return Service[] or null
      */
     static public Service[] fetchByState(int stateId) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getServiceByStateQuery)) {
-            callableStatement.setInt("state_id", stateId);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Service[] services = new Service[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int mechanicId = resultSet.getInt("mechanic_id");
-                    int clientId = resultSet.getInt("client_id");
-                    int carId = resultSet.getInt("car_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    services[i++] = new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures,
-                            stateId, dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                }
-
-                return services;
-            }
-        }
+        return DatabaseHandler.fetchAllBy(getServiceByStateQuery,
+                "state_id",
+                String.valueOf(stateId),
+                Service::fetchNext);
     }
 
     /**
@@ -319,37 +190,10 @@ public record Service(int id,
      * @return Service[] or null
      */
     static public Service[] fetchByMechanicProcessing(int mechanicId) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getServiceByMechanicProcessingQuery)) {
-            callableStatement.setInt("mechanic_id", mechanicId);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
-
-                Service[] services = new Service[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    int clientId = resultSet.getInt("client_id");
-                    int carId = resultSet.getInt("car_id");
-                    int hoursWorked = resultSet.getInt("hours_worked");
-                    String comments = resultSet.getString("comments");
-                    boolean hasPictures = resultSet.getBoolean("has_pictures");
-                    int dateCreated = resultSet.getInt("date_created");
-                    int dateCarArrival = resultSet.getInt("date_car_arrival");
-                    int dateCarProcessing = resultSet.getInt("date_car_processing");
-                    int dateCarDone = resultSet.getInt("date_car_done");
-                    int dateCarLeft = resultSet.getInt("date_car_left");
-
-                    services[i++] = new Service(id, mechanicId, clientId, carId, hoursWorked, comments, hasPictures, 2,
-                            dateCreated, dateCarArrival, dateCarProcessing, dateCarDone, dateCarLeft);
-                }
-
-                return services;
-            }
-        }
+        return DatabaseHandler.fetchAllBy(getServiceByMechanicProcessingQuery,
+                "mechanic_id",
+                String.valueOf(mechanicId),
+                Service::fetchNext);
     }
 
     /**
@@ -357,14 +201,8 @@ public record Service(int id,
      * 
      * @return true if successful
      */
-    public boolean save() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(createServiceQuery)) {
-            callableStatement.setInt("mechanic_id", mechanicId());
-            callableStatement.setInt("client_id", clientId());
-            callableStatement.setInt("car_id", carId());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+    public Service save() throws SQLException {
+        return DatabaseHandler.executeCreateStatement(createServiceQuery, this, Service::fetchNext);
     }
 
     /**
@@ -372,16 +210,8 @@ public record Service(int id,
      * 
      * @return true if successful
      */
-    public boolean update() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(updateServiceQuery)) {
-            callableStatement.setInt("id", id());
-            callableStatement.setInt("mechanic_id", mechanicId());
-            callableStatement.setInt("hours_worked", hoursWorked());
-            callableStatement.setString("comments", comments());
-            callableStatement.setBoolean("has_pictures", hasPictures());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+    public Service update() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(updateServiceQuery, this, Service::fetchNext);
     }
 
     /**
@@ -389,12 +219,8 @@ public record Service(int id,
      * 
      * @return true if successful
      */
-    public static boolean incrementState(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(incrementStateQuery)) {
-            callableStatement.setInt("id", id);
-
-            return callableStatement.executeUpdate() == 1;
-        }
+    public Service incrementState() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(incrementStateQuery, this,Service::fetchNext);
     }
 
     /**
@@ -404,10 +230,8 @@ public record Service(int id,
      * @return true if successful
      */
     static public boolean delete(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(deleteServiceQuery)) {
-            callableStatement.setInt("id", id);
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.deleteById(deleteServiceQuery, id);
     }
+
+
 }

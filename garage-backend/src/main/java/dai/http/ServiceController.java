@@ -112,8 +112,8 @@ public class ServiceController {
     public void save(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
 
-        if (service.save()) {
-            ctx.status(201);
+        if (service.save() != null) {
+            ctx.json(service);
             return;
         }
 
@@ -123,8 +123,8 @@ public class ServiceController {
     public void update(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
 
-        if (service.update()) {
-            ctx.status(200);
+        if (service.update() != null) {
+            ctx.json(service);
             return;
         }
 
@@ -132,10 +132,10 @@ public class ServiceController {
     }
 
     public void incrementState(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("serviceId"));
+        Service service = ctx.bodyAsClass(Service.class);
 
-        if (Service.incrementState(id)) {
-            ctx.status(200);
+        if (service.incrementState() != null) {
+            ctx.json(service);
             return;
         }
 
