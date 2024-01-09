@@ -13,8 +13,8 @@ class EmployeeTest extends GarageTest {
         Employee employee = Employee.fetchById(1);
 
         assertNotNull(employee);
-        assertEquals(employee, new Employee(1, "René", "Rentsch", "+41244303309", 5,  null));
-        assertEquals(employee, new Employee(1, "René", "Rentsch", "+41244303309", 5,  0));
+        assertEquals(employee, new Employee(1, "René", "Rentsch", "+41244303309", 5, null));
+        assertEquals(employee, new Employee(1, "René", "Rentsch", "+41244303309", 5, 0));
     }
 
     @Test
@@ -45,7 +45,6 @@ class EmployeeTest extends GarageTest {
         }
     }
 
-    /*
     @Test
     void saveNotKnowingId() throws SQLException {
         Employee employee = new Employee(ghostId, "Itachi", "Uchiwa", "+41835619384", 5, null);
@@ -53,7 +52,8 @@ class EmployeeTest extends GarageTest {
         Employee savedEmployee = employee.saveNotKnowingId();
         assertNotNull(savedEmployee);
         assertEquals(savedEmployee,
-                new Employee(11, employee.firstName(), employee.lastName(), employee.phoneNo(), employee.roleId(), employee.specializationId()));
+                new Employee(13, employee.firstName(), employee.lastName(), employee.phoneNo(), employee.roleId(),
+                        employee.specializationId()));
     }
 
     @Test
@@ -64,13 +64,16 @@ class EmployeeTest extends GarageTest {
         Employee savedEmployee = employee.saveKnowingId();
         assertNotNull(savedEmployee);
         assertEquals(savedEmployee,
-                new Employee(person.id(), employee.firstName(), employee.lastName(), employee.phoneNo(), employee.roleId(), employee.specializationId()));
+                new Employee(person.id(), employee.firstName(), employee.lastName(), employee.phoneNo(),
+                        employee.roleId(), employee.specializationId()));
     }
 
     @Test
     void update() throws SQLException {
         Employee originalEmployee = Employee.fetchById(2);
-        Employee updatedEmployee = new Employee(originalEmployee.id(), originalEmployee.firstName(), originalEmployee.lastName(), "+689283742398", originalEmployee.roleId(), originalEmployee.specializationId());
+        Employee updatedEmployee = new Employee(originalEmployee.id(), originalEmployee.firstName(),
+                originalEmployee.lastName(), "+689283742398", originalEmployee.roleId(),
+                originalEmployee.specializationId());
         assertNotEquals(updatedEmployee, originalEmployee);
         assertEquals(updatedEmployee.update(), updatedEmployee);
 
@@ -82,10 +85,10 @@ class EmployeeTest extends GarageTest {
     @Test
     void delete() throws SQLException {
         saveNotKnowingId();
-        Employee employee = Employee.fetchById(11);
+        Employee employee = Employee.fetchById(13);
         assertNotNull(employee);
-        assertTrue(Employee.delete(11));
-        assertNull(Employee.fetchById(11));
+        assertTrue(Employee.delete(13));
+        assertNull(Employee.fetchById(13));
     }
-    */
+
 }

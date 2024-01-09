@@ -17,9 +17,13 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
-    public int roleId() { return roleId; }
+    public int roleId() {
+        return roleId;
+    }
 
-    public Integer specializationId() { return specializationId; }
+    public Integer specializationId() {
+        return specializationId;
+    }
 
     static final String getAllQuery = "SELECT * FROM employee AS e JOIN person p ON e.id = p.id JOIN role r ON e.role_id = r.id;",
             getEmployeeByIdQuery = "SELECT * FROM employee AS e JOIN person p ON e.id = p.id JOIN role r ON e.role_id = r.id WHERE e.id = :id;",
@@ -48,7 +52,7 @@ public class Employee extends Person {
 
     public void completeCommonStatement(NamedParameterStatement statement) throws SQLException {
         statement.setInt("role_id", roleId());
-        if (specializationId() == 0)
+        if (specializationId == null || specializationId() == 0)
             statement.setNull("specialization_id", Types.INTEGER);
         else
             statement.setInt("specialization_id", specializationId());
@@ -102,7 +106,15 @@ public class Employee extends Person {
      * @return Employee or null
      */
     public Employee saveNotKnowingId() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(createEmployeeNotKnowingIdQuery, this, Employee::fetchNext);
+        // Create a person first
+        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        person = person.save();
+        // We can know complete the employee with all the values
+        Employee employee = new Employee(person.id(), person.firstName(), person.lastName(), person.phoneNo(), roleId,
+                specializationId);
+
+        // we now know the id
+        return employee.saveKnowingId();
     }
 
     /**
@@ -111,7 +123,11 @@ public class Employee extends Person {
      * @return Employee or null
      */
     public Employee saveKnowingId() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(createEmployeeKnowingIdQuery, this, Employee::fetchNext);
+        return DatabaseHandler.executeUpdateStatement(createEmployeeKnowingIdQuery, this,
+                (ResultSet resultSet) -> {
+                    resultSet.next();
+                    return this;
+                });
     }
 
     /**
@@ -120,7 +136,19 @@ public class Employee extends Person {
      * @return Employee or null
      */
     public Employee update() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(updateEmployeeQuery, this, Employee::fetchNext);
+        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        person = person.update();
+
+        Employee employee = new Employee(person.id(), person.firstName(), person.lastName(), person.phoneNo(), roleId,
+                specializationId);
+
+        return DatabaseHandler.executeUpdateStatement(updateEmployeeQuery,
+                employee,
+                (ResultSet resultSet) -> {
+                    resultSet.next();
+                    return employee;
+                });
+
     }
 
     /**

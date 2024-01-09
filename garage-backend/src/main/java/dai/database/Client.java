@@ -4,18 +4,21 @@ import java.sql.*;
 import java.util.Objects;
 
 public class Client extends Person {
-    private final String email, street, country;
-    private final int streetNo, npa;
+    private String email;
+    private String street;
+    private String country;
+    private int streetNo;
+    private int npa;
 
     public Client(int id,
-                  String firstName,
-                  String lastName,
-                  String phoneNo,
-                  String email,
-                  String street,
-                  int streetNo,
-                  int npa,
-                  String country) {
+            String firstName,
+            String lastName,
+            String phoneNo,
+            String email,
+            String street,
+            int streetNo,
+            int npa,
+            String country) {
         super(id, firstName, lastName, phoneNo);
         this.email = email;
         this.street = street;
@@ -24,15 +27,25 @@ public class Client extends Person {
         this.country = country;
     }
 
-    public String email() { return email; }
+    public String email() {
+        return email;
+    }
 
-    public String street() { return street; }
+    public String street() {
+        return street;
+    }
 
-    public int streetNo() { return streetNo; }
+    public int streetNo() {
+        return streetNo;
+    }
 
-    public int npa() { return npa; }
+    public int npa() {
+        return npa;
+    }
 
-    public String country() { return country; }
+    public String country() {
+        return country;
+    }
 
     static final String getAllQuery = "SELECT * FROM client AS c JOIN person p ON p.id = c.id;",
 
@@ -138,7 +151,16 @@ public class Client extends Person {
      * @return Client or null
      */
     public Client saveNotKnowingId() throws SQLException {
-        return DatabaseHandler.executeCreateStatement(createClientNotKnowingIdQuery, this, Client::fetchNext);
+
+        // create a person first in the db
+        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        person = person.save();
+
+        Client client = new Client(person.id(), person.firstName(), person.lastName(), person.phoneNo(), email, street,
+                streetNo, npa, country);
+
+        // we now know the id
+        return client.saveKnowingId();
     }
 
     /**
@@ -147,7 +169,13 @@ public class Client extends Person {
      * @return Client or null
      */
     public Client saveKnowingId() throws SQLException {
-        return DatabaseHandler.executeCreateStatement(createClientKnowingIdQuery, this, Client::fetchNext);
+
+        return DatabaseHandler.executeCreateStatement(createClientKnowingIdQuery,
+                this,
+                (ResultSet resultSet) -> {
+                    resultSet.next();
+                    return this;
+                });
     }
 
     /**
@@ -156,7 +184,19 @@ public class Client extends Person {
      * @return Client or null
      */
     public Client update() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(updateClientQuery, this, Client::fetchNext);
+        // create a person first in the db
+        Person person = new Person(id(), firstName(), lastName(), phoneNo());
+        person = person.update();
+
+        Client client = new Client(person.id(), person.firstName(), person.lastName(), person.phoneNo(), email, street,
+                streetNo, npa, country);
+
+        return DatabaseHandler.executeUpdateStatement(updateClientQuery,
+                client,
+                (ResultSet resultSet) -> {
+                    resultSet.next();
+                    return client;
+                });
     }
 
     /**
