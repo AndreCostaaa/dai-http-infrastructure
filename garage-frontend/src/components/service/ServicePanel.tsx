@@ -1,7 +1,8 @@
 import React from "react";
+import Services from "./Services";
 
 const ServicePanel = () => {
-  return <div>ServicePanel</div>;
+  return <Services serviceList={[]} />;
 };
 
 export default ServicePanel;

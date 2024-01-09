@@ -5,14 +5,7 @@ interface Props {
   serviceList: Service[];
 }
 const Services = ({ serviceList }: Props) => {
-  const headers = [
-    "id",
-    "prenom",
-    "nom",
-    "phone",
-    "role id",
-    "specialization id",
-  ];
+  const headers = ["id", "voiture", "client", "mecanicien", "etat", ""];
   return (
     <TableContainer>
       <Table>

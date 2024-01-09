@@ -2,14 +2,15 @@ import React from "react";
 import Employees from "./Employees";
 import { ModalProps } from "@chakra-ui/react";
 import GenericModal from "../generic/GenericModal";
+import { Employee } from "../../services/employee-service";
 interface Props extends ModalProps {
-  employeeId: number;
+  employeeList: Employee[];
 }
 
 const EmployeeModal = (props: Props) => {
   return (
     <GenericModal {...props}>
-      <Employees employeeList={[]} />
+      <Employees employeeList={props.employeeList} />
     </GenericModal>
   );
 };
