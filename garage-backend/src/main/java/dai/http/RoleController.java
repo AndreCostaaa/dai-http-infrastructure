@@ -32,8 +32,8 @@ public class RoleController {
     public void save(Context ctx) throws SQLException {
         Role role = ctx.bodyAsClass(Role.class);
 
-        if (role.save()) {
-            ctx.status(201);
+        if (role.save() != null) {
+            ctx.json(role);
             return;
         }
 
@@ -43,8 +43,8 @@ public class RoleController {
     public void update(Context ctx) throws SQLException {
         Role role = ctx.bodyAsClass(Role.class);
 
-        if (role.update()) {
-            ctx.status(200);
+        if (role.update() != null) {
+            ctx.json(role);
             return;
         }
 

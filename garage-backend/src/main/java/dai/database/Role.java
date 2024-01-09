@@ -6,7 +6,7 @@ public record Role(int id,
         String name,
         boolean canCreate,
         boolean canAssignOthers,
-        boolean isMechanic) {
+        boolean isMechanic) implements IEntity {
 
     static Connection con;
 
@@ -16,6 +16,38 @@ public record Role(int id,
             updateRoleQuery = "UPDATE role SET name = :name, can_create = :can_create, can_assign_others = :can_assign_others, is_mechanic = :is_mechanic WHERE id = :id;",
             deleteRoleQuery = "DELETE FROM role WHERE id = :id;";
 
+    private static Role fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next())
+            return null;
+
+        int id = resultSet.getInt("id");
+        String name = resultSet.getString("name");
+        boolean canCreate = resultSet.getBoolean("can_create");
+        boolean canAssignOthers = resultSet.getBoolean("can_assign_others");
+        boolean isMechanic = resultSet.getBoolean("is_mechanic");
+
+        return new Role(id, name, canCreate, canAssignOthers, isMechanic);
+    }
+
+    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
+        statement.setString("name", name());
+        statement.setBoolean("can_create", canCreate());
+        statement.setBoolean("can_assign_others", canAssignOthers());
+        statement.setBoolean("is_mechanic", isMechanic());
+
+    }
+
+    @Override
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+    }
+
+    @Override
+    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+        statement.setInt("id", id());
+    }
+
     /**
      * Fetch a Role from the database matching the given id.
      * 
@@ -23,21 +55,7 @@ public record Role(int id,
      * @return Role or null
      */
     static public Role fetchOne(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(getRoleByIdQuery)) {
-            callableStatement.setInt("id", id);
-
-            try (ResultSet resultSet = callableStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    String name = resultSet.getString("name");
-                    boolean canCreate = resultSet.getBoolean("can_create");
-                    boolean canAssignOthers = resultSet.getBoolean("can_assign_others");
-                    boolean isMechanic = resultSet.getBoolean("is_mechanic");
-
-                    return new Role(id, name, canCreate, canAssignOthers, isMechanic);
-                } else
-                    return null;
-            }
-        }
+        return DatabaseHandler.fetchById(getRoleByIdQuery, id, Role::fetchNext);
     }
 
     /**
@@ -46,28 +64,8 @@ public record Role(int id,
      * @return Role[] or null
      */
     static public Role[] fetchAll() throws SQLException {
-        try (Statement statement = con.createStatement()) {
-            try (ResultSet resultSet = statement.executeQuery(getAllQuery)) {
-                resultSet.last();
-                int count = resultSet.getRow();
-                resultSet.beforeFirst();
+        return DatabaseHandler.fetchAll(getAllQuery, Role::fetchNext);
 
-                Role[] roles = new Role[count];
-                int i = 0;
-
-                while (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
-                    boolean canCreate = resultSet.getBoolean("can_create");
-                    boolean canAssignOthers = resultSet.getBoolean("can_assign_others");
-                    boolean isMechanic = resultSet.getBoolean("is_mechanic");
-
-                    roles[i++] = new Role(id, name, canCreate, canAssignOthers, isMechanic);
-                }
-
-                return roles;
-            }
-        }
     }
 
     /**
@@ -75,15 +73,8 @@ public record Role(int id,
      * 
      * @return true if successful
      */
-    public boolean save() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(createRoleQuery)) {
-            callableStatement.setString("name", name());
-            callableStatement.setBoolean("can_create", canCreate());
-            callableStatement.setBoolean("can_assign_others", canAssignOthers());
-            callableStatement.setBoolean("is_mechanic", isMechanic());
-
-            return callableStatement.executeUpdate() == 1;
-        }
+    public Role save() throws SQLException {
+        return DatabaseHandler.executeCreateStatement(createRoleQuery, this, Role::fetchNext);
     }
 
     /**
@@ -91,16 +82,9 @@ public record Role(int id,
      * 
      * @return true if successful
      */
-    public boolean update() throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(updateRoleQuery)) {
-            callableStatement.setString("name", name());
-            callableStatement.setBoolean("can_create", canCreate());
-            callableStatement.setBoolean("can_assign_others", canAssignOthers());
-            callableStatement.setBoolean("is_mechanic", isMechanic());
-            callableStatement.setInt("id", id());
+    public Role update() throws SQLException {
+        return DatabaseHandler.executeUpdateStatement(updateRoleQuery, this, Role::fetchNext);
 
-            return callableStatement.executeUpdate() == 1;
-        }
     }
 
     /**
@@ -110,10 +94,6 @@ public record Role(int id,
      * @return true if successful
      */
     static public boolean delete(int id) throws SQLException {
-        try (CallableStatement callableStatement = con.prepareCall(deleteRoleQuery)) {
-            callableStatement.setInt("id", id);
-
-            return callableStatement.executeUpdate() == 1;
-        }
+        return DatabaseHandler.deleteById(deleteRoleQuery, id);
     }
 }
