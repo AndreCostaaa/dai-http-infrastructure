@@ -25,8 +25,8 @@ public class App {
         //ClientController
         ClientController clientController = new ClientController();
         app.get("/api/clients", clientController::fetchAll);
-        app.get("/api/clients/{clientId}", clientController::fetchOneById); //@TODO
-        app.get("/api/clients/{phoneNo}", clientController::fetchOneByPhoneNo); //@TODO
+        app.get("/api/clients/{clientId}", clientController::fetchOne);
+        app.get("/api/clients/phoneNo/{phoneNo}", clientController::fetchByPhoneNo);
         app.post("/api/clients", clientController::saveNotKnowingId);
         app.post("/api/clients/knownId", clientController::saveKnowingId);
         app.patch("/api/clients/update", clientController::update);
@@ -36,7 +36,7 @@ public class App {
         EmployeeController employeeController = new EmployeeController();
         app.get("/api/employees", employeeController::fetchAll);
         app.get("/api/employees/{employeeId}", employeeController::fetchOne);
-        app.get("/api/employees/mechanics", employeeController::fetchMechanics);
+        app.get("/api/mechanics", employeeController::fetchMechanics);
         app.post("/api/employees", employeeController::saveNotKnowingId);
         app.post("/api/employees/knownId/", employeeController::saveKnowingId);
         app.patch("/api/employees", employeeController::update);
@@ -62,11 +62,11 @@ public class App {
         ServiceController serviceController = new ServiceController();
         app.get("/api/services", serviceController::fetchAll);
         app.get("/api/services/{serviceId}", serviceController::fetchOne);
-        app.get("/api/services/{carId}", serviceController::fetchServiceByCar);
-        app.get("/api/services/{carId}/{stateId}", serviceController::fetchServiceByCarState);
-        app.get("/api/services/{mechanicId}", serviceController::fetchServiceByMechanic);
-        app.get("/api/services/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
-        app.get("/api/services/{stateId}", serviceController::fetchServiceByState);
+        app.get("/api/services/car/{carId}", serviceController::fetchServiceByCar);
+        app.get("/api/services/car/{carId}/{stateId}", serviceController::fetchServiceByCarState);
+        app.get("/api/services/mechanic/{mechanicId}", serviceController::fetchServiceByMechanic);
+        app.get("/api/services/mechanic/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
+        app.get("/api/services/state/{stateId}", serviceController::fetchServiceByState);
         app.get("/api/services/processing/{mechanicId}", serviceController::fetchServiceByMechanicProcessing);
         app.post("/api/services", serviceController::save);
         app.patch("/api/services", serviceController::update);
