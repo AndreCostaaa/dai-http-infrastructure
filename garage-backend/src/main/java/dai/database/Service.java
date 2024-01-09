@@ -353,51 +353,6 @@ public record Service(int id,
     }
 
     /**
-     * Fetch all the created Services from the database.
-     * 
-     * @return Service[] or null
-     */
-    static public Service[] fetchCreated() throws SQLException {
-        return fetchByState(0);
-    }
-
-    /**
-     * Fetch all the waiting Services from the database.
-     * 
-     * @return Service[] or null
-     */
-    static public Service[] fetchWaiting() throws SQLException {
-        return fetchByState(1);
-    }
-
-    /**
-     * Fetch all the processing Services from the database.
-     * 
-     * @return Service[] or null
-     */
-    static public Service[] fetchProcessing() throws SQLException {
-        return fetchByState(2);
-    }
-
-    /**
-     * Fetch all the done Services from the database.
-     * 
-     * @return Service[] or null
-     */
-    static public Service[] fetchDone() throws SQLException {
-        return fetchByState(3);
-    }
-
-    /**
-     * Fetch all the left Services from the database.
-     * 
-     * @return Service[] or null
-     */
-    static public Service[] fetchLeft() throws SQLException {
-        return fetchByState(4);
-    }
-
-    /**
      * Save the Service in the database.
      * 
      * @return true if successful
@@ -434,9 +389,9 @@ public record Service(int id,
      * 
      * @return true if successful
      */
-    public boolean incrementState() throws SQLException {
+    public static boolean incrementState(int id) throws SQLException {
         try (CallableStatement callableStatement = con.prepareCall(incrementStateQuery)) {
-            callableStatement.setInt("id", id());
+            callableStatement.setInt("id", id);
 
             return callableStatement.executeUpdate() == 1;
         }

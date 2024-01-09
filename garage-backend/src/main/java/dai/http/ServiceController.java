@@ -109,61 +109,6 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void fetchServiceCreated(Context ctx) throws SQLException {
-        Service[] services = Service.fetchCreated();
-
-        if (services.length == 0) {
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(services);
-    }
-
-    public void fetchServiceWaiting(Context ctx) throws SQLException {
-        Service[] services = Service.fetchWaiting();
-
-        if (services.length == 0) {
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(services);
-    }
-
-    public void fetchServiceProcessing(Context ctx) throws SQLException {
-        Service[] services = Service.fetchProcessing();
-
-        if (services.length == 0) {
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(services);
-    }
-
-    public void fetchServiceDone(Context ctx) throws SQLException {
-        Service[] services = Service.fetchDone();
-
-        if (services.length == 0) {
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(services);
-    }
-
-    public void fetchServiceLeft(Context ctx) throws SQLException {
-        Service[] services = Service.fetchLeft();
-
-        if (services.length == 0) {
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(services);
-    }
-
     public void save(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
 
@@ -187,9 +132,9 @@ public class ServiceController {
     }
 
     public void incrementState(Context ctx) throws SQLException {
-        Service service = ctx.bodyAsClass(Service.class);
+        int id = Integer.parseInt(ctx.pathParam("serviceId"));
 
-        if (service.incrementState()) {
+        if (Service.incrementState(id)) {
             ctx.status(200);
             return;
         }
