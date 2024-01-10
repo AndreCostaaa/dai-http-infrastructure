@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 public class PersonController {
 
+
     public void fetchAll(Context ctx) throws SQLException {
         Person[] people = Person.fetchAll();
 
