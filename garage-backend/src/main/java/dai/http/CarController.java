@@ -2,55 +2,60 @@ package dai.http;
 
 import dai.database.Car;
 import io.javalin.http.Context;
+import java.sql.SQLException;
 
 public class CarController {
 
-    public void fetchOne(Context ctx){
-        int id = Integer.parseInt(ctx.pathParam("carId"));
-        Car car = Car.fetchOne(id);
-        if(car == null) {
-            ctx.status(404);
-            return;
-        }
-        ctx.json(car);
-    }
-
-    public void fetchAll(Context ctx){
+    public void fetchAll(Context ctx) throws SQLException {
         Car[] cars = Car.fetchAll();
-        if(cars == null) {
+
+        if (cars.length == 0) {
             ctx.status(404);
             return;
         }
+
         ctx.json(cars);
     }
 
-    public void create(Context ctx){
+    public void fetchOne(Context ctx) throws SQLException {
+        int id = Integer.parseInt(ctx.pathParam("carId"));
+        Car car = Car.fetchOne(id);
+
+        if (car == null) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(car);
+    }
+
+    public void save(Context ctx) throws SQLException {
         Car car = ctx.bodyAsClass(Car.class);
 
-        if(Car.create(car)){
-            ctx.status(201);
+        if (car.save() != null) {
+            ctx.json(car);
             return;
         }
 
         ctx.status(400);
     }
 
-    public void delete(Context ctx){
+    public void update(Context ctx) throws SQLException {
+        Car car = ctx.bodyAsClass(Car.class);
+
+        if (car.update() != null) {
+            ctx.json(car);
+            return;
+        }
+
+        ctx.status(400);
+    }
+
+    public void delete(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("carId"));
 
-        if(Car.delete(id)){
+        if (Car.delete(id)) {
             ctx.status(204);
-            return;
-        }
-        ctx.status(400);
-
-    }
-
-    public void update(Context ctx){
-        Car car = ctx.bodyAsClass(Car.class);
-
-        if(Car.update(car)){
-            ctx.status(200);
             return;
         }
 

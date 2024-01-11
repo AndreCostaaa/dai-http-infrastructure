@@ -1,15 +1,28 @@
+
 package dai.http;
 
 import dai.database.Client;
 import io.javalin.http.Context;
+import java.sql.SQLException;
 
 public class ClientController {
 
-    public void fetchOne(Context ctx){
-        int id = Integer.parseInt(ctx.pathParam("clientId"));
-        Client client = Client.fetchOne(id);
+    public void fetchAll(Context ctx) throws SQLException {
+        Client[] clients = Client.fetchAll();
 
-        if(client == null){
+        if (clients.length == 0) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(clients);
+    }
+
+    public void fetchOne(Context ctx) throws SQLException {
+        int id = Integer.parseInt(ctx.pathParam("clientId"));
+        Client client = Client.fetchById(id);
+
+        if (client == null) {
             ctx.status(404);
             return;
         }
@@ -17,61 +30,55 @@ public class ClientController {
         ctx.json(client);
     }
 
-    public void fetchAll(Context ctx){
-        Client[] clients = Client.fetchAll();
-
-        if(clients == null){
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(clients);
-    }
-
-    public void fetchByPhone(Context ctx){
-        String phoneCode = ctx.pathParam("phoneCode");
+    public void fetchByPhoneNo(Context ctx) throws SQLException {
         String phoneNo = ctx.pathParam("phoneNo");
+        Client[] client = Client.fetchByPhoneNo(phoneNo);
 
-        Client[] clients = Client.fetchByPhone(phoneCode, phoneNo);
-
-        if(clients == null){
+        if (client == null) {
             ctx.status(404);
             return;
         }
-
-        ctx.json(clients);
+        ctx.json(client);
     }
 
-    public void create(Context ctx){
+    public void saveNotKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
 
-        if(Client.create(client)){
-            ctx.status(201);
+        if (client.saveNotKnowingId() == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(client);
     }
 
-    public void update(Context ctx){
+    public void saveKnowingId(Context ctx) throws SQLException {
+        Client client = ctx.bodyAsClass(Client.class);
+        client = client.saveKnowingId();
+        if (client == null) {
+            ctx.status(400);
+            return;
+        }
+        ctx.json(client);
+    }
+
+
+    public void update(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
 
-        if(Client.update(client)){
-            ctx.status(200);
+        if (client.update() == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(client);
     }
 
-    public void delete(Context ctx){
-        int id = Integer.parseInt(ctx.pathParam("clientId"));
+    public void delete(Context ctx) throws SQLException {
+        int clientId = Integer.parseInt(ctx.pathParam("clientId"));
 
-        if(Client.delete(id)){
-            ctx.status(204);
+        if (!Client.delete(clientId)) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.status(204);
     }
 }

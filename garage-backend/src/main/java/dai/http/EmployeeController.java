@@ -1,15 +1,17 @@
+
 package dai.http;
 
 import dai.database.Employee;
 import io.javalin.http.Context;
+import java.sql.SQLException;
 
 public class EmployeeController {
 
-    public void fetchOne(Context ctx){
+    public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("employeeId"));
-        Employee employee = Employee.fetchOne(id);
+        Employee employee = Employee.fetchById(id);
 
-        if(employee == null){
+        if (employee == null) {
             ctx.status(404);
             return;
         }
@@ -17,54 +19,55 @@ public class EmployeeController {
         ctx.json(employee);
     }
 
-    public void fetchAll(Context ctx){
-        Employee[] employees = Employee.fetchAll();
+    public void fetchMechanics(Context ctx) throws SQLException {
+        Employee[] mechanics = Employee.fetchEveryMechanic();
 
-        if(employees == null){
+        if (mechanics.length == 0) {
             ctx.status(404);
             return;
         }
 
-        ctx.json(employees);
+        ctx.json(mechanics);
     }
 
-    public void fetchMechanics(Context ctx){
-        Employee[] employees = Employee.fetchMechanics();
-
-        if(employees == null){
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(employees);
-    }
-
-    public void create(Context ctx){
+    public void saveNotKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
 
-        if(Employee.create(employee)){
-            ctx.status(201);
+        if (employee.saveNotKnowingId() != null) {
+            ctx.json(employee);
             return;
         }
 
         ctx.status(400);
     }
 
-    public void update(Context ctx){
+    public void saveKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
 
-        if(Employee.update(employee)){
-            ctx.status(200);
+        if (employee.saveKnowingId() != null) {
+            ctx.json(employee);
             return;
         }
 
         ctx.status(400);
     }
 
-    public void delete(Context ctx){
-        int id = Integer.parseInt(ctx.pathParam("employeeId"));
 
-        if(Employee.delete(id)){
+    public void update(Context ctx) throws SQLException {
+        Employee employee = ctx.bodyAsClass(Employee.class);
+
+        if (employee.update() != null) {
+            ctx.json(employee);
+            return;
+        }
+
+        ctx.status(400);
+    }
+
+    public void delete(Context ctx) throws SQLException {
+        int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
+
+        if (Employee.delete(employeeId)) {
             ctx.status(204);
             return;
         }
