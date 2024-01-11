@@ -84,3 +84,50 @@ After this is done the requests to our backend will get a 'Set-Cookie' header
 And multiple requests will all be redirected to the same container instance
 
 ![](media/sticky-session.png)
+
+## HTTPS
+
+The following steps were made to enable https
+
+1. Generated ssl certificate and key based on this [stack overflow answer](https://stackoverflow.com/questions/10175812/how-to-generate-a-self-signed-ssl-certificate-using-openssl#10176685).
+
+```bash
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=<StateName>/L=<CityName>/O=<CompanyName>/OU=<CompanySectionName>/CN=<CommonNameOrHostname>"
+```
+
+2. Generated a [traefik configuration file](./traefik/conf.yaml)
+
+3. Mounted these new files to the traefik container
+
+```docker compose
+#compose.yml
+reverse-proxy:
+    image: traefik:v2.10
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./ssl:/etc/traefik/certificates # cert.pem and key.pem
+      - ./traefik/conf.yaml:/etc/traefik/traefik.yaml # traefik config file
+    ...
+```
+
+4. Enabled tls in the backend and frontend using lables
+
+```docker compose
+#compose.yml
+  backend:
+    ...
+    labels:
+      ...
+      - "traefik.http.routers.backend.tls=true"
+  frontend:
+      ...
+      labels:
+        ...
+        - "traefik.http.routers.frontend.tls=true"
+```
+
+We can now connect using https.
+
+![](media/https-connection.png)
+
+Note: The browser warns us because the certificate is self signed

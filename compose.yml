@@ -2,7 +2,6 @@ version: "3.8"
 services:
   reverse-proxy:
     image: traefik:v2.10
-    command: --api.insecure=true --providers.docker
     ports:
       - 80:80
       - 443:443
@@ -30,7 +29,6 @@ services:
       - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
       - "traefik.http.services.backend-service.loadBalancer.sticky.cookie=true"
       - "traefik.http.services.backend-service.loadBalancer.sticky.cookie.name=api_session"
-      - "traefik.http.routers.entryPoint"
       - "traefik.http.routers.backend.tls=true"
   frontend:
     container_name: garage-front-end
