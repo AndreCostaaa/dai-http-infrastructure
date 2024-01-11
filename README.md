@@ -27,3 +27,21 @@ For this project we use Traefik as our reverse proxy
 3. We need to map one of the host ports to the traefiks's container port 80 so we can see the other services.
 4. We can also map one of the host ports to traefiks's 's port 8080 if we want to have access to traefik's dashboard
 5. At this point, the ports that were open for others services may be closed
+
+## Vertical Scaling and Load Balancing
+
+With traefik, this step is very easy. In the [docker compose file](compose.yml) we can setup the replicas directly using the replicas tag:
+
+```docker compose
+ backend:
+   ...
+    deploy:
+      replicas: 3
+    ...
+```
+
+We can also change this with the infrastructure running with:
+
+```bash
+docker compose up --scale <service_name>:<nb_of_instances>
+```
