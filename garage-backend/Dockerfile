@@ -1,5 +1,6 @@
 FROM openjdk:21-slim
 
+EXPOSE 80
 
 WORKDIR /app
 

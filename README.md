@@ -15,3 +15,15 @@
 ![](media/compose-build.png)
 
 ![](media/result-compose.png)
+
+### Reverse Proxy
+
+For this project we use Traefik as our reverse proxy
+
+#### Configuration Steps
+
+1. Define a service in the docker-compose file with the traefik image. For this project, we use the v2.10
+2. Traefik uses the `command` directive to initialize its infrastructure. Since we use docker, we need to use `--provides.docker` and if we want the Traefik dashboard we can also use the `--api.insecure=true` directive
+3. We need to map one of the host ports to the traefiks's container port 80 so we can see the other services.
+4. We can also map one of the host ports to traefiks's 's port 8080 if we want to have access to traefik's dashboard
+5. At this point, the ports that were open for others services may be closed
