@@ -12,7 +12,7 @@ public class App {
         app.get("/api/cars/{carId}", carController::fetchOne);
         app.post("/api/cars", carController::save);
         app.patch("/api/cars", carController::update);
-        app.delete("/api/cars/{serviceId}", carController::delete);
+        app.delete("/api/cars/{carId}", carController::delete);
 
         // CarPartController
         CarPartController carPartController = new CarPartController();

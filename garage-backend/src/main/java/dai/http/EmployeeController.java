@@ -53,13 +53,12 @@ public class EmployeeController {
 
     public void saveKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
-
-        if (employee.saveKnowingId() != null) {
-            ctx.json(employee);
+        employee = employee.saveKnowingId();
+        if (employee == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(employee);
     }
 
 

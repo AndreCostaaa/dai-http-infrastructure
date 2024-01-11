@@ -133,11 +133,12 @@ public class Employee extends Person {
      * @return Employee or null
      */
     public Employee saveKnowingId() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(createEmployeeKnowingIdQuery, this,
+        DatabaseHandler.executeUpdateStatement(createEmployeeKnowingIdQuery, this,
                 (ResultSet resultSet) -> {
                     resultSet.next();
                     return this;
                 });
+        return fetchById(this.getId());
     }
 
     /**
