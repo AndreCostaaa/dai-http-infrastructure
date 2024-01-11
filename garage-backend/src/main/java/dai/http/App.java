@@ -37,8 +37,8 @@ public class App {
         app.get("/api/employees", employeeController::fetchAll);
         app.get("/api/employees/{employeeId}", employeeController::fetchOne);
         app.get("/api/mechanics", employeeController::fetchMechanics);
-        app.post("/api/employees", employeeController::saveNotKnowingId);
-        app.post("/api/employees/knownId/", employeeController::saveKnowingId);
+        app.post("/api/employees", employeeController::create);
+        app.post("/api/employees/knownId/", employeeController::createKnowingId);
         app.patch("/api/employees", employeeController::update);
         app.delete("/api/employees/{employeeId}", employeeController::delete);
 

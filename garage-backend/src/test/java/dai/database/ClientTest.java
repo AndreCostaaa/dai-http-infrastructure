@@ -51,7 +51,7 @@ public class ClientTest extends GarageTest {
         Client savedClient = client.saveNotKnowingId();
         assertNotNull(savedClient);
         assertEquals(savedClient,
-                new Client(13, client.getFirstName(), client.getLastName(), client.getPhoneNo(), client.email(),
+                new Client(13, client.getFirstName(), client.getLastName(), client.getPhoneNo(), client.getEmail(),
                         client.getStreet(), client.getStreetNo(), client.getNpa(), client.getCountry()));
     }
 
@@ -65,7 +65,7 @@ public class ClientTest extends GarageTest {
         assertNotNull(savedClient);
         assertEquals(savedClient,
                 new Client(client.getId(), client.getFirstName(), client.getLastName(), client.getPhoneNo(),
-                        client.email(), client.getStreet(), client.getStreetNo(), client.getNpa(),
+                        client.getEmail(), client.getStreet(), client.getStreetNo(), client.getNpa(),
                         client.getCountry()));
     }
 
@@ -74,7 +74,7 @@ public class ClientTest extends GarageTest {
         Client originalClient = Client.fetchById(2);
         Client updatedClient = new Client(originalClient.getId(), originalClient.getFirstName(),
                 originalClient.getLastName(),
-                "+689283742398", originalClient.email(), originalClient.getStreet(), originalClient.getStreetNo(),
+                "+689283742398", originalClient.getEmail(), originalClient.getStreet(), originalClient.getStreetNo(),
                 originalClient.getNpa(), originalClient.getCountry());
 
         assertNotEquals(updatedClient, originalClient);

@@ -38,52 +38,47 @@ public class ClientController {
             ctx.status(404);
             return;
         }
-
         ctx.json(client);
     }
 
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
 
-        if (client.saveNotKnowingId() != null) {
-            ctx.json(client);
+        if (client.saveNotKnowingId() == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(client);
     }
 
     public void saveKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
-
-        if (client.saveKnowingId() != null) {
-            ctx.json(client);
+        client = client.saveKnowingId();
+        if (client == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(client);
     }
 
 
     public void update(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
 
-        if (client.update() != null) {
-            ctx.json(client);
+        if (client.update() == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(client);
     }
 
     public void delete(Context ctx) throws SQLException {
         int clientId = Integer.parseInt(ctx.pathParam("clientId"));
 
-        if (Client.delete(clientId)) {
-            ctx.status(204);
+        if (!Client.delete(clientId)) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.status(204);
     }
 }

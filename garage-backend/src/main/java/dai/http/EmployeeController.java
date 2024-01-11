@@ -7,17 +7,6 @@ import java.sql.SQLException;
 
 public class EmployeeController {
 
-    public void fetchAll(Context ctx) throws SQLException {
-        Employee[] employees = Employee.fetchAll();
-
-        if (employees.length == 0) {
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(employees);
-    }
-
     public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("employeeId"));
         Employee employee = Employee.fetchById(id);
