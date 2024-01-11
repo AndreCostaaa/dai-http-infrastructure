@@ -1,4 +1,9 @@
 version: "3.8"
+
+volumes:
+  database-volume:
+    external: false
+
 services:
   reverse-proxy:
     image: traefik:v2.10
@@ -15,6 +20,8 @@ services:
     image: "bitnami/postgresql:13"
     env_file:
       - .env
+    volumes:
+      - database-volume:/bitnami/postgresql
     ports:
       - 127.0.0.1:5434:5432
   backend:
