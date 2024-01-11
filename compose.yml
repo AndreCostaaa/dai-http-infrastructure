@@ -1,6 +1,19 @@
 version: "3.8"
-
 services:
+  database:
+    image: "bitnami/postgresql:13"
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:5434:5432
+  backend:
+    image: garage/back-end
+    build:
+      context: garage-backend
+    env_file:
+      - .env
+    ports:
+      - 7000:7000
   front-end:
     container_name: garage-front-end
     image: garage/front-end
@@ -9,3 +22,4 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 5111:80
+
