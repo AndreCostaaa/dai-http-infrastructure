@@ -1,9 +1,9 @@
 FROM openjdk:21-slim
 
-EXPOSE 80
+EXPOSE 5000
 
 WORKDIR /app
 
-COPY target/*.jar ./app.jar
+COPY target/app.jar ./app.jar
 
 CMD ["java", "-jar", "app.jar"]

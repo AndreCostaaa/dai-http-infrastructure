@@ -6,8 +6,11 @@
 
     <groupId>dai.http</groupId>
     <artifactId>dai-http</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
+    
     <build>
+       <finalName>app</finalName>
+
         <plugins>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
