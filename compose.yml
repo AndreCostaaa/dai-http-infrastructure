@@ -4,4 +4,12 @@ services:
     env_file:
       - .env
     ports:
-      - 5434:5432
+      - 127.0.0.1:5434:5432
+  backend:
+    image: garage/back-end
+    build:
+      context: garage-backend
+    env_file:
+      - .env
+    ports:
+      - 7000:7000
