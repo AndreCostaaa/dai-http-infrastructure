@@ -21,6 +21,8 @@ services:
       - .env
     labels:
       - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
+      - "traefik.http.services.backend-service.loadBalancer.sticky.cookie=true"
+      - "traefik.http.services.backend-service.loadBalancer.sticky.cookie.name=api_session"
   frontend:
     container_name: garage-front-end
     image: garage/front-end

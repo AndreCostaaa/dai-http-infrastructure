@@ -59,3 +59,5 @@ docker compose ps
 We can also check using the traefik's dashboard that we have the correct number of replicas:
 
 ![](media/traefik-scale.png)
+
+## Sticky Session
