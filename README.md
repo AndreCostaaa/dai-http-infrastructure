@@ -33,6 +33,7 @@ For this project we use Traefik as our reverse proxy
 With traefik, this step is very easy. In the [docker compose file](compose.yml) we can setup the replicas directly using the replicas tag:
 
 ```docker compose
+#compose.yml
  backend:
    ...
     deploy:
@@ -67,6 +68,7 @@ We can also check using the traefik's dashboard that we have the correct number 
 Sticky session configuration can be done using labels
 
 ```docker compose
+#compose.yml
   backend:
     ...
     labels:
