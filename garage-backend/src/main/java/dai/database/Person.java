@@ -7,6 +7,10 @@ public class Person implements IEntity {
     private int id;
     private String firstName, lastName, phoneNo;
 
+    public Person(){
+
+    }
+
     public Person(int id,
             String firstName,
             String lastName,

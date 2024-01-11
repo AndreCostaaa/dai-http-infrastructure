@@ -10,6 +10,10 @@ public class Client extends Person {
     private int streetNo;
     private int npa;
 
+    public Client(){
+        super();
+    }
+
     public Client(int id,
             String firstName,
             String lastName,
@@ -27,7 +31,7 @@ public class Client extends Person {
         this.country = country;
     }
 
-    public String email() {
+    public String getEmail() {
         return email;
     }
 
@@ -81,7 +85,7 @@ public class Client extends Person {
             return true;
         if (object instanceof Client otherClient) {
             return super.equals(otherClient)
-                    && email().equals(otherClient.email())
+                    && getEmail().equals(otherClient.getEmail())
                     && getStreet().equals(otherClient.getStreet())
                     && getStreetNo() == otherClient.getStreetNo()
                     && getNpa() == otherClient.getNpa()
@@ -91,7 +95,7 @@ public class Client extends Person {
     }
 
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo(), email(), getStreet(), getStreetNo(),
+        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo(), getEmail(), getStreet(), getStreetNo(),
                 getNpa(),
                 getCountry());
     }
@@ -117,7 +121,7 @@ public class Client extends Person {
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        statement.setString("email", email());
+        statement.setString("email", getEmail());
         statement.setString("street", getStreet());
         statement.setInt("street_no", getStreetNo());
         statement.setInt("npa", getNpa());
@@ -193,13 +197,13 @@ public class Client extends Person {
      * @return Client or null
      */
     public Client saveKnowingId() throws SQLException {
-
-        return DatabaseHandler.executeCreateStatement(createClientKnowingIdQuery,
+        DatabaseHandler.executeCreateStatement(createClientKnowingIdQuery,
                 this,
                 (ResultSet resultSet) -> {
                     resultSet.next();
                     return this;
                 });
+        return fetchById(this.getId());
     }
 
     /**
