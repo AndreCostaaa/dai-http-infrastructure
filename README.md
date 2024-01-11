@@ -43,5 +43,19 @@ With traefik, this step is very easy. In the [docker compose file](compose.yml) 
 We can also change this with the infrastructure running with:
 
 ```bash
-docker compose up --scale <service_name>:<nb_of_instances>
+docker compose up -d --scale <service_name>:<nb_of_instances>
 ```
+
+### Checking everything is working
+
+We can verify using:
+
+```bash
+docker compose ps
+```
+
+![](media/compose-scale.png)
+
+We can also check using the traefik's dashboard that we have the correct number of replicas:
+
+![](media/traefik-scale.png)
