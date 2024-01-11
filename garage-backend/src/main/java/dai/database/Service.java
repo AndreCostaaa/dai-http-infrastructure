@@ -16,8 +16,6 @@ public record Service(int id,
         int dateCarDone,
         int dateCarLeft) implements IEntity {
 
-    static Connection con;
-
     static final String getAllQuery = "SELECT * FROM service;",
             getServiceByIdQuery = "SELECT * FROM service WHERE id = :id;",
             getServiceByCarQuery = "SELECT * FROM service WHERE car_id = :car_id;",
@@ -31,17 +29,6 @@ public record Service(int id,
             incrementStateQuery = "WITH service_state AS (SELECT state_id FROM service WHERE id = :id) UPDATE service SET state_id = service_state + 1 WHERE id = :id;",
             deleteServiceQuery = "DELETE FROM service WHERE id = :id;";
 
-
-    @Override
-    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
-        completeStatementCommon(statement);
-    }
-
-    @Override
-    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
-        completeStatementCommon(statement);
-        statement.setInt("id", id());
-    }
 
     private static Service fetchNext(ResultSet resultSet) throws SQLException {
         if (!resultSet.next())
@@ -91,9 +78,20 @@ public record Service(int id,
         statement.setInt("date_car_left", dateCarLeft());
     }
 
+    @Override
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+    }
+
+    @Override
+    public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
+        completeStatementCommon(statement);
+        statement.setInt("id", id());
+    }
+
     /**
      * Fetch all Services from the database.
-     * 
+     *
      * @return Service[] or null
      */
     static public Service[] fetchAll() throws SQLException {
@@ -102,7 +100,7 @@ public record Service(int id,
 
     /**
      * Fetch a Service from the database matching the given id.
-     * 
+     *
      * @param id the id of the Service to fetch
      * @return Service or null
      */
@@ -112,7 +110,7 @@ public record Service(int id,
 
     /**
      * Fetch all Services from the database matching the given carId.
-     * 
+     *
      * @param carId the id of the Car to fetch Services for
      * @return Service[] or null
      */
@@ -125,7 +123,7 @@ public record Service(int id,
 
     /**
      * Fetch all Services from the database matching the given carId and stateId.
-     * 
+     *
      * @param carId   the id of the Car to fetch Services for
      * @param stateId the id of the State to fetch Services for
      * @return Service[] or null
@@ -141,7 +139,7 @@ public record Service(int id,
 
     /**
      * Fetch all Services from the database matching the given mechanicId.
-     * 
+     *
      * @param mechanicId the id of the mechanic Employee to fetch Services for
      * @return Service[] or null
      */
@@ -155,7 +153,7 @@ public record Service(int id,
     /**
      * Fetch all Services from the database matching the given mechanicId and
      * stateId.
-     * 
+     *
      * @param mechanicId the id of the mechanic Employee to fetch Services for
      * @param stateId    the id of the State to fetch Services for
      * @return Service[] or null
@@ -171,7 +169,7 @@ public record Service(int id,
 
     /**
      * Fetch all Services from the database matching the given stateId.
-     * 
+     *
      * @param stateId the id of the State to fetch Services for
      * @return Service[] or null
      */
@@ -185,7 +183,7 @@ public record Service(int id,
     /**
      * Fetch all the processing Services from the database matching the given
      * mechanicId.
-     * 
+     *
      * @param mechanicId the id of the mechanic Employee to fetch Services for
      * @return Service[] or null
      */
@@ -198,8 +196,8 @@ public record Service(int id,
 
     /**
      * Save the Service in the database.
-     * 
-     * @return true if successful
+     *
+     * @return Service or null
      */
     public Service save() throws SQLException {
         return DatabaseHandler.executeCreateStatement(createServiceQuery, this, Service::fetchNext);
@@ -207,8 +205,8 @@ public record Service(int id,
 
     /**
      * Update the Service in the database.
-     * 
-     * @return true if successful
+     *
+     * @return Service or null
      */
     public Service update() throws SQLException {
         return DatabaseHandler.executeUpdateStatement(updateServiceQuery, this, Service::fetchNext);
@@ -216,22 +214,21 @@ public record Service(int id,
 
     /**
      * Increment the state of the Service.
-     * 
-     * @return true if successful
+     *
+     * @return Service or null
      */
     public Service incrementState() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(incrementStateQuery, this,Service::fetchNext);
+        return DatabaseHandler.executeUpdateStatement(incrementStateQuery, this, Service::fetchNext);
     }
 
     /**
      * Delete a Service from the database matching the given id.
-     * 
+     *
      * @param id the id of the Service to delete
      * @return true if successful
      */
     static public boolean delete(int id) throws SQLException {
         return DatabaseHandler.deleteById(deleteServiceQuery, id);
     }
-
 
 }

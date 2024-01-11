@@ -13,7 +13,6 @@ public record Specialization(int id,
             updateSpecializationQuery = "UPDATE specialization SET name = :name, hourly_rate = :hourly_rate WHERE id = :id;",
             deleteSpecializationQuery = "DELETE FROM specialization WHERE id = :id;";
 
-
     private static Specialization fetchNext(ResultSet resultSet) throws SQLException{
         if(!resultSet.next()){
             return null;
@@ -60,4 +59,5 @@ public record Specialization(int id,
     static public boolean delete(int id) throws SQLException {
         return DatabaseHandler.deleteById(deleteSpecializationQuery, id);
     }
+    
 }

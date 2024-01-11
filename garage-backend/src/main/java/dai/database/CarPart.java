@@ -75,6 +75,15 @@ public record CarPart(int id,
     }
 
     /**
+     * Fetch all CarParts from the database.
+     *
+     * @return CarPart[] or null
+     */
+    static public CarPart[] fetchAll() throws SQLException {
+        return DatabaseHandler.fetchAll(getAllQuery, CarPart::fetchNext);
+    }
+
+    /**
      * Fetch a CarPart from the database matching the given id.
      *
      * @param id the id of the CarPart to fetch
@@ -82,15 +91,6 @@ public record CarPart(int id,
      */
     static public CarPart fetchOne(int id) throws SQLException {
         return DatabaseHandler.fetchById(getCarPartByIdQuery, id, CarPart::fetchNext);
-    }
-
-    /**
-     * Fetch all CarParts from the database.
-     *
-     * @return CarPart[] or null
-     */
-    static public CarPart[] fetchAll() throws SQLException {
-        return DatabaseHandler.fetchAll(getAllQuery, CarPart::fetchNext);
     }
 
     /**

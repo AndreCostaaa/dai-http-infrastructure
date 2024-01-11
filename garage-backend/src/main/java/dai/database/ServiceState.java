@@ -11,7 +11,6 @@ public record ServiceState(int id,
             getServiceStateByIdQuery = "SELECT * FROM service_state WHERE id = :id;",
             updateServiceStateQuery = "UPDATE service_state SET title = :title, description = :description WHERE id = :id;";
 
-
     private static ServiceState fetchNext(ResultSet resultSet) throws SQLException{
         if(!resultSet.next()){
             return null;
@@ -50,4 +49,5 @@ public record ServiceState(int id,
     public ServiceState update() throws SQLException{
         return DatabaseHandler.executeUpdateStatement(updateServiceStateQuery, this, ServiceState::fetchNext);
     }
+
 }

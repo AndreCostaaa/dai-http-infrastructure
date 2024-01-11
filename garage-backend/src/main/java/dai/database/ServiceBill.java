@@ -8,8 +8,6 @@ public record ServiceBill(int id,
         boolean paid,
         int discountPercentage) implements IEntity {
 
-    static Connection con;
-
     static final String getAllQuery = "SELECT * FROM service_bill",
             getByIdQuery = "SELECT * FROM service_bill WHERE id = :id",
             updateQuery = "UPDATE service_bill SET price = :price, delivered = :delivered, paid = :paid, discount_percentage = :discount_percentage WHERE id = :id",
@@ -62,6 +60,5 @@ public record ServiceBill(int id,
     static public boolean delete(int id) throws SQLException {
         return DatabaseHandler.deleteById(deleteQuery, id);
     }
-
 
 }
