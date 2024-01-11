@@ -4,7 +4,7 @@ import io.javalin.*;
 
 public class App {
     public static void main(String[] args) {
-        Javalin app = Javalin.create().start(7000);
+        Javalin app = Javalin.create().start(80);
 
         // CarController
         CarController carController = new CarController();
