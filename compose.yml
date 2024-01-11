@@ -1,5 +1,4 @@
 version: "3.8"
-
 services:
   reverse-proxy:
     image: traefik:v2.10
@@ -9,6 +8,23 @@ services:
       - 8081:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  database:
+    image: "bitnami/postgresql:13"
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:5434:5432
+  backend:
+    image: garage/back-end
+    build:
+      context: ./garage-backend
+      dockerfile: ./Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 7000:7000
+    labels:
+      - "traefik.http.routers.backend.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"
   frontend:
     container_name: garage-front-end
     image: garage/front-end
@@ -19,13 +35,3 @@ services:
       - 5111:80
     labels:
       - "traefik.http.routers.frontend.rule=Host(`localhost`)"
-  backend:
-    container_name: garage-back-end
-    image: garage/back-end
-    build:
-      context: ./garage-backend
-      dockerfile: ./Dockerfile
-    ports:
-      - 5111:80
-    labels:
-      - "traefik.http.routers.backend.rule=Host(`localhost`) && PathPrefix(`/api/v1`)"
