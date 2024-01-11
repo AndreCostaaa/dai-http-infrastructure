@@ -18,6 +18,7 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
+
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
@@ -26,6 +27,7 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
+    public int getRoleId() { return roleId; }
 
     public Integer getSpecializationId() {
         return specializationId;

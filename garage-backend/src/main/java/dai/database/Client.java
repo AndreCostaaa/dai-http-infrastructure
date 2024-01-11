@@ -234,20 +234,4 @@ public class Client extends Person {
     static public boolean delete(int id) throws SQLException {
         return DatabaseHandler.deleteById(deleteClientQuery, id);
     }
-
-    static public boolean create(Client client){
-        return true;
-    }
-
-    static public boolean createAlreadyInPerson(Client client){
-        return true;
-    }
-
-    static public boolean update(Client client){
-        return true;
-    }
-
-    static public boolean delete(int id){
-        return true;
-    }
 }

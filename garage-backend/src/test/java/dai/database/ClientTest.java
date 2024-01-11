@@ -14,6 +14,7 @@ public class ClientTest extends GarageTest {
 
         assertNotNull(client);
         assertEquals(client, new Client(2, "Amir", "Mouti", "+41765594551", "amir.mouti@heig-vd.ch", "Route de Bois",
+
                 14, 1200, "Switzerland"));
     }
 
