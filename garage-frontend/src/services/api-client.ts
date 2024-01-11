@@ -4,7 +4,8 @@ const headers = {
 };
 
 function apiDomain() {
-  return "http://localhost:5000/api/v1";
+  const { hostname } = window.location;
+  return `https://api.${hostname}/api`;
 }
 
 export default axios.create({
