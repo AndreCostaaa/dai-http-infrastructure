@@ -1,6 +1,7 @@
 package dai.http;
 
 import io.javalin.*;
+import io.javalin.http.Context;
 
 public class App {
     public static void main(String[] args) {
@@ -79,5 +80,9 @@ public class App {
         app.get("/api/serviceBills/{serviceBillId}", serviceBillController::fetchOne);
         app.patch("/api/serviceBills", serviceBillController::update);
         app.delete("/api/serviceBills/{serviceBillId}", serviceBillController::delete);
+
+        app.get("/api/stickySessionTest", (Context ctx) -> {
+            System.out.println(String.format("%d Sticky Session test !", System.currentTimeMillis()));
+        });
     }
 }

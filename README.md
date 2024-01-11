@@ -33,6 +33,7 @@ For this project we use Traefik as our reverse proxy
 With traefik, this step is very easy. In the [docker compose file](compose.yml) we can setup the replicas directly using the replicas tag:
 
 ```docker compose
+#compose.yml
  backend:
    ...
     deploy:
@@ -59,3 +60,27 @@ docker compose ps
 We can also check using the traefik's dashboard that we have the correct number of replicas:
 
 ![](media/traefik-scale.png)
+
+## Sticky Session
+
+### Configuration
+
+Sticky session configuration can be done using labels
+
+```docker compose
+#compose.yml
+  backend:
+    ...
+    labels:
+      ...
+      - "traefik.http.services.backend-service.loadBalancer.sticky.cookie=true"
+      - "traefik.http.services.backend-service.loadBalancer.sticky.cookie.name=api_session"
+```
+
+After this is done the requests to our backend will get a 'Set-Cookie' header
+
+![](media/sticky-session-response.png)
+
+And multiple requests will all be redirected to the same container instance
+
+![](media/sticky-session.png)
