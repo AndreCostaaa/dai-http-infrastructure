@@ -43,8 +43,8 @@ public class ClientController {
 
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
-
-        if (client.saveNotKnowingId() == null) {
+        client = client.saveNotKnowingId();
+        if (client == null) {
             ctx.status(400);
             return;
         }

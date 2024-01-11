@@ -29,7 +29,7 @@ public class App {
         app.get("/api/clients/phoneNo/{phoneNo}", clientController::fetchByPhoneNo);
         app.post("/api/clients", clientController::saveNotKnowingId);
         app.post("/api/clients/knownId", clientController::saveKnowingId);
-        app.patch("/api/clients/update", clientController::update);
+        app.patch("/api/clients", clientController::update);
         app.delete("/api/clients/{clientId}", clientController::delete);
 
         // EmployeeController

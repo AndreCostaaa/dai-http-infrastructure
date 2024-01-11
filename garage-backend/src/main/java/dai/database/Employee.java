@@ -7,6 +7,10 @@ public class Employee extends Person {
     private int roleId;
     private Integer specializationId;
 
+    public Employee(){
+
+    }
+
     public Employee(int id,
             String firstName,
             String lastName,

@@ -42,13 +42,12 @@ public class EmployeeController {
 
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
-
-        if (employee.saveNotKnowingId() != null) {
-            ctx.json(employee);
+        employee = employee.saveNotKnowingId();
+        if (employee == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(employee);
     }
 
     public void saveKnowingId(Context ctx) throws SQLException {
@@ -65,12 +64,11 @@ public class EmployeeController {
     public void update(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
 
-        if (employee.update() != null) {
-            ctx.json(employee);
+        if (employee.update() == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(employee);
     }
 
     public void delete(Context ctx) throws SQLException {

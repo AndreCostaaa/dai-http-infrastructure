@@ -111,35 +111,31 @@ public class ServiceController {
 
     public void save(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
-
-        if (service.save() != null) {
-            ctx.json(service);
+        service = service.save();
+        if (service == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(service);
     }
 
     public void update(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
-
-        if (service.update() != null) {
-            ctx.json(service);
+        if (service.update() == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(service);
     }
 
     public void incrementState(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
-
-        if (service.incrementState() != null) {
-            ctx.json(service);
+        service = service.incrementState();
+        if (service == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(service);
     }
 
     public void delete(Context ctx) throws SQLException {

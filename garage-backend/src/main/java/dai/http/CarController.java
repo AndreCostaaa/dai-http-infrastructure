@@ -31,24 +31,22 @@ public class CarController {
 
     public void save(Context ctx) throws SQLException {
         Car car = ctx.bodyAsClass(Car.class);
-
-        if (car.save() != null) {
-            ctx.json(car);
+        car = car.save();
+        if (car == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(car);
     }
 
     public void update(Context ctx) throws SQLException {
         Car car = ctx.bodyAsClass(Car.class);
 
-        if (car.update() != null) {
-            ctx.json(car);
+        if (car.update() == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(car);
     }
 
     public void delete(Context ctx) throws SQLException {
