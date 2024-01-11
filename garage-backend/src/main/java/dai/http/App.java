@@ -2,11 +2,22 @@ package dai.http;
 
 import io.javalin.*;
 import io.javalin.http.Context;
+import io.javalin.http.HandlerType;
+import io.javalin.http.Header;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 
 public class App {
     public static void main(String[] args) {
-        Javalin app = Javalin.create().start(80);
-
+        Javalin app = Javalin.create(config -> {
+            config.plugins.enableCors(cors -> {
+                cors.add(CorsPluginConfig::anyHost);
+            });
+        }).before(ctx -> {
+            System.out.println("Hello");
+            if (ctx.method() == HandlerType.OPTIONS) {
+                ctx.header(Header.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+            }
+        }).start(5000);
         // CarController
         CarController carController = new CarController();
         app.get("/api/cars", carController::fetchAll);
@@ -81,7 +92,8 @@ public class App {
         app.patch("/api/serviceBills", serviceBillController::update);
         app.delete("/api/serviceBills/{serviceBillId}", serviceBillController::delete);
 
-        app.get("/api/stickySessionTest", (Context ctx) -> {
+        app.get("/api/stickySessionTest", (
+                Context ctx) -> {
             System.out.println(String.format("%d Sticky Session test !", System.currentTimeMillis()));
         });
     }
