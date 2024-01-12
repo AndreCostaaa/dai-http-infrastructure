@@ -1,0 +1,22 @@
+meta {
+  name: update employee
+  type: http
+  seq: 6
+}
+
+patch {
+  url: http://localhost:7000/api/employees
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "firstName": "René",
+    "lastName": "Rentsh",
+    "phoneNo": "244303309",
+    "roleId": 5,
+    "specializationId": null
+  }
+}
