@@ -103,6 +103,20 @@ public class DatabaseHandler {
         }
     }
 
+    static public <T extends IEntity> T executeIncrementStateStatement(String stringQuery, int id,
+                                                               ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
+            throws SQLException {
+        stringQuery = addReturningToQuery(stringQuery);
+        try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
+                (stringQuery))) {
+            statement.setInt("id", id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return iresultSetHandler.fetchNext(resultSet);
+            }
+        }
+    }
+
     static public <T extends IEntity> T executeCreateStatement(String stringQuery, T element,
             ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {

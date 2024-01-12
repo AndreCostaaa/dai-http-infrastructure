@@ -25,7 +25,7 @@ public record Service(int id,
             getServiceByStateQuery = "SELECT * FROM service WHERE state_id = :state_id;",
             createServiceQuery = "INSERT INTO service (mechanic_id, client_id, car_id, hours_worked, comments, has_pictures, state_id, date_car_arrival, date_car_processing, date_car_done, date_car_left) VALUES (:mechanic_id, :client_id, :car_id, 0, '', false, 0, now(), NULL, NULL, NULL);",
             updateServiceQuery = "UPDATE service SET mechanic_id  = :mechanic_id, hours_worked = :hours_worked, comments = :comments, has_pictures = :has_pictures WHERE id = :id;",
-            incrementStateQuery = "WITH service_state AS (SELECT state_id FROM service WHERE id = :id) UPDATE service SET state_id = service_state + 1 WHERE id = :id;",
+            incrementStateQuery = "UPDATE service SET state_id = state_id + 1 WHERE id = :id;",
             deleteServiceQuery = "DELETE FROM service WHERE id = :id;";
 
 
@@ -193,7 +193,7 @@ public record Service(int id,
      * @return Service or null
      */
     public Service incrementState() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(incrementStateQuery, this, Service::fetchNext);
+        return DatabaseHandler.executeIncrementStateStatement(incrementStateQuery, this.id(), Service::fetchNext);
     }
 
     /**
