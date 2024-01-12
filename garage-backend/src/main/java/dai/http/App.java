@@ -67,7 +67,6 @@ public class App {
         app.get("/api/services/mechanic/{mechanicId}", serviceController::fetchServiceByMechanic);
         app.get("/api/services/mechanic/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
         app.get("/api/services/state/{stateId}", serviceController::fetchServiceByState);
-        app.get("/api/services/processing/{mechanicId}", serviceController::fetchServiceByMechanicProcessing);
         app.post("/api/services", serviceController::save);
         app.patch("/api/services", serviceController::update);
         app.patch("/api/services/{serviceId}", serviceController::incrementState);
