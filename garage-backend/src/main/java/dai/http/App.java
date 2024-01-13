@@ -68,7 +68,13 @@ public class App {
         app.post("/api/roles", roleController::save);
         app.patch("/api/roles", roleController::update);
         app.delete("/api/roles/{roleId}", roleController::delete);
-
+        // SpecializationController
+        SpecializationController specializationController = new SpecializationController();
+        app.get("/api/specializations", specializationController::fetchAll);
+        app.get("/api/specializations/{specializationId}", specializationController::fetchOne);
+        app.post("/api/specializations", specializationController::save);
+        app.patch("/api/specializations", specializationController::update);
+        app.delete("/api/specializations/{specializationId}", specializationController::delete);
         // ServiceController
         ServiceController serviceController = new ServiceController();
         app.get("/api/services", serviceController::fetchAll);

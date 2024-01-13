@@ -4,8 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public record Specialization(int id,
-                             String name,
-                             double hourlyRate) implements IEntity{
+        String name,
+        double hourlyRate) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM specialization;",
             getSpecializationByIdQuery = "SELECT * FROM specialization WHERE id = :id;",
@@ -13,8 +13,8 @@ public record Specialization(int id,
             updateSpecializationQuery = "UPDATE specialization SET name = :name, hourly_rate = :hourly_rate WHERE id = :id;",
             deleteSpecializationQuery = "DELETE FROM specialization WHERE id = :id;";
 
-    private static Specialization fetchNext(ResultSet resultSet) throws SQLException{
-        if(!resultSet.next()){
+    private static Specialization fetchNext(ResultSet resultSet) throws SQLException {
+        if (!resultSet.next()) {
             return null;
         }
         int id = resultSet.getInt("id");
@@ -24,7 +24,7 @@ public record Specialization(int id,
         return new Specialization(id, name, hourlyRate);
     }
 
-    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException{
+    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
         statement.setString("name", name);
         statement.setDouble("hourly_rate", hourlyRate);
     }
@@ -40,7 +40,7 @@ public record Specialization(int id,
         statement.setInt("id", id());
     }
 
-    static public Specialization[] fetchAll() throws SQLException{
+    static public Specialization[] fetchAll() throws SQLException {
         return DatabaseHandler.fetchAll(getAllQuery, Specialization::fetchNext);
     }
 
@@ -48,16 +48,16 @@ public record Specialization(int id,
         return DatabaseHandler.fetchById(getSpecializationByIdQuery, id, Specialization::fetchNext);
     }
 
-    public Specialization create() throws SQLException{
+    public Specialization save() throws SQLException {
         return DatabaseHandler.executeCreateStatement(createSpecializationQuery, this, Specialization::fetchNext);
     }
 
-    public Specialization update() throws SQLException{
+    public Specialization update() throws SQLException {
         return DatabaseHandler.executeUpdateStatement(updateSpecializationQuery, this, Specialization::fetchNext);
     }
 
     static public boolean delete(int id) throws SQLException {
         return DatabaseHandler.deleteById(deleteSpecializationQuery, id);
     }
-    
+
 }
