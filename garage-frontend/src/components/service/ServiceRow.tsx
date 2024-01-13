@@ -18,34 +18,30 @@ const ServiceRow = ({ service }: Props) => {
   } = useDisclosure();
   return (
     <>
-      <Tr>
-        <Td>{service.id}</Td>
-        <Td>
-          {service.car.model} - {service.car.brand}
-        </Td>
-        <Td>
-          {service.client.fname} {service.client.lname}
-        </Td>
-        <Td>
-          {service.mechanic?.lname || (
-            <Button onClick={onOpenAssign}>Assigner</Button>
-          )}
-        </Td>
-        <Td>{service.state.title}</Td>
-        <Td>
-          <Button onClick={onOpenService}>Détails</Button>
-        </Td>
-      </Tr>
-      <AssignMechanicModal
-        isOpen={isOpenAssign}
-        onClose={onCloseAssign}
-        children={null}
-      />
-      <ServiceModal
-        isOpen={isOpenService}
-        onClose={onCloseService}
-        children={null}
-      />
+      <Td>{service.id}</Td>
+      <Td>
+        {service.car.model} - {service.car.brand}
+      </Td>
+      <Td>
+        {service.client.firstName} {service.client.lastName}
+      </Td>
+      <Td>
+        {service.mechanic?.lastName || (
+          <Button onClick={onOpenAssign}>Assigner</Button>
+        )}
+      </Td>
+      <Td>{service.state.title}</Td>
+      <Td>
+        <Button onClick={onOpenService}>Détails</Button>
+      </Td>
+
+      {isOpenAssign && (
+        <AssignMechanicModal
+          isOpen={isOpenAssign}
+          onClose={onCloseAssign}
+          children={null}
+        />
+      )}
     </>
   );
 };
