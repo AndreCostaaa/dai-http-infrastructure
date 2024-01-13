@@ -3,7 +3,7 @@ import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 import ClientModal from "../client/ClientModal";
-import ServiceModal from "../service/ServiceModal";
+import CarServicesModal from "../service/CarServicesModal";
 interface Props {
   car: Car;
 }
@@ -38,18 +38,22 @@ const CarRow = ({ car }: Props) => {
           </Button>
         </Td>
       </Tr>
-      <ClientModal
-        children={null}
-        isOpen={isOpenOwner}
-        onClose={onCloseOwner}
-        clientId={car.ownerId}
-      />
-      <ServiceModal
-        children={null}
-        isOpen={isOpenService}
-        onClose={onCloseService}
-        carId={car.id}
-      />
+      {isOpenOwner && (
+        <ClientModal
+          children={null}
+          isOpen={isOpenOwner}
+          onClose={onCloseOwner}
+          clientId={car.ownerId}
+        />
+      )}
+      {isOpenService && (
+        <CarServicesModal
+          children={null}
+          isOpen={isOpenService}
+          onClose={onCloseService}
+          carId={car.id}
+        />
+      )}
     </>
   );
 };
