@@ -1,10 +1,4 @@
-import {
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalProps,
-} from "@chakra-ui/react";
+import { ModalProps } from "@chakra-ui/react";
 import Roles from "./Roles";
 import GenericModal from "../generic/GenericModal";
 import useRoleById from "../../hooks/useRoleById";

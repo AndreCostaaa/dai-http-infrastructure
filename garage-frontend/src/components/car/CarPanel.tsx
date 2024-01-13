@@ -1,4 +1,3 @@
-import { Center, Spinner } from "@chakra-ui/react";
 import Cars from "./Cars";
 import useCars from "../../hooks/useCars";
 import DataSkeleton from "../generic/DataSkeleton";

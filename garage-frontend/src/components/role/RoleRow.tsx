@@ -1,4 +1,4 @@
-import { Td, Tr, Icon, CheckboxIcon } from "@chakra-ui/react";
+import { Td, Tr } from "@chakra-ui/react";
 import { Role } from "../../services/role-service";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 

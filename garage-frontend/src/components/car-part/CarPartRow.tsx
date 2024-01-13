@@ -1,4 +1,5 @@
 import { Td, Tr } from "@chakra-ui/react";
+import { CarPart } from "../../services/car-part-service";
 interface Props {
   part: CarPart;
 }
