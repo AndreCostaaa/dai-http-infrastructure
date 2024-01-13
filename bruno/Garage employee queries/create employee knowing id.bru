@@ -1,0 +1,22 @@
+meta {
+  name: create employee knowing id
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:7000/api/employees/knownId
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "firstName": "René",
+    "lastName": "Rentsh",
+    "phoneNo": "244303309",
+    "roleId": 4,
+    "specializationId": null
+  }
+}

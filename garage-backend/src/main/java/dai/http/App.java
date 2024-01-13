@@ -13,7 +13,6 @@ public class App {
                 cors.add(CorsPluginConfig::anyHost);
             });
         }).before(ctx -> {
-            System.out.println("Hello");
             if (ctx.method() == HandlerType.OPTIONS) {
                 ctx.header(Header.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
             }
@@ -41,7 +40,7 @@ public class App {
         app.get("/api/clients/phoneNo/{phoneNo}", clientController::fetchByPhoneNo);
         app.post("/api/clients", clientController::saveNotKnowingId);
         app.post("/api/clients/knownId", clientController::saveKnowingId);
-        app.patch("/api/clients/update", clientController::update);
+        app.patch("/api/clients", clientController::update);
         app.delete("/api/clients/{clientId}", clientController::delete);
 
         // EmployeeController
@@ -77,9 +76,9 @@ public class App {
         app.get("/api/services/car/{carId}", serviceController::fetchServiceByCar);
         app.get("/api/services/car/{carId}/{stateId}", serviceController::fetchServiceByCarState);
         app.get("/api/services/mechanic/{mechanicId}", serviceController::fetchServiceByMechanic);
-        app.get("/api/services/mechanic/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
+        app.get("/api/services/mechanic/{mechanicId}/{stateId}",
+                serviceController::fetchServiceByMechanicState);
         app.get("/api/services/state/{stateId}", serviceController::fetchServiceByState);
-        app.get("/api/services/processing/{mechanicId}", serviceController::fetchServiceByMechanicProcessing);
         app.post("/api/services", serviceController::save);
         app.patch("/api/services", serviceController::update);
         app.patch("/api/services/{serviceId}", serviceController::incrementState);
@@ -92,8 +91,7 @@ public class App {
         app.patch("/api/serviceBills", serviceBillController::update);
         app.delete("/api/serviceBills/{serviceBillId}", serviceBillController::delete);
 
-        app.get("/api/stickySessionTest", (
-                Context ctx) -> {
+        app.get("/api/stickySessionTest", (Context ctx) -> {
             System.out.println(String.format("%d Sticky Session test !", System.currentTimeMillis()));
         });
     }

@@ -8,10 +8,10 @@ public record ServiceBill(int id,
         boolean paid,
         int discountPercentage) implements IEntity {
 
-    static final String getAllQuery = "SELECT * FROM service_bill",
-            getByIdQuery = "SELECT * FROM service_bill WHERE id = :id",
-            updateQuery = "UPDATE service_bill SET price = :price, delivered = :delivered, paid = :paid, discount_percentage = :discount_percentage WHERE id = :id",
-            deleteQuery = "DELETE FROM service_bill WHERE id = :id";
+    static final String getAllQuery = "SELECT * FROM service_bill;",
+            getByIdQuery = "SELECT * FROM service_bill WHERE id = :id;",
+            updateQuery = "UPDATE service_bill SET price = :price, delivered = :delivered, paid = :paid, discount_percentage = :discount_percentage WHERE id = :id;",
+            deleteQuery = "DELETE FROM service_bill WHERE id = :id;";
 
     private static ServiceBill fetchNext(ResultSet resultSet) throws SQLException {
         if (!resultSet.next())
@@ -20,29 +20,23 @@ public record ServiceBill(int id,
         int id = resultSet.getInt("id");
         int price = resultSet.getInt("price");
         boolean delivered = resultSet.getBoolean("delivered");
-        boolean paid = resultSet.getBoolean("rec_type");
+        boolean paid = resultSet.getBoolean("paid");
         int discountPercentage = resultSet.getInt("discount_percentage");
 
         return new ServiceBill(id, price, delivered, paid, discountPercentage);
     }
 
-
-    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        statement.setInt("price", price());
-        statement.setBoolean("delivered", delivered());
-        statement.setBoolean("paid", paid());
-        statement.setInt("discountPercentage", discountPercentage());
-    }
-
     @Override
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
-        completeStatementCommon(statement);
     }
 
     @Override
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
-        completeStatementCommon(statement);
         statement.setInt("id", id());
+        statement.setInt("price", price());
+        statement.setBoolean("delivered", delivered());
+        statement.setBoolean("paid", paid());
+        statement.setInt("discount_percentage", discountPercentage());
     }
 
     static public ServiceBill[] fetchAll() throws SQLException {

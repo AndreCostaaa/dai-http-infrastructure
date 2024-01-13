@@ -1,0 +1,23 @@
+meta {
+  name: update car
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:7000/api/cars
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 16,
+    "ownerId": 1,
+    "chassisNo": "2R4RC1CG8FR628979",
+    "recType": "RF7YBL",
+    "brand": "Nissan",
+    "model": "Leaf",
+    "color": "red"
+  }
+}
