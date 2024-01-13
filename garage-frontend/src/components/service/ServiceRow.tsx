@@ -1,7 +1,6 @@
 import { Service } from "../../services/service-client";
-import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Td, useDisclosure } from "@chakra-ui/react";
 import AssignMechanicModal from "../employee/AssignMechanicModal";
-import ServiceModal from "./ServiceModal";
 interface Props {
   service: Service;
 }
