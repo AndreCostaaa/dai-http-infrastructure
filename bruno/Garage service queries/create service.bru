@@ -1,0 +1,29 @@
+meta {
+  name: create service
+  type: http
+  seq: 8
+}
+
+post {
+  url: http://localhost:7000/api/services
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "id": 362,
+      "mechanicId": 3,
+      "clientId": 4,
+      "carId": 12,
+      "hoursWorked": 63,
+      "comments": "RAS",
+      "hasPictures": false,
+      "stateId": 2,
+      "dateCreated": 1699570800000,
+      "dateCarArrival": 1699570800000,
+      "dateCarProcessing": 1699570800000,
+      "dateCarDone": null,
+      "dateCarLeft": null
+  }
+}

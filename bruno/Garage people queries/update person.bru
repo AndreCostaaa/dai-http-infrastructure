@@ -1,0 +1,20 @@
+meta {
+  name: update person
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:7000/api/person
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 15,
+    "firstName": "Alain",
+    "lastName": "Juppé",
+    "phoneNo": "233303309"
+  }
+}

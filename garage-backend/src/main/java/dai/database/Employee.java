@@ -1,11 +1,14 @@
 package dai.database;
 
-
 import java.sql.*;
 
 public class Employee extends Person {
     private int roleId;
     private Integer specializationId;
+
+    public Employee() {
+
+    }
 
     public Employee(int id,
             String firstName,
@@ -18,7 +21,6 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
-
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
@@ -27,7 +29,9 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
-    public int getRoleId() { return roleId; }
+    public int getRoleId() {
+        return roleId;
+    }
 
     public Integer getSpecializationId() {
         return specializationId;

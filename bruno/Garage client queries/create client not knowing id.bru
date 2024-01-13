@@ -1,0 +1,25 @@
+meta {
+  name: create client not knowing id
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:7000/api/clients
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "phoneNo": "244303309",
+    "email": "rene@prg2.ch",
+    "street": "rue",
+    "country": "Suisse",
+    "streetNo": 4,
+    "npa": 1024
+  }
+}

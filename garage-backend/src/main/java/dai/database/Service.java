@@ -10,11 +10,11 @@ public record Service(int id,
         String comments,
         boolean hasPictures,
         int stateId,
-        int dateCreated,
-        int dateCarArrival,
-        int dateCarProcessing,
-        int dateCarDone,
-        int dateCarLeft) implements IEntity {
+        Date dateCreated,
+        Date dateCarArrival,
+        Date dateCarProcessing,
+        Date dateCarDone,
+        Date dateCarLeft) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM service;",
             getServiceByIdQuery = "SELECT * FROM service WHERE id = :id;",
@@ -23,12 +23,10 @@ public record Service(int id,
             getServiceByMechanicQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id;",
             getServiceByMechanicStateQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id AND state_id = :state_id;",
             getServiceByStateQuery = "SELECT * FROM service WHERE state_id = :state_id;",
-            getServiceByMechanicProcessingQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id AND state_id = 2;",
             createServiceQuery = "INSERT INTO service (mechanic_id, client_id, car_id, hours_worked, comments, has_pictures, state_id, date_car_arrival, date_car_processing, date_car_done, date_car_left) VALUES (:mechanic_id, :client_id, :car_id, 0, '', false, 0, now(), NULL, NULL, NULL);",
             updateServiceQuery = "UPDATE service SET mechanic_id  = :mechanic_id, hours_worked = :hours_worked, comments = :comments, has_pictures = :has_pictures WHERE id = :id;",
-            incrementStateQuery = "WITH service_state AS (SELECT state_id FROM service WHERE id = :id) UPDATE service SET state_id = service_state + 1 WHERE id = :id;",
+            incrementStateQuery = "UPDATE service SET state_id = state_id + 1 WHERE id = :id;",
             deleteServiceQuery = "DELETE FROM service WHERE id = :id;";
-
 
     private static Service fetchNext(ResultSet resultSet) throws SQLException {
         if (!resultSet.next())
@@ -42,11 +40,11 @@ public record Service(int id,
         String comments = resultSet.getString("comments");
         boolean hasPictures = resultSet.getBoolean("has_pictures");
         int stateId = resultSet.getInt("state_id");
-        int dateCreated = resultSet.getInt("date_created");
-        int dateCarArrival = resultSet.getInt("date_car_arrival");
-        int dateCarProcessing = resultSet.getInt("date_car_processing");
-        int dateCarDone = resultSet.getInt("date_car_done");
-        int dateCarLeft = resultSet.getInt("date_car_left");
+        Date dateCreated = resultSet.getDate("date_created");
+        Date dateCarArrival = resultSet.getDate("date_car_arrival");
+        Date dateCarProcessing = resultSet.getDate("date_car_processing");
+        Date dateCarDone = resultSet.getDate("date_car_done");
+        Date dateCarLeft = resultSet.getDate("date_car_left");
 
         return new Service(id,
                 mechanicId,
@@ -63,30 +61,20 @@ public record Service(int id,
                 dateCarLeft);
     }
 
-    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
+    @Override
+    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
         statement.setInt("mechanic_id", mechanicId());
         statement.setInt("client_id", clientId());
         statement.setInt("car_id", carId());
-        statement.setInt("hours_worked", hoursWorked());
-        statement.setString("comments", comments());
-        statement.setBoolean("has_pictures", hasPictures());
-        statement.setInt("state_id", stateId());
-        statement.setInt("date_created", dateCreated());
-        statement.setInt("date_car_arrival", dateCarArrival());
-        statement.setInt("date_car_processing", dateCarProcessing());
-        statement.setInt("date_car_done", dateCarDone());
-        statement.setInt("date_car_left", dateCarLeft());
-    }
-
-    @Override
-    public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
-        completeStatementCommon(statement);
     }
 
     @Override
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
-        completeStatementCommon(statement);
         statement.setInt("id", id());
+        statement.setInt("mechanic_id", mechanicId());
+        statement.setInt("hours_worked", hoursWorked());
+        statement.setString("comments", comments());
+        statement.setBoolean("has_pictures", hasPictures());
     }
 
     /**
@@ -117,7 +105,7 @@ public record Service(int id,
     static public Service[] fetchByCar(int carId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByCarQuery,
                 "car_id",
-                String.valueOf(carId),
+                carId,
                 Service::fetchNext);
     }
 
@@ -146,7 +134,7 @@ public record Service(int id,
     static public Service[] fetchByMechanic(int mechanicId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByMechanicQuery,
                 "mechanic_id",
-                String.valueOf(mechanicId),
+                mechanicId,
                 Service::fetchNext);
     }
 
@@ -176,21 +164,7 @@ public record Service(int id,
     static public Service[] fetchByState(int stateId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByStateQuery,
                 "state_id",
-                String.valueOf(stateId),
-                Service::fetchNext);
-    }
-
-    /**
-     * Fetch all the processing Services from the database matching the given
-     * mechanicId.
-     *
-     * @param mechanicId the id of the mechanic Employee to fetch Services for
-     * @return Service[] or null
-     */
-    static public Service[] fetchByMechanicProcessing(int mechanicId) throws SQLException {
-        return DatabaseHandler.fetchAllBy(getServiceByMechanicProcessingQuery,
-                "mechanic_id",
-                String.valueOf(mechanicId),
+                stateId,
                 Service::fetchNext);
     }
 
@@ -218,7 +192,7 @@ public record Service(int id,
      * @return Service or null
      */
     public Service incrementState() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(incrementStateQuery, this, Service::fetchNext);
+        return DatabaseHandler.executeIncrementStateStatement(incrementStateQuery, this.id(), Service::fetchNext);
     }
 
     /**

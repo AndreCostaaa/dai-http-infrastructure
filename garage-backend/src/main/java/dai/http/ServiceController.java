@@ -97,49 +97,34 @@ public class ServiceController {
         ctx.json(services);
     }
 
-    public void fetchServiceByMechanicProcessing(Context ctx) throws SQLException {
-        int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
-        Service[] services = Service.fetchByMechanicProcessing(mechanicId);
-
-        if (services.length == 0) {
-            ctx.status(404);
-            return;
-        }
-
-        ctx.json(services);
-    }
-
     public void save(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
-
-        if (service.save() != null) {
-            ctx.json(service);
+        service = service.save();
+        if (service == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(service);
     }
 
     public void update(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
-
-        if (service.update() != null) {
-            ctx.json(service);
+        service = service.update();
+        if (service == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(service);
     }
 
     public void incrementState(Context ctx) throws SQLException {
         Service service = ctx.bodyAsClass(Service.class);
-
-        if (service.incrementState() != null) {
-            ctx.json(service);
+        service = service.incrementState();
+        if (service == null) {
+            ctx.status(400);
             return;
         }
-
-        ctx.status(400);
+        ctx.json(service);
     }
 
     public void delete(Context ctx) throws SQLException {
