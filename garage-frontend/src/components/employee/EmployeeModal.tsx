@@ -4,12 +4,13 @@ import GenericModal from "../generic/GenericModal";
 import { Employee } from "../../services/employee-service";
 interface Props extends ModalProps {
   employeeList: Employee[];
+  onClick?: (employee: Employee) => void;
 }
 
 const EmployeeModal = (props: Props) => {
   return (
     <GenericModal {...props}>
-      <Employees employeeList={props.employeeList} />
+      <Employees onClick={props.onClick} employeeList={props.employeeList} />
     </GenericModal>
   );
 };
