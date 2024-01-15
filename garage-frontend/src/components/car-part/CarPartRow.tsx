@@ -1,7 +1,8 @@
 import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
-import { CarPart } from "../../services/car-part-service";
+import carPartService, { CarPart } from "../../services/car-part-service";
 import AssignServiceModal from "../service/AssignServiceModal";
 import SingleServiceModal from "../service/SingleServiceModal";
+import { Service } from "../../services/service-client";
 interface Props {
   part: CarPart;
 }
@@ -40,6 +41,9 @@ const CarPartRow = ({ part }: Props) => {
           isOpen={isOpenAssign}
           onClose={onCloseAssign}
           children={null}
+          onAssign={(service: Service) =>
+            carPartService.update({ ...part, serviceId: service.id } as CarPart)
+          }
         />
       )}
 
