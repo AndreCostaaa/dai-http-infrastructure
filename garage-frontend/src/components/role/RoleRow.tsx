@@ -7,13 +7,13 @@ interface Props {
 }
 const RoleRow = ({ role }: Props) => {
   return (
-    <Tr>
+    <>
       <Td>{role.id}</Td>
       <Td>{role.name}</Td>
       <Td>{role.isMechanic ? <CheckIcon /> : <CloseIcon />}</Td>
       <Td>{role.canAssignOthers ? <CheckIcon /> : <CloseIcon />}</Td>
       <Td>{role.canCreate ? <CheckIcon /> : <CloseIcon />}</Td>
-    </Tr>
+    </>
   );
 };
 

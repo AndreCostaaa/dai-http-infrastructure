@@ -1,12 +1,22 @@
-import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
+import {
+  Button,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 
 import { Role } from "../../services/role-service";
 import RoleRow from "./RoleRow";
 
 interface Props {
   roles: Role[];
+  onSelect?: (role: Role) => void;
 }
-const Roles = ({ roles }: Props) => {
+const Roles = ({ roles, onSelect }: Props) => {
   const headers = [
     "id",
     "nom",
@@ -14,6 +24,9 @@ const Roles = ({ roles }: Props) => {
     "peut attribuer",
     "peut creer",
   ];
+  if (onSelect) {
+    headers.push("");
+  }
   return (
     <TableContainer>
       <Table>
@@ -26,7 +39,14 @@ const Roles = ({ roles }: Props) => {
         </Thead>
         <Tbody>
           {roles.map((role, i) => (
-            <RoleRow key={i} role={role} />
+            <Tr>
+              <RoleRow key={i} role={role} />
+              {onSelect && (
+                <Td>
+                  <Button onClick={() => onSelect(role)}>Selectionner</Button>
+                </Td>
+              )}
+            </Tr>
           ))}
         </Tbody>
       </Table>
