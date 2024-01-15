@@ -6,11 +6,11 @@ interface Props {
 }
 const SpecializationRow = ({ specialization }: Props) => {
   return (
-    <Tr>
+    <>
       <Td>{specialization.id}</Td>
       <Td>{specialization.name}</Td>
       <Td>{specialization.hourlyRate}</Td>
-    </Tr>
+    </>
   );
 };
 
