@@ -20,7 +20,7 @@ const CarRow = ({ car }: Props) => {
   } = useDisclosure();
   return (
     <>
-      <Tr>
+      <>
         <Td>{car.id}</Td>
         <Td>{car.brand}</Td>
         <Td>{car.model}</Td>
@@ -37,7 +37,7 @@ const CarRow = ({ car }: Props) => {
             <HiMiniMagnifyingGlass />
           </Button>
         </Td>
-      </Tr>
+      </>
       {isOpenOwner && (
         <ClientModal
           children={null}

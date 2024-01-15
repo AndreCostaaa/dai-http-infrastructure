@@ -1,10 +1,20 @@
 import { Car } from "../../services/car-service";
-import { TableContainer, Table, Thead, Tr, Th, Tbody } from "@chakra-ui/react";
+import {
+  TableContainer,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Button,
+  Td,
+} from "@chakra-ui/react";
 import CarRow from "./CarRow";
 interface Props {
   carList: Car[];
+  onSelect?: (car: Car) => void;
 }
-const Cars = ({ carList }: Props) => {
+const Cars = ({ carList, onSelect }: Props) => {
   const headers = [
     "id",
     "brand",
@@ -15,6 +25,9 @@ const Cars = ({ carList }: Props) => {
     "propriètaire",
     "services",
   ];
+  if (onSelect) {
+    headers.push("");
+  }
   return (
     <TableContainer>
       <Table>
@@ -27,7 +40,14 @@ const Cars = ({ carList }: Props) => {
         </Thead>
         <Tbody>
           {carList.map((car, i) => (
-            <CarRow key={i} car={car} />
+            <Tr>
+              <CarRow key={i} car={car} />
+              <Td>
+                {onSelect && (
+                  <Button onClick={() => onSelect(car)}>Selectioner</Button>
+                )}
+              </Td>
+            </Tr>
           ))}
         </Tbody>
       </Table>
