@@ -1,11 +1,24 @@
-import { TableContainer, Table, Thead, Tr, Th, Tbody } from "@chakra-ui/react";
+import {
+  TableContainer,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Button,
+} from "@chakra-ui/react";
 import { Service } from "../../services/service-client";
 import ServiceRow from "./ServiceRow";
 interface Props {
   serviceList: Service[];
+  onSelect?: (service: Service) => void;
 }
-const Services = ({ serviceList }: Props) => {
+const Services = ({ serviceList, onSelect }: Props) => {
   const headers = ["id", "voiture", "client", "mecanicien", "etat", ""];
+
+  if (onSelect) {
+    headers.push("");
+  }
   return (
     <TableContainer>
       <Table>
@@ -17,9 +30,18 @@ const Services = ({ serviceList }: Props) => {
           </Tr>
         </Thead>
         <Tbody>
-          {serviceList.map((service, i) => (
-            <ServiceRow key={i} service={service} />
-          ))}
+          {serviceList
+            .sort((serviceA, serviceB) => serviceA.state.id - serviceB.state.id)
+            .map((service, i) => (
+              <Tr>
+                <ServiceRow key={i} service={service} />
+                {onSelect && (
+                  <Button onClick={() => onSelect(service)}>
+                    Selectionner
+                  </Button>
+                )}
+              </Tr>
+            ))}
         </Tbody>
       </Table>
     </TableContainer>
