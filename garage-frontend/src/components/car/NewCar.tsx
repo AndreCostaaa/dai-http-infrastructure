@@ -56,6 +56,8 @@ const NewCar = () => {
           title: "Erreur",
           status: "error",
           description: description,
+          duration: 5000,
+          isClosable: true,
         });
       })
       .finally(() => setIsLoading(false));
