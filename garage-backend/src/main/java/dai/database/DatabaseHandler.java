@@ -30,7 +30,7 @@ public class DatabaseHandler {
         return query.replace(";", " RETURNING *;");
     }
 
-    static public boolean deleteById(String stringQuery, int id) throws SQLException {
+    static public boolean deleteById(String stringQuery, Integer id) throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             statement.setInt("id", id);
@@ -64,7 +64,7 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T> T[] fetchAllBy(String stringQuery, String key, int value,
+    static public <T> T[] fetchAllBy(String stringQuery, String key, Integer value,
                                      ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
@@ -78,8 +78,8 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T> T[] fetchAllByTwoParams(String stringQuery, String key1, int value1,
-                                     String key2, int value2,
+    static public <T> T[] fetchAllByTwoParams(String stringQuery, String key1, Integer value1,
+                                     String key2, Integer value2,
                                      ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
@@ -95,7 +95,7 @@ public class DatabaseHandler {
     }
 
 
-    static public <T> T fetchById(String stringQuery, int id, ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
+    static public <T> T fetchById(String stringQuery, Integer id, ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
@@ -121,7 +121,7 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T extends IEntity> T executeIncrementStateStatement(String stringQuery, int id,
+    static public <T extends IEntity> T executeIncrementStateStatement(String stringQuery, Integer id,
                                                                ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {
         stringQuery = addReturningToQuery(stringQuery);

@@ -35,6 +35,24 @@ class CarTest extends GarageTest {
     }
 
     @Test
+    void fetchByOwnerId() throws SQLException {
+        Car[] cars = Car.fetchByOwnerId(2);
+
+        assertNotNull(cars);
+        assertEquals(3, cars.length);
+        for (Car car : cars) {
+            assertNotNull(car);
+            assertInstanceOf(Car.class, car);
+            assertNotNull(car.id());
+            assertTrue(car.id() > 0);
+            assertNotNull(car.chassisNo());
+            assertEquals(17, car.chassisNo().length());
+            assertNotNull(car.recType());
+            assertEquals(6, car.recType().length());
+        }
+    }
+
+    @Test
     void save() throws SQLException {
         Car car = new Car(ghostId, 3, "8AFA8EFZH9FWFH9FW", "FH8239", "Mercedes", "AMG GT Coupé", "grey");
 

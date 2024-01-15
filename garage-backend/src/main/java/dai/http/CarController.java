@@ -1,6 +1,7 @@
 package dai.http;
 
 import dai.database.Car;
+import dai.database.Service;
 import io.javalin.http.Context;
 import java.sql.SQLException;
 
@@ -27,6 +28,18 @@ public class CarController {
         }
 
         ctx.json(car);
+    }
+
+    public void fetchByOwnerId(Context ctx) throws SQLException {
+        Integer ownerId = Integer.parseInt(ctx.pathParam("ownerId"));
+        Car[] cars = Car.fetchByOwnerId(ownerId);
+
+        if (cars.length == 0) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(cars);
     }
 
     public void save(Context ctx) throws SQLException {

@@ -12,6 +12,7 @@ public record Car(Integer id,
 
     static final String getAllCarsQuery = "SELECT * FROM car;",
             getCarByIdQuery = "SELECT * FROM car WHERE id = :id;",
+            getCarByOwnerIdQuery = "SELECT * FROM car WHERE owner_id = :owner_id;",
             createCarQuery = "INSERT INTO car(owner_id, chassis_no, rec_type, brand, model, color) VALUES (:owner_id, :chassis_no, :rec_type, :brand, :model, :color);",
             updateCarQuery = "UPDATE car SET owner_id = :owner_id, chassis_no = :chassis_no, rec_type = :rec_type, brand = :brand, model = :model, color = :color WHERE id = :id;",
             deleteCarQuery = "DELETE FROM car WHERE id = :id;";
@@ -70,6 +71,16 @@ public record Car(Integer id,
      */
     static public Car fetchOne(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getCarByIdQuery, id, Car::fetchNext);
+    }
+
+    /**
+     * Fetch all Cars from the database matching the given owenerId.
+     *
+     * @param ownerId the id of the Client to fetch Cars for
+     * @return Car[] or null
+     */
+    static public Car[] fetchByOwnerId(Integer ownerId) throws SQLException {
+        return DatabaseHandler.fetchAllBy(getCarByOwnerIdQuery, "owner_id", ownerId, Car::fetchNext);
     }
 
     /**

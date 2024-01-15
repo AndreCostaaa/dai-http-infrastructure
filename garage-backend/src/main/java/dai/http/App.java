@@ -10,6 +10,7 @@ public class App {
         CarController carController = new CarController();
         app.get("/api/cars", carController::fetchAll);
         app.get("/api/cars/{carId}", carController::fetchOne);
+        app.get("/api/cars/owner/{ownerId}", carController::fetchByOwnerId);
         app.post("/api/cars", carController::save);
         app.patch("/api/cars", carController::update);
         app.delete("/api/cars/{carId}", carController::delete);
