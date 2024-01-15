@@ -1,7 +1,6 @@
 import { ModalProps } from "@chakra-ui/react";
 import serviceClient, { Service } from "../../services/service-client";
 import GenericModal from "../generic/GenericModal";
-import Services from "./Services";
 import ServiceDetails from "./ServiceDetails";
 import useServiceById from "../../hooks/useServiceById";
 interface Props extends ModalProps {
