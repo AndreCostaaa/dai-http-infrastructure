@@ -6,6 +6,7 @@ import {
   Th,
   Tbody,
   Button,
+  Td,
 } from "@chakra-ui/react";
 import { Service } from "../../services/service-client";
 import ServiceRow from "./ServiceRow";
@@ -35,11 +36,13 @@ const Services = ({ serviceList, onSelect }: Props) => {
             .map((service, i) => (
               <Tr>
                 <ServiceRow key={i} service={service} />
-                {onSelect && (
-                  <Button onClick={() => onSelect(service)}>
-                    Selectionner
-                  </Button>
-                )}
+                <Td>
+                  {onSelect && (
+                    <Button onClick={() => onSelect(service)}>
+                      Selectionner
+                    </Button>
+                  )}
+                </Td>
               </Tr>
             ))}
         </Tbody>
