@@ -19,7 +19,7 @@ public class ClientController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("clientId"));
+        Integer id = Integer.parseInt(ctx.pathParam("clientId"));
         Client client = Client.fetchById(id);
 
         if (client == null) {
@@ -78,7 +78,7 @@ public class ClientController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int clientId = Integer.parseInt(ctx.pathParam("clientId"));
+        Integer clientId = Integer.parseInt(ctx.pathParam("clientId"));
 
         if (!Client.delete(clientId)) {
             ctx.status(400);

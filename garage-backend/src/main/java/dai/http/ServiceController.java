@@ -18,7 +18,7 @@ public class ServiceController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("serviceId"));
+        Integer id = Integer.parseInt(ctx.pathParam("serviceId"));
         Service service = Service.fetchById(id);
 
         if (service == null) {
@@ -30,7 +30,7 @@ public class ServiceController {
     }
 
     public void fetchServiceByCar(Context ctx) throws SQLException {
-        int carId = Integer.parseInt(ctx.pathParam("carId"));
+        Integer carId = Integer.parseInt(ctx.pathParam("carId"));
         Service[] services = Service.fetchByCar(carId);
 
         if (services.length == 0) {
@@ -42,8 +42,8 @@ public class ServiceController {
     }
 
     public void fetchServiceByCarState(Context ctx) throws SQLException {
-        int carId = Integer.parseInt(ctx.pathParam("carId"));
-        int stateId = Integer.parseInt(ctx.pathParam("stateId"));
+        Integer carId = Integer.parseInt(ctx.pathParam("carId"));
+        Integer stateId = Integer.parseInt(ctx.pathParam("stateId"));
         Service[] services = Service.fetchByCarState(carId, stateId);
 
         if (services.length == 0) {
@@ -55,7 +55,7 @@ public class ServiceController {
     }
 
     public void fetchServiceByMechanic(Context ctx) throws SQLException {
-        int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
+        Integer mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
         Service[] services = Service.fetchByMechanic(mechanicId);
 
         if (services.length == 0) {
@@ -67,8 +67,8 @@ public class ServiceController {
     }
 
     public void fetchServiceByMechanicState(Context ctx) throws SQLException {
-        int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
-        int stateId = Integer.parseInt(ctx.pathParam("stateId"));
+        Integer mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
+        Integer stateId = Integer.parseInt(ctx.pathParam("stateId"));
         Service[] services = Service.fetchByMechanicState(mechanicId, stateId);
 
         if (services.length == 0) {
@@ -80,7 +80,7 @@ public class ServiceController {
     }
 
     public void fetchServiceByState(Context ctx) throws SQLException {
-        int stateId = Integer.parseInt(ctx.pathParam("stateId"));
+        Integer stateId = Integer.parseInt(ctx.pathParam("stateId"));
 
         if (stateId > 4 || stateId < 0) {
             ctx.status(400);
@@ -134,7 +134,7 @@ public class ServiceController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("serviceId"));
+        Integer id = Integer.parseInt(ctx.pathParam("serviceId"));
 
         if (Service.delete(id)) {
             ctx.status(204);

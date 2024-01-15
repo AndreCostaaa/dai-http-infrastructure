@@ -1,15 +1,16 @@
 package dai.database;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 
-public record Service(int id,
-        int mechanicId,
-        int clientId,
-        int carId,
-        int hoursWorked,
+public record Service(Integer id,
+        Integer mechanicId,
+        Integer clientId,
+        Integer carId,
+        Integer hoursWorked,
         String comments,
         boolean hasPictures,
-        int stateId,
+        Integer stateId,
         Date dateCreated,
         Date dateCarArrival,
         Date dateCarProcessing,
@@ -33,19 +34,19 @@ public record Service(int id,
         if (!resultSet.next())
             return null;
 
-        int id = resultSet.getInt("id");
-        int mechanicId = resultSet.getInt("mechanic_id");
-        int clientId = resultSet.getInt("client_id");
-        int carId = resultSet.getInt("car_id");
-        int hoursWorked = resultSet.getInt("hours_worked");
+        Integer id = resultSet.getObject("id", Integer.class);
+        Integer mechanicId = resultSet.getObject("mechanic_id", Integer.class);
+        Integer clientId = resultSet.getObject("client_id", Integer.class);
+        Integer carId = resultSet.getObject("car_id", Integer.class);
+        Integer hoursWorked = resultSet.getObject("hours_worked", Integer.class);
         String comments = resultSet.getString("comments");
         boolean hasPictures = resultSet.getBoolean("has_pictures");
-        int stateId = resultSet.getInt("state_id");
-        Date dateCreated = resultSet.getDate("date_created");
-        Date dateCarArrival = resultSet.getDate("date_car_arrival");
-        Date dateCarProcessing = resultSet.getDate("date_car_processing");
-        Date dateCarDone = resultSet.getDate("date_car_done");
-        Date dateCarLeft = resultSet.getDate("date_car_left");
+        Integer stateId = resultSet.getObject("state_id", Integer.class);
+        Date dateCreated = new Date(resultSet.getTimestamp("date_created").getTime());
+        Date dateCarArrival = new Date(resultSet.getTimestamp("date_car_arrival").getTime());
+        Date dateCarProcessing = new Date(resultSet.getTimestamp("date_car_processing").getTime());
+        Date dateCarDone = new Date(resultSet.getTimestamp("date_car_done").getTime());
+        Date dateCarLeft = new Date(resultSet.getTimestamp("date_car_left").getTime());
 
         return new Service(id,
                 mechanicId,
@@ -64,16 +65,16 @@ public record Service(int id,
 
     @Override
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
-        statement.setInt("mechanic_id", mechanicId());
-        statement.setInt("client_id", clientId());
-        statement.setInt("car_id", carId());
+        DatabaseHandler.checkIfNull(mechanicId, mechanicId(), statement, "mechanic_id", Types.INTEGER);
+        DatabaseHandler.checkIfNull(clientId, clientId(), statement, "client_id", Types.INTEGER);
+        DatabaseHandler.checkIfNull(carId, carId(), statement, "car_id", Types.INTEGER);
     }
 
     @Override
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         statement.setInt("id", id());
-        statement.setInt("mechanic_id", mechanicId());
-        statement.setInt("hours_worked", hoursWorked());
+        DatabaseHandler.checkIfNull(mechanicId, mechanicId(), statement, "mechanic_id", Types.INTEGER);
+        DatabaseHandler.checkIfNull(hoursWorked, hoursWorked(), statement, "hours_worked", Types.INTEGER);
         statement.setString("comments", comments());
         statement.setBoolean("has_pictures", hasPictures());
     }
@@ -93,7 +94,7 @@ public record Service(int id,
      * @param id the id of the Service to fetch
      * @return Service or null
      */
-    static public Service fetchById(int id) throws SQLException {
+    static public Service fetchById(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getServiceByIdQuery, id, Service::fetchNext);
     }
 
@@ -103,7 +104,7 @@ public record Service(int id,
      * @param carId the id of the Car to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByCar(int carId) throws SQLException {
+    static public Service[] fetchByCar(Integer carId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByCarQuery,
                 "car_id",
                 carId,
@@ -117,7 +118,7 @@ public record Service(int id,
      * @param stateId the id of the State to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByCarState(int carId, int stateId) throws SQLException {
+    static public Service[] fetchByCarState(Integer carId, Integer stateId) throws SQLException {
         return DatabaseHandler.fetchAllByTwoParams(getServiceByCarStateQuery,
                 "car_id",
                 carId,
@@ -132,7 +133,7 @@ public record Service(int id,
      * @param mechanicId the id of the mechanic Employee to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByMechanic(int mechanicId) throws SQLException {
+    static public Service[] fetchByMechanic(Integer mechanicId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByMechanicQuery,
                 "mechanic_id",
                 mechanicId,
@@ -147,7 +148,7 @@ public record Service(int id,
      * @param stateId    the id of the State to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByMechanicState(int mechanicId, int stateId) throws SQLException {
+    static public Service[] fetchByMechanicState(Integer mechanicId, Integer stateId) throws SQLException {
         return DatabaseHandler.fetchAllByTwoParams(getServiceByMechanicStateQuery,
                 "mechanic_id",
                 mechanicId,
@@ -162,7 +163,7 @@ public record Service(int id,
      * @param stateId the id of the State to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByState(int stateId) throws SQLException {
+    static public Service[] fetchByState(Integer stateId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByStateQuery,
                 "state_id",
                 stateId,
@@ -202,7 +203,7 @@ public record Service(int id,
      * @param id the id of the Service to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteServiceQuery, id);
     }
 

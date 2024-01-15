@@ -1,33 +1,34 @@
 package dai.database;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 
 public class Employee extends Person {
-    private int roleId;
+    private Integer roleId;
     private Integer specializationId;
 
     public Employee(){
 
     }
 
-    public Employee(int id,
+    public Employee(Integer id,
             String firstName,
             String lastName,
             String phoneNo,
-            int roleId,
+            Integer roleId,
             Integer specializationId) {
         super(id, firstName, lastName, phoneNo);
         this.roleId = roleId;
         this.specializationId = specializationId;
     }
 
-    public void setRoleId(int roleId) { this.roleId = roleId; }
+    public void setRoleId(Integer roleId) { this.roleId = roleId; }
 
     public void setSpecializationId(Integer specializationId) {
         this.specializationId = specializationId;
     }
 
-    public int getRoleId() { return roleId; }
+    public Integer getRoleId() { return roleId; }
 
     public Integer getSpecializationId() {
         return specializationId;
@@ -51,7 +52,7 @@ public class Employee extends Person {
         if (employee == null)
             return null;
 
-        int roleId = resultSet.getInt("role_id");
+        Integer roleId = resultSet.getObject("role_id", Integer.class);
         Integer specializationId = resultSet.getObject("specialization_id", Integer.class);
 
         return new Employee(employee.getId(), employee.getFirstName(), employee.getLastName(), employee.getPhoneNo(),
@@ -59,11 +60,8 @@ public class Employee extends Person {
     }
 
     public void completeCommonStatement(NamedParameterStatement statement) throws SQLException {
-        statement.setInt("role_id", getRoleId());
-        if (specializationId == null || getSpecializationId() == 0)
-            statement.setNull("specialization_id", Types.INTEGER);
-        else
-            statement.setInt("specialization_id", getSpecializationId());
+        DatabaseHandler.checkIfNull(roleId, getRoleId(), statement, "role_id", Types.INTEGER);
+        DatabaseHandler.checkIfNull(specializationId, getSpecializationId(), statement, "specialization_id", Types.INTEGER);
     }
 
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
@@ -95,7 +93,7 @@ public class Employee extends Person {
      * @param id the id of the Employee to fetch
      * @return Employee or null
      */
-    static public Employee fetchById(int id) throws SQLException {
+    static public Employee fetchById(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getEmployeeByIdQuery, id, Employee::fetchNext);
     }
 
@@ -163,7 +161,7 @@ public class Employee extends Person {
      * @param id the id of the Employee to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteEmployeeQuery, id);
     }
 }

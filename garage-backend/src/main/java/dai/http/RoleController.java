@@ -18,7 +18,7 @@ public class RoleController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("roleId"));
+        Integer id = Integer.parseInt(ctx.pathParam("roleId"));
         Role role = Role.fetchOne(id);
 
         if (role == null) {
@@ -54,7 +54,7 @@ public class RoleController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("roleId"));
+        Integer id = Integer.parseInt(ctx.pathParam("roleId"));
 
         if (Role.delete(id)) {
             ctx.status(204);

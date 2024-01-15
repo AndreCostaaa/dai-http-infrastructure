@@ -18,7 +18,7 @@ public class CarPartController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("carPartId"));
+        Integer id = Integer.parseInt(ctx.pathParam("carPartId"));
         CarPart carPart = CarPart.fetchOne(id);
 
         if (carPart == null) {
@@ -53,7 +53,7 @@ public class CarPartController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int carPartId = Integer.parseInt(ctx.pathParam("carPartId"));
+        Integer carPartId = Integer.parseInt(ctx.pathParam("carPartId"));
 
         if (CarPart.delete(carPartId)) {
             ctx.status(204);

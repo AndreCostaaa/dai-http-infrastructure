@@ -19,7 +19,7 @@ public class EmployeeController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("employeeId"));
+        Integer id = Integer.parseInt(ctx.pathParam("employeeId"));
         Employee employee = Employee.fetchById(id);
 
         if (employee == null) {
@@ -78,7 +78,7 @@ public class EmployeeController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
+        Integer employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
 
         if (Employee.delete(employeeId)) {
             ctx.status(204);

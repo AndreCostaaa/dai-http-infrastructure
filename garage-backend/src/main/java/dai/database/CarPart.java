@@ -1,9 +1,10 @@
 package dai.database;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.Objects;
 
-public record CarPart(int id,
+public record CarPart(Integer id,
         Integer serviceId,
         String supplier,
         String supplierRef,
@@ -12,7 +13,7 @@ public record CarPart(int id,
         double buyPrice,
         double sellPrice) implements IEntity {
 
-    public CarPart(int id,
+    public CarPart(Integer id,
             Integer serviceId,
             String supplier,
             String supplierRef,
@@ -40,8 +41,8 @@ public record CarPart(int id,
         if (!resultSet.next())
             return null;
 
-        int id = resultSet.getInt("id");
-    Integer serviceId = resultSet.getObject("service_id", Integer.class);
+        Integer id = resultSet.getObject("id", Integer.class);
+        Integer serviceId = resultSet.getObject("service_id", Integer.class);
         String supplier = resultSet.getString("supplier");
         String supplierRef = resultSet.getString("supplier_ref");
         String name = resultSet.getString("name");
@@ -53,10 +54,7 @@ public record CarPart(int id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        if (serviceId() == 0)
-            statement.setNull("service_id", Types.INTEGER);
-        else
-            statement.setInt("service_id", serviceId());
+        DatabaseHandler.checkIfNull(serviceId, serviceId(), statement, "service_id", Types.INTEGER);
         statement.setString("supplier", supplier());
         statement.setString("supplier_ref", supplierRef());
         statement.setString("name", name());
@@ -89,7 +87,7 @@ public record CarPart(int id,
      * @param id the id of the CarPart to fetch
      * @return CarPart or null
      */
-    static public CarPart fetchOne(int id) throws SQLException {
+    static public CarPart fetchOne(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getCarPartByIdQuery, id, CarPart::fetchNext);
     }
 
@@ -117,7 +115,7 @@ public record CarPart(int id,
      * @param id the id of the CarPart to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteCarPartQuery, id);
     }
 

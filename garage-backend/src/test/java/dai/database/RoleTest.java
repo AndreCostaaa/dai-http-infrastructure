@@ -25,6 +25,7 @@ class RoleTest extends GarageTest {
         for (Role role : roles) {
             assertNotNull(role);
             assertInstanceOf(Role.class, role);
+            assertNotNull(role.id());
             assertTrue(role.id() > 0);
         }
     }

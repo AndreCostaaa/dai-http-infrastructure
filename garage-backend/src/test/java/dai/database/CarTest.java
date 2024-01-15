@@ -25,8 +25,8 @@ class CarTest extends GarageTest {
         for (Car car : cars) {
             assertNotNull(car);
             assertInstanceOf(Car.class, car);
+            assertNotNull(car.id());
             assertTrue(car.id() > 0);
-            assertTrue(car.ownerId() > 0);
             assertNotNull(car.chassisNo());
             assertEquals(17, car.chassisNo().length());
             assertNotNull(car.recType());

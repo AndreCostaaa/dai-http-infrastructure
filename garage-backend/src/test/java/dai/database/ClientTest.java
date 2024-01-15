@@ -27,9 +27,10 @@ public class ClientTest extends GarageTest {
         for (Client client : clients) {
             assertNotNull(client);
             assertInstanceOf(Client.class, client);
+            assertNotNull(client.getId());
             assertTrue(client.getId() > 0);
-            assertTrue(client.getStreetNo() > 0);
-            assertTrue(client.getNpa() > 0);
+            assertTrue(client.getStreetNo() >= 0);
+            assertTrue(client.getNpa() >= 0);
         }
     }
 

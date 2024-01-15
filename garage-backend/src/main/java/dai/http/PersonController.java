@@ -20,7 +20,7 @@ public class PersonController {
 
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("personId"));
+        Integer id = Integer.parseInt(ctx.pathParam("personId"));
         Person person = Person.fetchById(id);
 
         if (person == null) {
@@ -55,7 +55,7 @@ public class PersonController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int personId = Integer.parseInt(ctx.pathParam("personId"));
+        Integer personId = Integer.parseInt(ctx.pathParam("personId"));
         boolean success = false;
 
         try {
