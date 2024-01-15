@@ -1,8 +1,8 @@
 import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
 import carPartService, { CarPart } from "../../services/car-part-service";
 import AssignServiceModal from "../service/AssignServiceModal";
-import SingleServiceModal from "../service/SingleServiceModal";
 import { Service } from "../../services/service-client";
+import ServiceDetailModal from "../service/ServiceDetailModal";
 interface Props {
   part: CarPart;
 }
@@ -48,7 +48,7 @@ const CarPartRow = ({ part }: Props) => {
       )}
 
       {isOpenService && (
-        <SingleServiceModal
+        <ServiceDetailModal
           isOpen={isOpenService}
           onClose={onCloseService}
           children={null}
