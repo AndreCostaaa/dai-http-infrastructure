@@ -65,8 +65,8 @@ const NewCar = () => {
   return (
     <VStack>
       <Heading textAlign={"center"}>Nouvelle Voiture</Heading>
-      <FormControl>
-        <FormLabel>Marque</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Marque</FormLabel>
         <Input
           value={car.brand}
           type="text"
@@ -76,8 +76,8 @@ const NewCar = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Modèle</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Modèle</FormLabel>
         <Input
           value={car.model}
           onChange={(e) =>
@@ -87,8 +87,8 @@ const NewCar = () => {
           type="text"
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>No Chassis</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>No Chassis</FormLabel>
         <Input
           value={car.chassisNo}
           type="text"
@@ -98,8 +98,8 @@ const NewCar = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Reception par Type</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Reception par Type</FormLabel>
         <Input
           value={car.recType}
           type="text"
@@ -109,8 +109,8 @@ const NewCar = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Couleur</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Couleur</FormLabel>
         <Input
           value={car.color}
           type="text"
@@ -120,8 +120,8 @@ const NewCar = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Propriètaire</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Propriètaire</FormLabel>
         <Button onClick={onOpen}>
           {car.ownerId !== 0 ? ownerName : "Selectionner"}
         </Button>

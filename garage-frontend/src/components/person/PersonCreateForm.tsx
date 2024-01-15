@@ -8,8 +8,8 @@ interface Props {
 const PersonCreateForm = ({ person, setPerson }: Props) => {
   return (
     <>
-      <FormControl>
-        <FormLabel>Prénom</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Prénom</FormLabel>
         <Input
           value={person.firstName}
           type="text"
@@ -19,8 +19,8 @@ const PersonCreateForm = ({ person, setPerson }: Props) => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Nom</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Nom</FormLabel>
         <Input
           value={person.lastName}
           type="text"
@@ -30,8 +30,8 @@ const PersonCreateForm = ({ person, setPerson }: Props) => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Natel</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Natel</FormLabel>
         <Input
           value={person.phoneNo}
           type="text"

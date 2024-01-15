@@ -74,8 +74,8 @@ const NewCarPart = () => {
   return (
     <VStack>
       <Heading textAlign={"center"}>Nouvelle Pièce</Heading>
-      <FormControl>
-        <FormLabel>Nom</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Nom</FormLabel>
         <Input
           value={part.name}
           type="text"
@@ -85,8 +85,8 @@ const NewCarPart = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Description</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Description</FormLabel>
         <Input
           value={part.description}
           onChange={(e) =>
@@ -96,8 +96,8 @@ const NewCarPart = () => {
           type="text"
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Fournisseur</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Fournisseur</FormLabel>
         <Input
           value={part.supplier}
           type="text"
@@ -107,8 +107,8 @@ const NewCarPart = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Ref. Fournisseur</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Ref. Fournisseur</FormLabel>
         <Input
           value={part.supplierRef}
           type="text"
@@ -118,8 +118,8 @@ const NewCarPart = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Prix d'achat</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Prix d'achat</FormLabel>
         <NumberInput
           defaultValue={0}
           value={part.buyPrice}
@@ -131,8 +131,8 @@ const NewCarPart = () => {
           <NumberInputField />
         </NumberInput>
       </FormControl>
-      <FormControl>
-        <FormLabel>Prix de vente</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Prix de vente</FormLabel>
         <NumberInput
           defaultValue={0}
           value={part.sellPrice}
@@ -144,8 +144,8 @@ const NewCarPart = () => {
           <NumberInputField />
         </NumberInput>
       </FormControl>
-      <FormControl>
-        <FormLabel>Service</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Service</FormLabel>
         <Button onClick={onOpen}>
           {part.serviceId !== 0 ? serviceName : "Assigner"}
         </Button>

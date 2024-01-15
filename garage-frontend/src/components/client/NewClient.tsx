@@ -79,8 +79,8 @@ const NewClient = () => {
           })
         }
       />
-      <FormControl>
-        <FormLabel>Email</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Email</FormLabel>
         <Input
           value={client.email}
           type="text"
@@ -90,8 +90,8 @@ const NewClient = () => {
           }
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Rue</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Rue</FormLabel>
         <Input
           value={client.street}
           onChange={(e) =>
@@ -101,8 +101,8 @@ const NewClient = () => {
           type="text"
         />
       </FormControl>
-      <FormControl>
-        <FormLabel>Nº</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Nº</FormLabel>
         <NumberInput
           defaultValue={0}
           value={client.streetNo}
@@ -112,8 +112,8 @@ const NewClient = () => {
           <NumberInputField />
         </NumberInput>
       </FormControl>
-      <FormControl>
-        <FormLabel>Npa</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Npa</FormLabel>
         <NumberInput
           defaultValue={0}
           value={client.npa}
@@ -123,8 +123,8 @@ const NewClient = () => {
           <NumberInputField />
         </NumberInput>
       </FormControl>
-      <FormControl>
-        <FormLabel>Pays</FormLabel>
+      <FormControl textAlign={"center"}>
+        <FormLabel textAlign={"center"}>Pays</FormLabel>
         <Input
           value={client.country}
           onChange={(e) =>
