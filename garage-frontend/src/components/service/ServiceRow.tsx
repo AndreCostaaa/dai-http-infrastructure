@@ -42,11 +42,12 @@ const ServiceRow = ({ service }: Props) => {
           children={null}
         />
       )}
-      {isOpenAssign && (
+      {isOpenService && (
         <ServiceDetailModal
           isOpen={isOpenService}
           onClose={onCloseService}
           children={null}
+          serviceId={service.id}
         />
       )}
     </>
