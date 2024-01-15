@@ -2,6 +2,7 @@ import { Service } from "../../services/service-client";
 import {
   Box,
   Button,
+  HStack,
   Heading,
   NumberDecrementStepper,
   NumberIncrementStepper,
@@ -43,7 +44,12 @@ const ServiceDetails = ({ service, setService, onSubmit }: Props) => {
         </Heading>
         <Clients clientList={[service.client] as Client[]} />
       </Box>
-
+      <Box width={"100%"}>
+        <Heading size="lg" textAlign="center">
+          Voiture
+        </Heading>
+        <Cars carList={[service.car]} />
+      </Box>
       <Box width={"100%"}>
         <Heading size="lg" textAlign={"center"}>
           Mecanicien
@@ -61,31 +67,29 @@ const ServiceDetails = ({ service, setService, onSubmit }: Props) => {
           </>
         )}
       </Box>
-
-      <Box width={"100%"}>
-        <Heading size="lg" textAlign="center">
-          Voiture
-        </Heading>
-        <Cars carList={[service.car]} />
-      </Box>
-
-      <Box>
-        <Heading size="lg">Heures</Heading>
-        <NumberInput
-          maxW="100px"
-          mr="2rem"
-          value={service.hoursWorked}
-          onChange={(_, value) =>
-            setService({ ...service, hoursWorked: value })
-          }
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
-      </Box>
+      <HStack>
+        <Box width="50%">
+          <Heading size="lg">Heures</Heading>
+          <NumberInput
+            maxW="100px"
+            mr="2rem"
+            value={service.hoursWorked}
+            onChange={(_, value) =>
+              setService({ ...service, hoursWorked: value })
+            }
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
+        </Box>
+        <Box width={"50%"}>
+          <Heading size="lg">État</Heading>
+          <></>
+        </Box>
+      </HStack>
       <Box>
         <Heading size="lg">Commentaires</Heading>
         <EditableField
