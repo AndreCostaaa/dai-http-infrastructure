@@ -1,6 +1,5 @@
 import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
 import { CarPart } from "../../services/car-part-service";
-import ServiceModal from "../service/ServiceModal";
 import AssignServiceModal from "../service/AssignServiceModal";
 import SingleServiceModal from "../service/SingleServiceModal";
 interface Props {

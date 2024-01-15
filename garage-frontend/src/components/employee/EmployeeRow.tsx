@@ -1,4 +1,4 @@
-import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Td, useDisclosure } from "@chakra-ui/react";
 import { Employee } from "../../services/employee-service";
 import RoleModal from "../role/RoleModal";
 import SpecializationModal from "../specialization/SpecializationModal";

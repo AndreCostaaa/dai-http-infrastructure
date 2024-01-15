@@ -1,6 +1,7 @@
 import { Service } from "../../services/service-client";
 import { Button, Td, useDisclosure } from "@chakra-ui/react";
 import AssignMechanicModal from "../employee/AssignMechanicModal";
+import ServiceDetailModal from "./ServiceDetailModal";
 interface Props {
   service: Service;
 }
@@ -38,6 +39,13 @@ const ServiceRow = ({ service }: Props) => {
         <AssignMechanicModal
           isOpen={isOpenAssign}
           onClose={onCloseAssign}
+          children={null}
+        />
+      )}
+      {isOpenAssign && (
+        <ServiceDetailModal
+          isOpen={isOpenService}
+          onClose={onCloseService}
           children={null}
         />
       )}
