@@ -1,11 +1,14 @@
 package dai.database;
 
-
 import java.sql.*;
 
 public class Employee extends Person {
     private int roleId;
     private Integer specializationId;
+
+    public Employee(){
+
+    }
 
     public Employee(int id,
             String firstName,
@@ -18,10 +21,7 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
+    public void setRoleId(int roleId) { this.roleId = roleId; }
 
     public void setSpecializationId(Integer specializationId) {
         this.specializationId = specializationId;
@@ -82,7 +82,7 @@ public class Employee extends Person {
 
     /**
      * Fetch all Employees from the database.
-     * 
+     *
      * @return Employee[] or null
      */
     static public Employee[] fetchAll() throws SQLException {
@@ -91,7 +91,7 @@ public class Employee extends Person {
 
     /**
      * Fetch an Employee from the database matching the given id.
-     * 
+     *
      * @param id the id of the Employee to fetch
      * @return Employee or null
      */
@@ -101,7 +101,7 @@ public class Employee extends Person {
 
     /**
      * Fetch every Employee which has mechanic Role from the database.
-     * 
+     *
      * @return Employee[] or null
      */
     static public Employee[] fetchEveryMechanic() throws SQLException {
@@ -110,62 +110,56 @@ public class Employee extends Person {
 
     /**
      * Save the Employee in the database without knowing the id.
-     * 
+     *
      * @return Employee or null
      */
     public Employee saveNotKnowingId() throws SQLException {
         // Create a person first
         Person person = new Person(getId(), getFirstName(), getLastName(), getPhoneNo());
         person = person.save();
-        // We can know complete the employee with all the values
-        Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(),
-                person.getPhoneNo(),
-                roleId,
-                specializationId);
+        // We can now complete the employee with all the values
+        Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(), person.getPhoneNo(), roleId, specializationId);
 
-        // we now know the id
+        // We now know the id
         return employee.saveKnowingId();
     }
 
     /**
      * Save the Employee in the database knowing the id.
-     * 
+     *
      * @return Employee or null
      */
     public Employee saveKnowingId() throws SQLException {
-        return DatabaseHandler.executeUpdateStatement(createEmployeeKnowingIdQuery, this,
+        DatabaseHandler.executeUpdateStatement(createEmployeeKnowingIdQuery, this,
                 (ResultSet resultSet) -> {
                     resultSet.next();
                     return this;
                 });
+
+        return fetchById(this.getId());
     }
 
     /**
      * Update the Employee in the database.
-     * 
+     *
      * @return Employee or null
      */
     public Employee update() throws SQLException {
         Person person = new Person(getId(), getFirstName(), getLastName(), getPhoneNo());
         person = person.update();
 
-        Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(),
-                person.getPhoneNo(),
-                roleId,
-                specializationId);
+        Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(), person.getPhoneNo(), roleId, specializationId);
 
-        return DatabaseHandler.executeUpdateStatement(updateEmployeeQuery,
-                employee,
+        return DatabaseHandler.executeUpdateStatement(updateEmployeeQuery, employee,
                 (ResultSet resultSet) -> {
                     resultSet.next();
                     return employee;
                 });
-
     }
 
     /**
      * Delete an Employee from the database matching the given id.
-     * 
+     *
      * @param id the id of the Employee to delete
      * @return true if successful
      */

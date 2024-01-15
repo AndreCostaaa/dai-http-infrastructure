@@ -31,24 +31,26 @@ public class RoleController {
 
     public void save(Context ctx) throws SQLException {
         Role role = ctx.bodyAsClass(Role.class);
+        role = role.save();
 
-        if (role.save() != null) {
-            ctx.json(role);
+        if (role == null) {
+            ctx.status(400);
+
             return;
         }
 
-        ctx.status(400);
+        ctx.json(role);
     }
 
     public void update(Context ctx) throws SQLException {
         Role role = ctx.bodyAsClass(Role.class);
 
-        if (role.update() != null) {
-            ctx.json(role);
+        if (role.update() == null) {
+            ctx.status(400);
             return;
         }
 
-        ctx.status(400);
+        ctx.json(role);
     }
 
     public void delete(Context ctx) throws SQLException {

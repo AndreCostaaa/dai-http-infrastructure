@@ -1,0 +1,21 @@
+meta {
+  name: update bill
+  type: http
+  seq: 3
+}
+
+patch {
+  url: http://localhost:7000/api/serviceBills
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 363,
+    "price": 12,
+    "delivered": false,
+    "paid": true,
+    "discountPercentage": 99
+  }
+}

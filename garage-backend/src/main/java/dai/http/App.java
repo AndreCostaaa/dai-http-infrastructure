@@ -12,7 +12,7 @@ public class App {
         app.get("/api/cars/{carId}", carController::fetchOne);
         app.post("/api/cars", carController::save);
         app.patch("/api/cars", carController::update);
-        app.delete("/api/cars/{serviceId}", carController::delete);
+        app.delete("/api/cars/{carId}", carController::delete);
 
         // CarPartController
         CarPartController carPartController = new CarPartController();
@@ -29,7 +29,7 @@ public class App {
         app.get("/api/clients/phoneNo/{phoneNo}", clientController::fetchByPhoneNo);
         app.post("/api/clients", clientController::saveNotKnowingId);
         app.post("/api/clients/knownId", clientController::saveKnowingId);
-        app.patch("/api/clients/update", clientController::update);
+        app.patch("/api/clients", clientController::update);
         app.delete("/api/clients/{clientId}", clientController::delete);
 
         // EmployeeController
@@ -37,8 +37,8 @@ public class App {
         app.get("/api/employees", employeeController::fetchAll);
         app.get("/api/employees/{employeeId}", employeeController::fetchOne);
         app.get("/api/mechanics", employeeController::fetchMechanics);
-        app.post("/api/employees", employeeController::create);
-        app.post("/api/employees/knownId/", employeeController::createKnowingId);
+        app.post("/api/employees", employeeController::saveNotKnowingId);
+        app.post("/api/employees/knownId/", employeeController::saveKnowingId);
         app.patch("/api/employees", employeeController::update);
         app.delete("/api/employees/{employeeId}", employeeController::delete);
 
@@ -67,7 +67,6 @@ public class App {
         app.get("/api/services/mechanic/{mechanicId}", serviceController::fetchServiceByMechanic);
         app.get("/api/services/mechanic/{mechanicId}/{stateId}", serviceController::fetchServiceByMechanicState);
         app.get("/api/services/state/{stateId}", serviceController::fetchServiceByState);
-        app.get("/api/services/processing/{mechanicId}", serviceController::fetchServiceByMechanicProcessing);
         app.post("/api/services", serviceController::save);
         app.patch("/api/services", serviceController::update);
         app.patch("/api/services/{serviceId}", serviceController::incrementState);

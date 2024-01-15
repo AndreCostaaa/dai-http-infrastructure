@@ -7,6 +7,17 @@ import java.sql.SQLException;
 
 public class EmployeeController {
 
+    public void fetchAll(Context ctx) throws SQLException {
+        Employee[] employees = Employee.fetchAll();
+
+        if (employees.length == 0) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(employees);
+    }
+
     public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("employeeId"));
         Employee employee = Employee.fetchById(id);
@@ -32,36 +43,38 @@ public class EmployeeController {
 
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
+        employee = employee.saveNotKnowingId();
 
-        if (employee.saveNotKnowingId() != null) {
-            ctx.json(employee);
+        if (employee == null) {
+            ctx.status(400);
             return;
         }
 
-        ctx.status(400);
+        ctx.json(employee);
     }
 
     public void saveKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
+        employee = employee.saveKnowingId();
 
-        if (employee.saveKnowingId() != null) {
-            ctx.json(employee);
+        if (employee == null) {
+            ctx.status(400);
             return;
         }
 
-        ctx.status(400);
+        ctx.json(employee);
     }
 
 
     public void update(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
 
-        if (employee.update() != null) {
-            ctx.json(employee);
+        if (employee.update() == null) {
+            ctx.status(400);
             return;
         }
 
-        ctx.status(400);
+        ctx.json(employee);
     }
 
     public void delete(Context ctx) throws SQLException {

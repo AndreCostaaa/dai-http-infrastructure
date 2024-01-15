@@ -46,6 +46,20 @@ public class DatabaseHandler {
         }
     }
 
+    static public <T> T[] fetchAllBy(String stringQuery, String key, int value,
+                                     ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
+        try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
+                (stringQuery))) {
+            statement.setInt(key, value);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                var resultSetHandler = new ResultSetHandler<>(resultSet, iresultSetHandler);
+
+                return resultSetHandler.fetchAll();
+            }
+        }
+    }
+
     static public <T> T[] fetchAllByTwoParams(String stringQuery, String key1, int value1,
                                      String key2, int value2,
                                      ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
@@ -82,6 +96,20 @@ public class DatabaseHandler {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             element.completeUpdateStatement(statement);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return iresultSetHandler.fetchNext(resultSet);
+            }
+        }
+    }
+
+    static public <T extends IEntity> T executeIncrementStateStatement(String stringQuery, int id,
+                                                               ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
+            throws SQLException {
+        stringQuery = addReturningToQuery(stringQuery);
+        try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
+                (stringQuery))) {
+            statement.setInt("id", id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 return iresultSetHandler.fetchNext(resultSet);

@@ -13,11 +13,12 @@ public class ConnectionHandler {
 
     }
 
-    private static Connection createConnection(String dbms, String ip, String port, String dbName, String user,
+    private static Connection createConnection(String dbms, String url, String dbName, String user,
             String password, String schema) throws SQLException {
+
         String connectionString = String.format(
-                "jdbc:%s://%s:%s/%s?user=%s&password=%s&currentSchema=%s",
-                dbms, ip, port, dbName, user, password, schema);
+                "jdbc:%s://%s/%s?user=%s&password=%s&currentSchema=%s",
+                dbms, url, dbName, user, password, schema);
 
         return DriverManager.getConnection(connectionString);
     }
@@ -25,18 +26,15 @@ public class ConnectionHandler {
     public static Connection getConnection() throws SQLException {
 
         if (connection == null) {
-            Dotenv dotenv = Dotenv.configure().load();
-            String dbms = dotenv.get("JDBC_DBMS");
-            String ip = dotenv.get("JDBC_IP");
-            String port = dotenv.get("JDBC_PORT");
-            String dbName = dotenv.get("JDBC_DATABASE_NAME");
-            String user = dotenv.get("JDBC_USER");
-            String password = dotenv.get("JDBC_PASSWORD");
+            String dbms = System.getenv("JDBC_DBMS");
+            String url = System.getenv("JDBC_URL");
+            String dbName = System.getenv("JDBC_DATABASE_NAME");
+            String user = System.getenv("JDBC_USER");
+            String password = System.getenv("JDBC_PASSWORD");
 
-            String schema = dotenv.get("JDBC_SCHEMA");
+            String schema = System.getenv("JDBC_SCHEMA");
 
-            connection = createConnection(dbms, ip, port, dbName, user, password, schema);
-
+            connection = createConnection(dbms, url, dbName, user, password, schema);
         }
         return connection;
     }
@@ -45,13 +43,12 @@ public class ConnectionHandler {
 
         Dotenv dotenv = Dotenv.configure().load();
         String dbms = "postgresql";
-        String ip = "localhost";
-        String port = "5434";
-        String dbName = dotenv.get("JDBC_DATABASE_NAME");
-        String user = dotenv.get("JDBC_USER");
-        String password = dotenv.get("JDBC_PASSWORD");
-        String schema = dotenv.get("JDBC_SCHEMA");
+        String url = "localhost:5434";
+        String dbName = System.getenv("JDBC_DATABASE_NAME");
+        String user = System.getenv("JDBC_USER");
+        String password = System.getenv("JDBC_PASSWORD");
+        String schema = System.getenv("JDBC_SCHEMA");
 
-        connection = createConnection(dbms, ip, port, dbName, user, password, schema);
+        connection = createConnection(dbms, url, dbName, user, password, schema);
     }
 }
