@@ -1,13 +1,14 @@
 package dai.http;
 
 import dai.database.Service;
+import dai.database.ServiceDisplay;
 import io.javalin.http.Context;
 import java.sql.SQLException;
 
 public class ServiceController {
 
     public void fetchAll(Context ctx) throws SQLException {
-        Service[] services = Service.fetchAll();
+        ServiceDisplay[] services = Service.fetchAll();
 
         if (services.length == 0) {
             ctx.status(404);
@@ -19,7 +20,7 @@ public class ServiceController {
 
     public void fetchOne(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("serviceId"));
-        Service service = Service.fetchById(id);
+        ServiceDisplay service = Service.fetchById(id);
 
         if (service == null) {
             ctx.status(404);
@@ -31,7 +32,7 @@ public class ServiceController {
 
     public void fetchServiceByCar(Context ctx) throws SQLException {
         int carId = Integer.parseInt(ctx.pathParam("carId"));
-        Service[] services = Service.fetchByCar(carId);
+        ServiceDisplay[] services = Service.fetchByCar(carId);
 
         if (services.length == 0) {
             ctx.status(404);
@@ -44,7 +45,7 @@ public class ServiceController {
     public void fetchServiceByCarState(Context ctx) throws SQLException {
         int carId = Integer.parseInt(ctx.pathParam("carId"));
         int stateId = Integer.parseInt(ctx.pathParam("stateId"));
-        Service[] services = Service.fetchByCarState(carId, stateId);
+        ServiceDisplay[] services = Service.fetchByCarState(carId, stateId);
 
         if (services.length == 0) {
             ctx.status(404);
@@ -56,7 +57,7 @@ public class ServiceController {
 
     public void fetchServiceByMechanic(Context ctx) throws SQLException {
         int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
-        Service[] services = Service.fetchByMechanic(mechanicId);
+        ServiceDisplay[] services = Service.fetchByMechanic(mechanicId);
 
         if (services.length == 0) {
             ctx.status(404);
@@ -69,7 +70,7 @@ public class ServiceController {
     public void fetchServiceByMechanicState(Context ctx) throws SQLException {
         int mechanicId = Integer.parseInt(ctx.pathParam("mechanicId"));
         int stateId = Integer.parseInt(ctx.pathParam("stateId"));
-        Service[] services = Service.fetchByMechanicState(mechanicId, stateId);
+        ServiceDisplay[] services = Service.fetchByMechanicState(mechanicId, stateId);
 
         if (services.length == 0) {
             ctx.status(404);
@@ -87,7 +88,7 @@ public class ServiceController {
             return;
         }
 
-        Service[] services = Service.fetchByState(stateId);
+        ServiceDisplay[] services = Service.fetchByState(stateId);
 
         if (services.length == 0) {
             ctx.status(404);

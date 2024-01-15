@@ -16,13 +16,13 @@ public record Service(int id,
         Date dateCarDone,
         Date dateCarLeft) implements IEntity {
 
-    static final String getAllQuery = "SELECT * FROM service;",
-            getServiceByIdQuery = "SELECT * FROM service WHERE id = :id;",
-            getServiceByCarQuery = "SELECT * FROM service WHERE car_id = :car_id;",
-            getServiceByCarStateQuery = "SELECT * FROM service WHERE car_id = :car_id AND state_id = :state_id;",
-            getServiceByMechanicQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id;",
-            getServiceByMechanicStateQuery = "SELECT * FROM service WHERE mechanic_id = :mechanic_id AND state_id = :state_id;",
-            getServiceByStateQuery = "SELECT * FROM service WHERE state_id = :state_id;",
+    static final String getAllQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id;",
+            getServiceByIdQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE s.id = :id;",
+            getServiceByCarQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE car_id = :car_id;",
+            getServiceByCarStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE car_id = :car_id AND state_id = :state_id;",
+            getServiceByMechanicQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE mechanic_id = :mechanic_id;",
+            getServiceByMechanicStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE mechanic_id = :mechanic_id AND state_id = :state_id;",
+            getServiceByStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE state_id = :state_id;",
             createServiceQuery = "INSERT INTO service (mechanic_id, client_id, car_id, hours_worked, comments, has_pictures, state_id, date_car_arrival, date_car_processing, date_car_done, date_car_left) VALUES (:mechanic_id, :client_id, :car_id, 0, '', false, 0, now(), NULL, NULL, NULL);",
             updateServiceQuery = "UPDATE service SET mechanic_id  = :mechanic_id, hours_worked = :hours_worked, comments = :comments, has_pictures = :has_pictures WHERE id = :id;",
             incrementStateQuery = "UPDATE service SET state_id = state_id + 1 WHERE id = :id;",
@@ -82,8 +82,8 @@ public record Service(int id,
      *
      * @return Service[] or null
      */
-    static public Service[] fetchAll() throws SQLException {
-        return DatabaseHandler.fetchAll(getAllQuery, Service::fetchNext);
+    static public ServiceDisplay[] fetchAll() throws SQLException {
+        return DatabaseHandler.fetchAll(getAllQuery, ServiceDisplay::fetchNext);
     }
 
     /**
@@ -92,8 +92,8 @@ public record Service(int id,
      * @param id the id of the Service to fetch
      * @return Service or null
      */
-    static public Service fetchById(int id) throws SQLException {
-        return DatabaseHandler.fetchById(getServiceByIdQuery, id, Service::fetchNext);
+    static public ServiceDisplay fetchById(int id) throws SQLException {
+        return DatabaseHandler.fetchById(getServiceByIdQuery, id, ServiceDisplay::fetchNext);
     }
 
     /**
@@ -102,11 +102,11 @@ public record Service(int id,
      * @param carId the id of the Car to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByCar(int carId) throws SQLException {
+    static public ServiceDisplay[] fetchByCar(int carId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByCarQuery,
                 "car_id",
                 carId,
-                Service::fetchNext);
+                ServiceDisplay::fetchNext);
     }
 
     /**
@@ -116,13 +116,13 @@ public record Service(int id,
      * @param stateId the id of the State to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByCarState(int carId, int stateId) throws SQLException {
+    static public ServiceDisplay[] fetchByCarState(int carId, int stateId) throws SQLException {
         return DatabaseHandler.fetchAllByTwoParams(getServiceByCarStateQuery,
                 "car_id",
                 carId,
                 "state_id",
                 stateId,
-                Service::fetchNext);
+                ServiceDisplay::fetchNext);
     }
 
     /**
@@ -131,11 +131,11 @@ public record Service(int id,
      * @param mechanicId the id of the mechanic Employee to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByMechanic(int mechanicId) throws SQLException {
+    static public ServiceDisplay[] fetchByMechanic(int mechanicId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByMechanicQuery,
                 "mechanic_id",
                 mechanicId,
-                Service::fetchNext);
+                ServiceDisplay::fetchNext);
     }
 
     /**
@@ -146,13 +146,13 @@ public record Service(int id,
      * @param stateId    the id of the State to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByMechanicState(int mechanicId, int stateId) throws SQLException {
+    static public ServiceDisplay[] fetchByMechanicState(int mechanicId, int stateId) throws SQLException {
         return DatabaseHandler.fetchAllByTwoParams(getServiceByMechanicStateQuery,
                 "mechanic_id",
                 mechanicId,
                 "state_id",
                 stateId,
-                Service::fetchNext);
+                ServiceDisplay::fetchNext);
     }
 
     /**
@@ -161,11 +161,11 @@ public record Service(int id,
      * @param stateId the id of the State to fetch Services for
      * @return Service[] or null
      */
-    static public Service[] fetchByState(int stateId) throws SQLException {
+    static public ServiceDisplay[] fetchByState(int stateId) throws SQLException {
         return DatabaseHandler.fetchAllBy(getServiceByStateQuery,
                 "state_id",
                 stateId,
-                Service::fetchNext);
+                ServiceDisplay::fetchNext);
     }
 
     /**
