@@ -30,14 +30,9 @@ export class HttpService {
   postMedia(data: FormData, config?: AxiosRequestConfig) {
     return mediaApiClient.post(this.endpoint, data, config);
   }
-  update<T extends Entity>(
-    id: string | number,
-    entity: T,
-    config: AxiosRequestConfig
-  ) {
+  update<T extends Entity>(entity: T, config?: AxiosRequestConfig) {
     return apiClient.patch(this.endpoint, entity, {
       ...config,
-      params: { id: id },
     });
   }
 }
