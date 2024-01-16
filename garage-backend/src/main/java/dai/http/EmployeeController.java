@@ -30,6 +30,18 @@ public class EmployeeController {
         ctx.json(employee);
     }
 
+    public void fetchByPhoneNo(Context ctx) throws SQLException {
+        Integer phoneNo = Integer.parseInt(ctx.pathParam("phoneNo"));
+        Employee employee = Employee.fetchByPhoneNo(phoneNo);
+
+        if (employee == null) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(employee);
+    }
+
     public void fetchMechanics(Context ctx) throws SQLException {
         Employee[] mechanics = Employee.fetchEveryMechanic();
 
@@ -64,7 +76,6 @@ public class EmployeeController {
 
         ctx.json(employee);
     }
-
 
     public void update(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
