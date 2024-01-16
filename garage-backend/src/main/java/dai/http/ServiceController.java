@@ -118,9 +118,10 @@ public class ServiceController {
     public void update(Context ctx) throws SQLException {
         ServiceDisplay serviceDisplay = ctx.bodyAsClass(ServiceDisplay.class);
 
+        Integer mechanicId = serviceDisplay.mechanic() == null ? null : serviceDisplay.mechanic().getId();
         Service service = Service.serviceForUpdate(
                 serviceDisplay.id(),
-                serviceDisplay.mechanic().getId(),
+                mechanicId,
                 serviceDisplay.hoursWorked(),
                 serviceDisplay.comments(),
                 serviceDisplay.hasPictures());
