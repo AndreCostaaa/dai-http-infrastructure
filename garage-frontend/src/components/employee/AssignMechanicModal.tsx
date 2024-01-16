@@ -1,15 +1,19 @@
 import useMechanics from "../../hooks/useMechanics";
-import DataSkeleton from "../generic/DataSkeleton";
-import EmployeeModal from "./EmployeeModal";
+import { Employee } from "../../services/employee-service";
 import { ModalProps } from "@chakra-ui/react";
+import Employees from "./Employees";
+import GenericModal from "../generic/GenericModal";
 
-const AssignMechanicModal = (props: ModalProps) => {
-  const { data, isLoading } = useMechanics();
+interface Props extends ModalProps {
+  onSelect: (mechanic: Employee) => void;
+}
+const AssignMechanicModal = (props: Props) => {
+  const { data } = useMechanics();
 
   return (
-    <DataSkeleton isLoading={isLoading} data={data}>
-      {data && <EmployeeModal {...props} employeeList={data} />}
-    </DataSkeleton>
+    <GenericModal {...props}>
+      {data && <Employees employeeList={data} onSelect={props.onSelect} />}
+    </GenericModal>
   );
 };
 
