@@ -3,7 +3,7 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-function apiDomain() {
+export function apiDomain() {
   const { hostname } = window.location;
   return `https://api.${hostname}/api`;
 }
