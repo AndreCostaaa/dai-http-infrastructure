@@ -37,6 +37,7 @@ public class App {
         EmployeeController employeeController = new EmployeeController();
         app.get("/api/employees", employeeController::fetchAll);
         app.get("/api/employees/{employeeId}", employeeController::fetchOne);
+        app.get("/api/employees/phone/{phoneNo}", employeeController::fetchByPhoneNo);
         app.get("/api/mechanics", employeeController::fetchMechanics);
         app.post("/api/employees", employeeController::saveNotKnowingId);
         app.post("/api/employees/knownId/", employeeController::saveKnowingId);
