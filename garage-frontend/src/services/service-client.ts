@@ -17,11 +17,12 @@ export interface Service {
   comments: string;
   hasPictures: boolean;
   state: ServiceState;
+  nextState: ServiceState;
   dateCreated: Date;
-  dateCarArrival: Date;
-  dateCarProcessing: Date;
-  dateCarDone: Date;
-  dateCarLeft: Date;
+  dateCarArrival: Date | null;
+  dateCarProcessing: Date | null;
+  dateCarDone: Date | null;
+  dateCarLeft: Date | null;
 }
 
 export default create("/services");

@@ -1,4 +1,5 @@
-import create, { Person } from "./http-service";
+import create from "./http-service";
+import { Person } from "./person-service";
 
 export interface Client extends Person {
   email: string;

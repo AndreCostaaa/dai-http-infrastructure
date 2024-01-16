@@ -106,7 +106,7 @@ CREATE TABLE service_bill (
     paid BOOLEAN NOT NULL,
     discount_percentage SMALLINT,
     PRIMARY KEY (id),
-    CONSTRAINT sb_s_fk FOREIGN KEY (id) REFERENCES service
+    CONSTRAINT sb_s_fk FOREIGN KEY (id) REFERENCES service ON DELETE CASCADE
 );
 --Views
 CREATE VIEW car_parts_in_stock AS

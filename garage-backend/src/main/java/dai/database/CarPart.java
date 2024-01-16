@@ -1,9 +1,10 @@
 package dai.database;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.Objects;
 
-public record CarPart(int id,
+public record CarPart(Integer id,
         Integer serviceId,
         String supplier,
         String supplierRef,
@@ -12,7 +13,7 @@ public record CarPart(int id,
         double buyPrice,
         double sellPrice) implements IEntity {
 
-    public CarPart(int id,
+    public CarPart(Integer id,
             Integer serviceId,
             String supplier,
             String supplierRef,
@@ -32,6 +33,7 @@ public record CarPart(int id,
 
     static final String getAllQuery = "SELECT * FROM car_part;",
             getCarPartByIdQuery = "SELECT * FROM car_part WHERE id = :id;",
+            getCarPartByServiceIdQuery = "SELECT * FROM car_part WHERE service_id = :service_id;",
             createCarPartQuery = "INSERT INTO car_part(service_id, supplier, supplier_ref, name, description, buy_price, sell_price) VALUES (:service_id, :supplier, :supplier_ref, :name, :description, :buy_price, :sell_price);",
             updateCarPartQuery = "UPDATE car_part SET service_id = :service_id, supplier = :supplier, supplier_ref = :supplier_ref, name = :name, description = :description, buy_price = :buy_price, sell_price = :sell_price WHERE id = :id;",
             deleteCarPartQuery = "DELETE FROM car_part WHERE id = :id;";
@@ -40,8 +42,8 @@ public record CarPart(int id,
         if (!resultSet.next())
             return null;
 
-        int id = resultSet.getInt("id");
-    Integer serviceId = resultSet.getObject("service_id", Integer.class);
+        Integer id = resultSet.getObject("id", Integer.class);
+        Integer serviceId = resultSet.getObject("service_id", Integer.class);
         String supplier = resultSet.getString("supplier");
         String supplierRef = resultSet.getString("supplier_ref");
         String name = resultSet.getString("name");
@@ -53,10 +55,7 @@ public record CarPart(int id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        if (serviceId() == 0)
-            statement.setNull("service_id", Types.INTEGER);
-        else
-            statement.setInt("service_id", serviceId());
+        DatabaseHandler.checkIfNull(serviceId, serviceId(), statement, "service_id", Types.INTEGER);
         statement.setString("supplier", supplier());
         statement.setString("supplier_ref", supplierRef());
         statement.setString("name", name());
@@ -89,8 +88,18 @@ public record CarPart(int id,
      * @param id the id of the CarPart to fetch
      * @return CarPart or null
      */
-    static public CarPart fetchOne(int id) throws SQLException {
+    static public CarPart fetchOne(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getCarPartByIdQuery, id, CarPart::fetchNext);
+    }
+
+    /**
+     * Fetch all CarParts from the database matching the given serviceId.
+     *
+     * @param serviceId the id of the Service to fetch CarParts for
+     * @return CarPart[] or null
+     */
+    static public CarPart[] fetchByServiceId(Integer serviceId) throws SQLException {
+        return DatabaseHandler.fetchAllBy(getCarPartByServiceIdQuery, "service_id", serviceId, CarPart::fetchNext);
     }
 
     /**
@@ -117,7 +126,7 @@ public record CarPart(int id,
      * @param id the id of the CarPart to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteCarPartQuery, id);
     }
 

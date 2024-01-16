@@ -1,20 +1,26 @@
 import { ModalProps } from "@chakra-ui/react";
 import Specializations from "./Specializations";
-import { Specialization } from "../../services/specialization-service";
 import GenericModal from "../generic/GenericModal";
+import useSpecializationById from "../../hooks/useSpecializationById";
+import DataSkeleton from "../generic/DataSkeleton";
 
 interface Props extends ModalProps {
   specializationId: number;
 }
 
-const data: Array<Specialization> = [{ hourlyRate: 20, id: 1, name: "test" }];
-
 const SpecializationModal = (props: Props) => {
+  const { data, isLoading } = useSpecializationById(props.specializationId);
   return (
-    <GenericModal
-      {...props}
-      children={<Specializations specializations={data} />}
-    />
+    <DataSkeleton
+      isLoading={isLoading}
+      data={data}
+      children={
+        <GenericModal
+          {...props}
+          children={data && <Specializations specializations={[data]} />}
+        />
+      }
+    ></DataSkeleton>
   );
 };
 

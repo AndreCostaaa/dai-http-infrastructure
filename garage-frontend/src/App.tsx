@@ -11,7 +11,7 @@ function App() {
   return (
     <Grid
       templateAreas={{ lg: `"navbar" "mainpanel"` }}
-      gridAutoRows={"1fr"}
+      templateRows="repeat(1, 1fr)"
       templateColumns="repeat(5, 1fr)"
       gap={4}
       height={"100%"}

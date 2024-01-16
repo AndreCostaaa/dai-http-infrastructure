@@ -1,16 +1,16 @@
-import React from "react";
 import Employees from "./Employees";
 import { ModalProps } from "@chakra-ui/react";
 import GenericModal from "../generic/GenericModal";
 import { Employee } from "../../services/employee-service";
 interface Props extends ModalProps {
   employeeList: Employee[];
+  onClick?: (employee: Employee) => void;
 }
 
 const EmployeeModal = (props: Props) => {
   return (
     <GenericModal {...props}>
-      <Employees employeeList={props.employeeList} />
+      <Employees onSelect={props.onClick} employeeList={props.employeeList} />
     </GenericModal>
   );
 };

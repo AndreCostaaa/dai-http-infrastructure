@@ -1,5 +1,6 @@
 import { TableContainer, Table, Thead, Tr, Th, Tbody } from "@chakra-ui/react";
 import CarPartRow from "./CarPartRow";
+import { CarPart } from "../../services/car-part-service";
 interface Props {
   carPartList: CarPart[];
 }

@@ -1,4 +1,4 @@
-import { Td, Tr } from "@chakra-ui/react";
+import { Td } from "@chakra-ui/react";
 import { Specialization } from "../../services/specialization-service";
 
 interface Props {
@@ -6,11 +6,11 @@ interface Props {
 }
 const SpecializationRow = ({ specialization }: Props) => {
   return (
-    <Tr>
+    <>
       <Td>{specialization.id}</Td>
       <Td>{specialization.name}</Td>
       <Td>{specialization.hourlyRate}</Td>
-    </Tr>
+    </>
   );
 };
 

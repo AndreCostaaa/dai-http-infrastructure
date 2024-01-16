@@ -1,4 +1,3 @@
-import { AxiosRequestConfig } from "axios";
 import useData from "./useData";
 import { Service } from "../services/service-client";
 

@@ -1,4 +1,4 @@
-import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Td, useDisclosure } from "@chakra-ui/react";
 import { Employee } from "../../services/employee-service";
 import RoleModal from "../role/RoleModal";
 import SpecializationModal from "../specialization/SpecializationModal";
@@ -18,32 +18,37 @@ const EmployeeRow = ({ employee }: Props) => {
   } = useDisclosure();
   return (
     <>
-      <Tr>
-        <Td>{employee.id}</Td>
-        <Td>{employee.fname}</Td>
-        <Td>{employee.lname}</Td>
-        <Td>{employee.phoneCode + " " + employee.phoneNo}</Td>
-        <Td>
-          <Button onClick={roleOnToggle}>{employee.roleId}</Button>
-        </Td>
-        <Td>
+      <Td>{employee.id}</Td>
+      <Td>{employee.firstName}</Td>
+      <Td>{employee.lastName}</Td>
+      <Td>{employee.phoneNo}</Td>
+      <Td>
+        <Button onClick={roleOnToggle}>{employee.roleId}</Button>
+      </Td>
+      <Td>
+        {employee.specializationId && (
           <Button onClick={specializationOnToggle}>
             {employee.specializationId}
           </Button>
-        </Td>
-      </Tr>
-      <RoleModal
-        roleId={employee.roleId}
-        children={null}
-        isOpen={roleIsOpen}
-        onClose={roleOnClose}
-      />
-      <SpecializationModal
-        specializationId={employee.specializationId}
-        children={null}
-        isOpen={specializationIsOpen}
-        onClose={specializationOnClose}
-      />
+        )}
+      </Td>
+
+      {roleIsOpen && (
+        <RoleModal
+          roleId={employee.roleId}
+          children={null}
+          isOpen={roleIsOpen}
+          onClose={roleOnClose}
+        />
+      )}
+      {specializationIsOpen && employee.specializationId && (
+        <SpecializationModal
+          specializationId={employee.specializationId}
+          children={null}
+          isOpen={specializationIsOpen}
+          onClose={specializationOnClose}
+        />
+      )}
     </>
   );
 };

@@ -3,7 +3,7 @@ package dai.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public record ServiceState(int id,
+public record ServiceState(Integer id,
                            String title,
                            String description) implements IEntity {
 
@@ -12,10 +12,10 @@ public record ServiceState(int id,
             updateServiceStateQuery = "UPDATE service_state SET title = :title, description = :description WHERE id = :id;";
 
     private static ServiceState fetchNext(ResultSet resultSet) throws SQLException{
-        if(!resultSet.next()){
+        if (!resultSet.next())
             return null;
-        }
-        int id = resultSet.getInt("id");
+
+        Integer id = resultSet.getObject("id", Integer.class);
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
 
@@ -42,7 +42,7 @@ public record ServiceState(int id,
         return DatabaseHandler.fetchAll(getAllQuery, ServiceState::fetchNext);
     }
 
-    static public ServiceState fetchById(int id) throws SQLException {
+    static public ServiceState fetchById(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getServiceStateByIdQuery, id, ServiceState::fetchNext);
     }
 
