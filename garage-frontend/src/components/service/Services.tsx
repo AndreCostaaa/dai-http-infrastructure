@@ -7,17 +7,24 @@ import {
   Tbody,
   Button,
   Td,
+  IconButton,
 } from "@chakra-ui/react";
 import { Service } from "../../services/service-client";
 import ServiceRow from "./ServiceRow";
+import { DeleteIcon } from "@chakra-ui/icons";
 interface Props {
   serviceList: Service[];
   onSelect?: (service: Service) => void;
+  onUpdate?: (service: Service) => void;
+  onDelete?: (service: Service) => void;
 }
-const Services = ({ serviceList, onSelect }: Props) => {
+const Services = ({ serviceList, onSelect, onUpdate, onDelete }: Props) => {
   const headers = ["id", "voiture", "client", "mecanicien", "etat", ""];
 
   if (onSelect) {
+    headers.push("");
+  }
+  if (onDelete) {
     headers.push("");
   }
   return (
@@ -33,9 +40,13 @@ const Services = ({ serviceList, onSelect }: Props) => {
         <Tbody>
           {serviceList
             .sort((serviceA, serviceB) => serviceA.state.id - serviceB.state.id)
-            .map((service, i) => (
+            .map((service) => (
               <Tr>
-                <ServiceRow key={i} service={service} />
+                <ServiceRow
+                  key={service.id}
+                  service={service}
+                  onUpdate={(service) => onUpdate && onUpdate(service)}
+                />
                 <Td>
                   {onSelect && (
                     <Button onClick={() => onSelect(service)}>
@@ -43,6 +54,15 @@ const Services = ({ serviceList, onSelect }: Props) => {
                     </Button>
                   )}
                 </Td>
+                {onDelete && (
+                  <Td>
+                    <IconButton
+                      aria-label=""
+                      icon={<DeleteIcon />}
+                      onClick={() => onDelete(service)}
+                    ></IconButton>
+                  </Td>
+                )}
               </Tr>
             ))}
         </Tbody>
