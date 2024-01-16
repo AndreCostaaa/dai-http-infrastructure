@@ -10,7 +10,7 @@ interface Props extends ModalProps {
 const EmployeeModal = (props: Props) => {
   return (
     <GenericModal {...props}>
-      <Employees onClick={props.onClick} employeeList={props.employeeList} />
+      <Employees onSelect={props.onClick} employeeList={props.employeeList} />
     </GenericModal>
   );
 };
