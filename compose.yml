@@ -30,6 +30,8 @@ services:
       dockerfile: ./Dockerfile
     env_file:
       - .env
+    volumes:
+      - ./backend-media:/app/media
     labels:
       - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
       - "traefik.http.services.backend-service.loadBalancer.sticky.cookie=true"
