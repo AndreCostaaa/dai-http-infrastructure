@@ -1,7 +1,6 @@
 import { Service } from "../../services/service-client";
-import { Button, IconButton, Td, useDisclosure } from "@chakra-ui/react";
+import { Button, Td, useDisclosure } from "@chakra-ui/react";
 import ServiceDetailModal from "./ServiceDetailModal";
-import { DeleteIcon } from "@chakra-ui/icons";
 interface Props {
   service: Service;
   onUpdate: (service: Service) => void;

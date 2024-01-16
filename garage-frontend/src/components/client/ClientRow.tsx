@@ -1,5 +1,5 @@
 import { Client } from "../../services/client-service";
-import { Td, Tr } from "@chakra-ui/react";
+import { Td } from "@chakra-ui/react";
 interface Props {
   client: Client;
 }

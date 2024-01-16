@@ -1,5 +1,5 @@
 import { Car } from "../../services/car-service";
-import { Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
+import { Button, Td, useDisclosure } from "@chakra-ui/react";
 import { HiMiniMagnifyingGlass } from "react-icons/hi2";
 
 import ClientModal from "../client/ClientModal";

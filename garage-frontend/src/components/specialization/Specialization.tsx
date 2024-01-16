@@ -1,4 +1,4 @@
-import { Td, Tr } from "@chakra-ui/react";
+import { Td } from "@chakra-ui/react";
 import { Specialization } from "../../services/specialization-service";
 
 interface Props {

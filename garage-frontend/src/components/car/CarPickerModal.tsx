@@ -1,4 +1,3 @@
-import React from "react";
 import GenericModal from "../generic/GenericModal";
 import useClientCars from "../../hooks/useClientCars";
 import { ModalProps } from "@chakra-ui/react";

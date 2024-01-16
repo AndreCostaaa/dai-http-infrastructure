@@ -1,22 +1,16 @@
 import { useState } from "react";
-import carService, { Car } from "../../services/car-service";
 import {
   Button,
   FormControl,
   FormLabel,
   Heading,
   Input,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
-  NumberInputStepper,
   VStack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { Client } from "../../services/client-service";
-import ClientPickerModal from "../client/ClientPickerModal";
 import carPartService, { CarPart } from "../../services/car-part-service";
 import AssignServiceModal from "../service/AssignServiceModal";
 import { Service } from "../../services/service-client";
