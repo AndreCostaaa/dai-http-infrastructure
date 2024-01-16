@@ -1,21 +1,18 @@
 import { Service } from "../../services/service-client";
-import { Button, Td, useDisclosure } from "@chakra-ui/react";
-import AssignMechanicModal from "../employee/AssignMechanicModal";
+import { Button, IconButton, Td, useDisclosure } from "@chakra-ui/react";
 import ServiceDetailModal from "./ServiceDetailModal";
+import { DeleteIcon } from "@chakra-ui/icons";
 interface Props {
   service: Service;
+  onUpdate: (service: Service) => void;
 }
-const ServiceRow = ({ service }: Props) => {
-  const {
-    onOpen: onOpenAssign,
-    isOpen: isOpenAssign,
-    onClose: onCloseAssign,
-  } = useDisclosure();
+const ServiceRow = ({ service, onUpdate }: Props) => {
   const {
     onOpen: onOpenService,
     isOpen: isOpenService,
     onClose: onCloseService,
   } = useDisclosure();
+
   return (
     <>
       <Td>{service.id}</Td>
@@ -27,7 +24,7 @@ const ServiceRow = ({ service }: Props) => {
       </Td>
       <Td>
         {service.mechanic?.lastName || (
-          <Button onClick={onOpenAssign}>Assigner</Button>
+          <Button onClick={onOpenService}>Assigner</Button>
         )}
       </Td>
       <Td>{service.state.title}</Td>
@@ -35,17 +32,11 @@ const ServiceRow = ({ service }: Props) => {
         <Button onClick={onOpenService}>Détails</Button>
       </Td>
 
-      {isOpenAssign && (
-        <AssignMechanicModal
-          isOpen={isOpenAssign}
-          onClose={onCloseAssign}
-          children={null}
-        />
-      )}
       {isOpenService && (
         <ServiceDetailModal
           isOpen={isOpenService}
           onClose={onCloseService}
+          onSubmit={onUpdate}
           children={null}
           serviceId={service.id}
         />
