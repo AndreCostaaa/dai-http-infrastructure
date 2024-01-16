@@ -3,7 +3,7 @@ package dai.database;
 import java.sql.*;
 
 public record ServiceBill(Integer id,
-        Double price,
+        double price,
         boolean delivered,
         boolean paid,
         Integer discountPercentage) implements IEntity {
@@ -18,7 +18,7 @@ public record ServiceBill(Integer id,
             return null;
 
         Integer id = resultSet.getObject("id", Integer.class);
-        Double price = resultSet.getObject("price", Double.class);
+        double price = resultSet.getDouble("price");
         boolean delivered = resultSet.getBoolean("delivered");
         boolean paid = resultSet.getBoolean("paid");
         Integer discountPercentage = resultSet.getObject("discount_percentage", Integer.class);
@@ -33,7 +33,7 @@ public record ServiceBill(Integer id,
     @Override
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         statement.setInt("id", id());
-        DatabaseHandler.checkIfNull(price, price(), statement, "price", Types.DOUBLE);
+        statement.setDouble("price", price());
         statement.setBoolean("delivered", delivered());
         statement.setBoolean("paid", paid());
         DatabaseHandler.checkIfNull(discountPercentage, discountPercentage(), statement, "discount_percentage", Types.INTEGER);

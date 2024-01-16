@@ -8,14 +8,12 @@ public class DatabaseHandler {
         void completeStatement(T element, NamedParameterStatement statement) throws SQLException;
     }
 
-    static protected <T> void checkIfNull(T object, T objectValue, NamedParameterStatement statement, String objectName,
+    static protected void checkIfNull(Integer object, Integer objectValue, NamedParameterStatement statement, String objectName,
             int sqlType) throws SQLException {
         if (object == null || objectValue.equals(0))
             statement.setNull(objectName, sqlType);
-        else if (object instanceof Integer)
-            statement.setInt(objectName, (Integer) objectValue);
-        else if (object instanceof Double)
-            statement.setDouble(objectName, (Double) objectValue);
+        else
+            statement.setInt(objectName, objectValue);
     }
 
     static private String addReturningToQuery(String query) {
