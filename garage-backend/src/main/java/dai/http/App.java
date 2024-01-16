@@ -92,6 +92,7 @@ public class App {
         app.patch("/api/services", serviceController::update);
         app.patch("/api/services/{serviceId}", serviceController::incrementState);
         app.delete("/api/services/{serviceId}", serviceController::delete);
+        app.post("/api/services/media/{serviceId}", serviceController::upload);
 
         // ServiceBillController
         ServiceBillController serviceBillController = new ServiceBillController();
