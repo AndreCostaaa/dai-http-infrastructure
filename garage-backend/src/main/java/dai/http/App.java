@@ -83,10 +83,7 @@ public class App {
         app.get("/api/services", serviceController::fetchAll);
         app.get("/api/services/{serviceId}", serviceController::fetchOne);
         app.get("/api/services/car/{carId}", serviceController::fetchServiceByCar);
-        app.get("/api/services/car/{carId}/{stateId}", serviceController::fetchServiceByCarState);
         app.get("/api/services/mechanic/{mechanicId}", serviceController::fetchServiceByMechanic);
-        app.get("/api/services/mechanic/{mechanicId}/{stateId}",
-                serviceController::fetchServiceByMechanicState);
         app.get("/api/services/state/{stateId}", serviceController::fetchServiceByState);
         app.post("/api/services", serviceController::save);
         app.patch("/api/services", serviceController::update);
