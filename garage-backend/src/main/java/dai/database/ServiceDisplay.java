@@ -30,7 +30,7 @@ public record ServiceDisplay(int id,
         int roleId = resultSet.getInt("role_id");
         int specializationId = resultSet.getInt("specialization_id");
 
-        Employee mechanic = new Employee(mechanicId, mechanicFirstName, mechanicLastName, mechanicPhone, roleId, specializationId);
+        Employee mechanic = mechanicId == 0 ? null : new Employee(mechanicId, mechanicFirstName, mechanicLastName, mechanicPhone, roleId, specializationId);
 
         int clientId = resultSet.getInt("client_id");
         String clientFirstName = resultSet.getString("client_fname");
