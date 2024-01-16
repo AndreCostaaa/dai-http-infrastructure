@@ -32,7 +32,7 @@ public record Service(Integer id,
     /**
      * creates a Service with the parameters used for the insert query
      */
-    public static Service serviceForCreate(int mechanicId, int clientId, int carId) {
+    public static Service serviceForCreate(Integer mechanicId, int clientId, int carId) {
         return new Service(0,
                 mechanicId,
                 clientId,
@@ -83,12 +83,17 @@ public record Service(Integer id,
         String comments = resultSet.getString("comments");
         boolean hasPictures = resultSet.getBoolean("has_pictures");
         Integer stateId = resultSet.getObject("state_id", Integer.class);
-        Date dateCreated = new Date(resultSet.getTimestamp("date_created").getTime());
-        Date dateCarArrival = new Date(resultSet.getTimestamp("date_car_arrival").getTime());
-        Date dateCarProcessing = new Date(resultSet.getTimestamp("date_car_processing").getTime());
-        Date dateCarDone = new Date(resultSet.getTimestamp("date_car_done").getTime());
-        Date dateCarLeft = new Date(resultSet.getTimestamp("date_car_left").getTime());
 
+        Date[] dates = new Date[5];
+        String[] keys = { "date_created", "date_car_arrival", "date_car_processing", "date_car_done", "date_car_left" };
+
+        for (int i = 0; i < dates.length; ++i) {
+            Timestamp ts = resultSet.getTimestamp(keys[i]);
+            if (ts == null) {
+                continue;
+            }
+            dates[i] = new Date(ts.getTime());
+        }
         return new Service(id,
                 mechanicId,
                 clientId,
@@ -97,11 +102,11 @@ public record Service(Integer id,
                 comments,
                 hasPictures,
                 stateId,
-                dateCreated,
-                dateCarArrival,
-                dateCarProcessing,
-                dateCarDone,
-                dateCarLeft);
+                dates[0],
+                dates[1],
+                dates[2],
+                dates[3],
+                dates[4]);
     }
 
     @Override

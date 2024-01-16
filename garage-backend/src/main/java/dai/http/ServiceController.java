@@ -101,8 +101,9 @@ public class ServiceController {
     public void save(Context ctx) throws SQLException {
         ServiceDisplay serviceDisplay = ctx.bodyAsClass(ServiceDisplay.class);
 
+        Integer mechanicId = serviceDisplay.mechanic() == null ? null : serviceDisplay.mechanic().getId();
         Service service = Service.serviceForCreate(
-                serviceDisplay.mechanic().getId(),
+                mechanicId,
                 serviceDisplay.client().getId(),
                 serviceDisplay.car().id());
 
