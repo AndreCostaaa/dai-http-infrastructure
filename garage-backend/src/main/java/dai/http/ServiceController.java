@@ -6,6 +6,7 @@ import io.javalin.http.Context;
 import io.javalin.http.UploadedFile;
 import io.javalin.util.FileUtil;
 
+import java.io.*;
 import java.sql.SQLException;
 
 public class ServiceController {
@@ -164,5 +165,41 @@ public class ServiceController {
         ctx.uploadedFiles().forEach(uploadedFile ->
                 FileUtil.streamToFile(uploadedFile.content(),
                         "services/media/" + serviceId + "/" + uploadedFile.filename()));
+    }
+    public void download(Context ctx) throws IOException {
+        int serviceId = Integer.parseInt(ctx.pathParam("serviceId"));
+        String imageId = ctx.pathParam("imageName");
+
+        String imagePath = "services/media/" + serviceId + "/" + imageId;
+        File imageFile = new File(imagePath);
+        if(!imageFile.exists())
+        {
+            ctx.status(404);
+            return;
+        }
+        InputStream is = new BufferedInputStream(new FileInputStream(imageFile));
+        ctx.header("Content-Disposition", "attachment; filename=\"" + imageFile.getName() + "\"");
+        ctx.header("Content-Length", String.valueOf(imageFile.length()));
+        ctx.result(is);
+    }
+    public void getImagesNames(Context ctx)
+    {
+        int serviceId = Integer.parseInt(ctx.pathParam("serviceId"));
+
+        String dirPath = "services/media/" + serviceId + "/";
+        File directory = new File(dirPath);
+
+        if(!directory.exists())
+        {
+            ctx.status(404);
+            return;
+        }
+
+        String[] filNames = directory.list();
+        if(filNames == null){
+            ctx.status(404);
+            return;
+        }
+        ctx.json(filNames);
     }
 }
