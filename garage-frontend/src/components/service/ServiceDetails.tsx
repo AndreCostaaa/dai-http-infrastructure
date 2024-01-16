@@ -4,7 +4,6 @@ import {
   Button,
   HStack,
   Heading,
-  Image,
   NumberDecrementStepper,
   NumberIncrementStepper,
   NumberInput,
