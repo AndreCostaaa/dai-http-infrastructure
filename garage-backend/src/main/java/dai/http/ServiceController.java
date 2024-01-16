@@ -3,6 +3,8 @@ package dai.http;
 import dai.database.Service;
 import dai.database.ServiceDisplay;
 import io.javalin.http.Context;
+import io.javalin.util.FileUtil;
+
 import java.sql.SQLException;
 
 public class ServiceController {
@@ -154,5 +156,13 @@ public class ServiceController {
         }
 
         ctx.status(400);
+    }
+
+    public void upload(Context ctx){
+        int serviceId = Integer.parseInt(ctx.pathParam("serviceId"));
+        
+        ctx.uploadedFiles("files").forEach(uploadedFile ->
+                FileUtil.streamToFile(uploadedFile.content(),
+                        "services/media/" + serviceId + "/" + uploadedFile.filename()));
     }
 }
