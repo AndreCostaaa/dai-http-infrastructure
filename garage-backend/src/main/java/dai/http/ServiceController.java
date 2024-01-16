@@ -145,7 +145,6 @@ public class ServiceController {
             ctx.status(400);
             return;
         }
-
         ctx.json(service);
     }
 

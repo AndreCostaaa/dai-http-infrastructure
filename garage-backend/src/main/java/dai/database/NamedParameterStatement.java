@@ -184,7 +184,7 @@ public class NamedParameterStatement implements AutoCloseable {
 
     /**
      *
-     * @param name parameter name
+     * @param name  parameter name
      * @param value parameter value
      * @throws SQLException             if an error occurred
      * @throws IllegalArgumentException if the parameter does not exist
@@ -251,8 +251,6 @@ public class NamedParameterStatement implements AutoCloseable {
             statement.setTimestamp(index, value);
         }
     }
-
-
 
     /**
      * Sets a parameter to NULL in the database.

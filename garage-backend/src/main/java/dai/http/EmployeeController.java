@@ -6,7 +6,6 @@ import io.javalin.http.Context;
 import java.sql.SQLException;
 
 public class EmployeeController {
-
     public void fetchAll(Context ctx) throws SQLException {
         Employee[] employees = Employee.fetchAll();
 
@@ -56,19 +55,16 @@ public class EmployeeController {
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
         employee = employee.saveNotKnowingId();
-
         if (employee == null) {
             ctx.status(400);
             return;
         }
-
         ctx.json(employee);
     }
 
     public void saveKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
         employee = employee.saveKnowingId();
-
         if (employee == null) {
             ctx.status(400);
             return;
@@ -84,7 +80,6 @@ public class EmployeeController {
             ctx.status(400);
             return;
         }
-
         ctx.json(employee);
     }
 

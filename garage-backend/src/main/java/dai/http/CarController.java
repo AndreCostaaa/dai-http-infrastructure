@@ -50,7 +50,6 @@ public class CarController {
             ctx.status(400);
             return;
         }
-
         ctx.json(car);
     }
 
@@ -61,7 +60,6 @@ public class CarController {
             ctx.status(400);
             return;
         }
-
         ctx.json(car);
     }
 

@@ -44,19 +44,16 @@ public class ClientController {
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
         client = client.saveNotKnowingId();
-
         if (client == null) {
             ctx.status(400);
             return;
         }
-
         ctx.json(client);
     }
 
     public void saveKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
         client = client.saveKnowingId();
-
         if (client == null) {
             ctx.status(400);
             return;
@@ -72,7 +69,6 @@ public class ClientController {
             ctx.status(400);
             return;
         }
-
         ctx.json(client);
     }
 
@@ -83,7 +79,6 @@ public class ClientController {
             ctx.status(400);
             return;
         }
-
         ctx.status(204);
     }
 }

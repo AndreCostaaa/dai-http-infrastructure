@@ -8,7 +8,8 @@ public class DatabaseHandler {
         void completeStatement(T element, NamedParameterStatement statement) throws SQLException;
     }
 
-    static protected void checkIfNull(Integer object, Integer objectValue, NamedParameterStatement statement, String objectName,
+    static protected void checkIfNull(Integer object, Integer objectValue, NamedParameterStatement statement,
+            String objectName,
             int sqlType) throws SQLException {
         if (object == null || objectValue.equals(0))
             statement.setNull(objectName, sqlType);

@@ -2,7 +2,6 @@ package dai.http;
 
 import dai.database.Person;
 import io.javalin.http.Context;
-
 import java.sql.SQLException;
 
 public class PersonController {
@@ -33,23 +32,19 @@ public class PersonController {
     public void save(Context ctx) throws SQLException {
         Person person = ctx.bodyAsClass(Person.class);
         person = person.save();
-
         if (person == null) {
             ctx.status(400);
             return;
         }
-
         ctx.json(person);
     }
 
     public void update(Context ctx) throws SQLException {
         Person person = ctx.bodyAsClass(Person.class);
-
         if (person.update() == null) {
             ctx.status(400);
             return;
         }
-
         ctx.json(person);
     }
 
@@ -68,7 +63,6 @@ public class PersonController {
             ctx.status(400);
             return;
         }
-
         ctx.status(204);
     }
 }

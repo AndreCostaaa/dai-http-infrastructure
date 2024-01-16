@@ -10,7 +10,7 @@ public class Client extends Person {
     private Integer streetNo;
     private Integer npa;
 
-    public Client(){
+    public Client() {
         super();
     }
 
@@ -95,7 +95,8 @@ public class Client extends Person {
     }
 
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo(), getEmail(), getStreet(), getStreetNo(),
+        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo(), getEmail(), getStreet(),
+                getStreetNo(),
                 getNpa(),
                 getCountry());
     }

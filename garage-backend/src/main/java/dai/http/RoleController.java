@@ -44,12 +44,10 @@ public class RoleController {
 
     public void update(Context ctx) throws SQLException {
         Role role = ctx.bodyAsClass(Role.class);
-
         if (role.update() == null) {
             ctx.status(400);
             return;
         }
-
         ctx.json(role);
     }
 

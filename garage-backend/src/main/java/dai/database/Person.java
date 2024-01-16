@@ -7,7 +7,7 @@ public class Person implements IEntity {
     private Integer id;
     private String firstName, lastName, phoneNo;
 
-    public Person(){
+    public Person() {
 
     }
 
@@ -21,7 +21,9 @@ public class Person implements IEntity {
         this.phoneNo = phoneNo;
     }
 
-    public void setId(Integer id) { this.id = id; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;

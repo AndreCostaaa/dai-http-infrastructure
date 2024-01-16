@@ -4,14 +4,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public record ServiceState(Integer id,
-                           String title,
-                           String description) implements IEntity {
+        String title,
+        String description) implements IEntity {
 
     static final String getAllQuery = "SELECT * FROM service_state;",
             getServiceStateByIdQuery = "SELECT * FROM service_state WHERE id = :id;",
             updateServiceStateQuery = "UPDATE service_state SET title = :title, description = :description WHERE id = :id;";
 
-    private static ServiceState fetchNext(ResultSet resultSet) throws SQLException{
+    private static ServiceState fetchNext(ResultSet resultSet) throws SQLException {
         if (!resultSet.next())
             return null;
 
@@ -22,7 +22,7 @@ public record ServiceState(Integer id,
         return new ServiceState(id, title, description);
     }
 
-    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException{
+    private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
         statement.setString("title", title);
         statement.setString("description", description);
     }
@@ -38,7 +38,7 @@ public record ServiceState(Integer id,
         statement.setInt("id", id());
     }
 
-    static public ServiceState[] fetchAll() throws SQLException{
+    static public ServiceState[] fetchAll() throws SQLException {
         return DatabaseHandler.fetchAll(getAllQuery, ServiceState::fetchNext);
     }
 
@@ -46,7 +46,7 @@ public record ServiceState(Integer id,
         return DatabaseHandler.fetchById(getServiceStateByIdQuery, id, ServiceState::fetchNext);
     }
 
-    public ServiceState update() throws SQLException{
+    public ServiceState update() throws SQLException {
         return DatabaseHandler.executeUpdateStatement(updateServiceStateQuery, this, ServiceState::fetchNext);
     }
 

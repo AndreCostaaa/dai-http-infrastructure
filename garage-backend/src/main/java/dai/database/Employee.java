@@ -158,7 +158,6 @@ public class Employee extends Person {
                     resultSet.next();
                     return this;
                 });
-
         return fetchById(this.getId());
     }
 

@@ -13,8 +13,10 @@ class CarPartTest extends GarageTest {
         CarPart carPart = CarPart.fetchOne(1);
 
         assertNotNull(carPart);
-        assertEquals(carPart, new CarPart(1, null, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30", "Motor Oil - 1L", 19.95, 29.95));
-        assertEquals(carPart, new CarPart(1, 0, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30", "Motor Oil - 1L", 19.95, 29.95));
+        assertEquals(carPart, new CarPart(1, null, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30",
+                "Motor Oil - 1L", 19.95, 29.95));
+        assertEquals(carPart, new CarPart(1, 0, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30", "Motor Oil - 1L",
+                19.95, 29.95));
     }
 
     @Test
@@ -52,18 +54,22 @@ class CarPartTest extends GarageTest {
 
     @Test
     void save() throws SQLException {
-        CarPart carPart = new CarPart(ghostId, 2, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30", "Motor Oil - 1L", 19.95, 29.95);
+        CarPart carPart = new CarPart(ghostId, 2, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30",
+                "Motor Oil - 1L", 19.95, 29.95);
 
         CarPart savedCarPart = carPart.save();
         assertNotNull(savedCarPart);
         assertEquals(savedCarPart,
-                new CarPart(19, carPart.serviceId(), carPart.supplier(), carPart.supplierRef(), carPart.name(), carPart.description(), carPart.buyPrice(), carPart.sellPrice()));
+                new CarPart(19, carPart.serviceId(), carPart.supplier(), carPart.supplierRef(), carPart.name(),
+                        carPart.description(), carPart.buyPrice(), carPart.sellPrice()));
     }
 
     @Test
     void update() throws SQLException {
         CarPart originalCarPart = CarPart.fetchOne(8);
-        CarPart updatedCarPart = new CarPart(originalCarPart.id(), originalCarPart.serviceId(), originalCarPart.supplier(), originalCarPart.supplierRef(), originalCarPart.name(), originalCarPart.description(), 14.95, originalCarPart.sellPrice());
+        CarPart updatedCarPart = new CarPart(originalCarPart.id(), originalCarPart.serviceId(),
+                originalCarPart.supplier(), originalCarPart.supplierRef(), originalCarPart.name(),
+                originalCarPart.description(), 14.95, originalCarPart.sellPrice());
         assertNotEquals(updatedCarPart, originalCarPart);
         assertEquals(updatedCarPart.update(), updatedCarPart);
 
@@ -81,5 +87,4 @@ class CarPartTest extends GarageTest {
         assertTrue(CarPart.delete(19));
         assertNull(CarPart.fetchOne(19));
     }
-
 }
