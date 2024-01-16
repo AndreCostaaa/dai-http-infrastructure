@@ -1,25 +1,27 @@
 package dai.database;
 
-
 import java.sql.*;
 
 public class Employee extends Person {
-    private int roleId;
+    private Integer roleId;
     private Integer specializationId;
 
-    public Employee(int id,
+    public Employee() {
+
+    }
+
+    public Employee(Integer id,
             String firstName,
             String lastName,
             String phoneNo,
-            int roleId,
+            Integer roleId,
             Integer specializationId) {
         super(id, firstName, lastName, phoneNo);
         this.roleId = roleId;
         this.specializationId = specializationId;
     }
 
-
-    public void setRoleId(int roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
@@ -27,7 +29,9 @@ public class Employee extends Person {
         this.specializationId = specializationId;
     }
 
-    public int getRoleId() { return roleId; }
+    public Integer getRoleId() {
+        return roleId;
+    }
 
     public Integer getSpecializationId() {
         return specializationId;
@@ -36,6 +40,7 @@ public class Employee extends Person {
     static final String getAllQuery = "SELECT * FROM employee AS e JOIN person p ON e.id = p.id JOIN role r ON e.role_id = r.id;",
             getEmployeeByIdQuery = "SELECT * FROM employee AS e JOIN person p ON e.id = p.id JOIN role r ON e.role_id = r.id WHERE e.id = :id;",
             getEveryMechanicQuery = "SELECT * FROM employee AS e JOIN person p ON e.id = p.id WHERE role_id IN (SELECT id FROM role WHERE is_mechanic = true);",
+            getEmployeeByPhoneNoQuery = "SELECT * FROM employee AS e JOIN person p ON p.id = e.id WHERE p.phone_no = :phone_no;",
             createEmployeeNotKnowingIdQuery = "WITH person_id AS (INSERT INTO person (fname, lname, phone_no) VALUES (:fname, :lname, :phone_no) RETURNING id) INSERT INTO employee (id, role_id, specialization_id) VALUES (person_id, :role_id, :specialization_id);",
             createEmployeeKnowingIdQuery = "INSERT INTO employee (id, role_id, specialization_id) VALUES (:id, :role_id, :specialization_id);",
             updateEmployeeQuery = "UPDATE employee SET role_id = :role_id, specialization_id = :specialization_id WHERE id = :id;",
@@ -51,7 +56,7 @@ public class Employee extends Person {
         if (employee == null)
             return null;
 
-        int roleId = resultSet.getInt("role_id");
+        Integer roleId = resultSet.getObject("role_id", Integer.class);
         Integer specializationId = resultSet.getObject("specialization_id", Integer.class);
 
         return new Employee(employee.getId(), employee.getFirstName(), employee.getLastName(), employee.getPhoneNo(),
@@ -59,11 +64,9 @@ public class Employee extends Person {
     }
 
     public void completeCommonStatement(NamedParameterStatement statement) throws SQLException {
-        statement.setInt("role_id", getRoleId());
-        if (specializationId == null || getSpecializationId() == 0)
-            statement.setNull("specialization_id", Types.INTEGER);
-        else
-            statement.setInt("specialization_id", getSpecializationId());
+        DatabaseHandler.checkIfNull(roleId, getRoleId(), statement, "role_id", Types.INTEGER);
+        DatabaseHandler.checkIfNull(specializationId, getSpecializationId(), statement, "specialization_id",
+                Types.INTEGER);
     }
 
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
@@ -82,7 +85,7 @@ public class Employee extends Person {
 
     /**
      * Fetch all Employees from the database.
-     * 
+     *
      * @return Employee[] or null
      */
     static public Employee[] fetchAll() throws SQLException {
@@ -91,17 +94,27 @@ public class Employee extends Person {
 
     /**
      * Fetch an Employee from the database matching the given id.
-     * 
+     *
      * @param id the id of the Employee to fetch
      * @return Employee or null
      */
-    static public Employee fetchById(int id) throws SQLException {
+    static public Employee fetchById(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getEmployeeByIdQuery, id, Employee::fetchNext);
     }
 
     /**
+     * Fetch an Employee from the database matching the given phone number.
+     *
+     * @param phoneNo the phoneNo of the Employee to fetch
+     * @return Employee or null
+     */
+    static public Employee[] fetchByPhoneNo(String phoneNo) throws SQLException {
+        return DatabaseHandler.fetchAllBy(getEmployeeByPhoneNoQuery, "phone_no", phoneNo, Employee::fetchNext);
+    }
+
+    /**
      * Fetch every Employee which has mechanic Role from the database.
-     * 
+     *
      * @return Employee[] or null
      */
     static public Employee[] fetchEveryMechanic() throws SQLException {
@@ -109,27 +122,34 @@ public class Employee extends Person {
     }
 
     /**
+     * Fetch every Employee which has mechanic Role from the database.
+     *
+     * @return Employee[] or null
+     */
+    static public Employee[] fetchEmployeeByPhoneNo() throws SQLException {
+        return DatabaseHandler.fetchAll(getEveryMechanicQuery, Employee::fetchNext);
+    }
+
+    /**
      * Save the Employee in the database without knowing the id.
-     * 
+     *
      * @return Employee or null
      */
     public Employee saveNotKnowingId() throws SQLException {
         // Create a person first
         Person person = new Person(getId(), getFirstName(), getLastName(), getPhoneNo());
         person = person.save();
-        // We can know complete the employee with all the values
+        // We can now complete the employee with all the values
         Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(),
-                person.getPhoneNo(),
-                roleId,
-                specializationId);
+                person.getPhoneNo(), roleId, specializationId);
 
-        // we now know the id
+        // We now know the id
         return employee.saveKnowingId();
     }
 
     /**
      * Save the Employee in the database knowing the id.
-     * 
+     *
      * @return Employee or null
      */
     public Employee saveKnowingId() throws SQLException {
@@ -138,12 +158,13 @@ public class Employee extends Person {
                     resultSet.next();
                     return this;
                 });
+
         return fetchById(this.getId());
     }
 
     /**
      * Update the Employee in the database.
-     * 
+     *
      * @return Employee or null
      */
     public Employee update() throws SQLException {
@@ -151,26 +172,22 @@ public class Employee extends Person {
         person = person.update();
 
         Employee employee = new Employee(person.getId(), person.getFirstName(), person.getLastName(),
-                person.getPhoneNo(),
-                roleId,
-                specializationId);
+                person.getPhoneNo(), roleId, specializationId);
 
-        return DatabaseHandler.executeUpdateStatement(updateEmployeeQuery,
-                employee,
+        return DatabaseHandler.executeUpdateStatement(updateEmployeeQuery, employee,
                 (ResultSet resultSet) -> {
                     resultSet.next();
                     return employee;
                 });
-
     }
 
     /**
      * Delete an Employee from the database matching the given id.
-     * 
+     *
      * @param id the id of the Employee to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteEmployeeQuery, id);
     }
 }

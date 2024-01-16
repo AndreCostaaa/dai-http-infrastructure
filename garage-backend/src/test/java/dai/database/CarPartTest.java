@@ -26,6 +26,24 @@ class CarPartTest extends GarageTest {
         for (CarPart carPart : carParts) {
             assertNotNull(carPart);
             assertInstanceOf(CarPart.class, carPart);
+            assertNotNull(carPart.id());
+            assertTrue(carPart.id() > 0);
+            assertTrue(carPart.buyPrice() >= 0);
+            assertTrue(carPart.sellPrice() >= 0);
+        }
+    }
+
+    @Test
+    void fetchByServiceId() throws SQLException {
+        save();
+        CarPart[] carParts = CarPart.fetchByServiceId(2);
+
+        assertNotNull(carParts);
+        assertEquals(1, carParts.length);
+        for (CarPart carPart : carParts) {
+            assertNotNull(carPart);
+            assertInstanceOf(CarPart.class, carPart);
+            assertNotNull(carPart.id());
             assertTrue(carPart.id() > 0);
             assertTrue(carPart.buyPrice() >= 0);
             assertTrue(carPart.sellPrice() >= 0);
@@ -63,4 +81,5 @@ class CarPartTest extends GarageTest {
         assertTrue(CarPart.delete(19));
         assertNull(CarPart.fetchOne(19));
     }
+
 }

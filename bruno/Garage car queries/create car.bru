@@ -1,0 +1,23 @@
+meta {
+  name: create car
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://localhost/api/cars
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "id": 13,
+      "ownerId": 1,
+      "chassisNo": "2R4RC1CG8FR628979",
+      "recType": "RF7YBL",
+      "brand": "Nissan",
+      "model": "Leaf",
+      "color": "black"
+  }
+}

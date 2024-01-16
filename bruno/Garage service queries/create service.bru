@@ -1,0 +1,48 @@
+meta {
+  name: create service
+  type: http
+  seq: 8
+}
+
+post {
+  url: https://localhost/api/services
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "car": {
+      "id": 4,
+      "ownerId": 3,
+      "chassisNo": "KMHCG45C42U350239",
+      "recType": "E2R9HK",
+      "brand": "Subaru",
+      "model": "Imprenza",
+      "color": "blue"
+    },
+    "client": {
+      "id": 3,
+      "firstName": "Yanis",
+      "lastName": "Ouadahi",
+      "phoneNo": "+41789147182",
+      "email": "yanis.ouadahi@heig-vd.ch",
+      "street": "Rue des Parcs",
+      "country": "Switzerland",
+      "streetNo": 232,
+      "npa": 1002
+    },
+    "mechanic": null,
+    "comments": "",
+    "dateCarArrival": null,
+    "dateCarDone": null,
+    "dateCarLeft": null,
+    "dateCarProcessing": null,
+    "dateCreated": "2024-01-16T21:35:08.282Z",
+    "hasPictures": false,
+    "hoursWorked": 0,
+    "state": {
+      "id": 1
+    }
+  }
+}

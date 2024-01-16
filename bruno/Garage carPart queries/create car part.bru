@@ -1,0 +1,24 @@
+meta {
+  name: create car part
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://localhost/api/carParts
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 2,
+    "serviceId": 0,
+    "supplier": "Motorex",
+    "supplierRef": "TS-X SAE 5W-30",
+    "name": "Concept TS-X SAE 5W-30",
+    "description": "Motor Oil - 60L",
+    "buyPrice": 199.95,
+    "sellPrice": 20.95
+  }
+}

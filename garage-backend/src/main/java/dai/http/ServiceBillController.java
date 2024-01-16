@@ -18,7 +18,7 @@ public class ServiceBillController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("serviceBillId"));
+        Integer id = Integer.parseInt(ctx.pathParam("serviceBillId"));
         ServiceBill bill = ServiceBill.fetchOne(id);
 
         if (bill == null) {
@@ -41,7 +41,7 @@ public class ServiceBillController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("serviceBillId"));
+        Integer id = Integer.parseInt(ctx.pathParam("serviceBillId"));
 
         if (ServiceBill.delete(id)) {
             ctx.status(204);

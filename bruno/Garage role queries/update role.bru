@@ -1,0 +1,21 @@
+meta {
+  name: update role
+  type: http
+  seq: 4
+}
+
+patch {
+  url: https://localhost/api/roles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 6,
+    "name": "Layabout",
+    "canCreate": true,
+    "canAssignOthers": false,
+    "isMechanic": false
+  }
+}

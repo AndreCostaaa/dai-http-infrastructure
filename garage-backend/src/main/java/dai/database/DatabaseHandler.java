@@ -8,11 +8,19 @@ public class DatabaseHandler {
         void completeStatement(T element, NamedParameterStatement statement) throws SQLException;
     }
 
+    static protected void checkIfNull(Integer object, Integer objectValue, NamedParameterStatement statement, String objectName,
+            int sqlType) throws SQLException {
+        if (object == null || objectValue.equals(0))
+            statement.setNull(objectName, sqlType);
+        else
+            statement.setInt(objectName, objectValue);
+    }
+
     static private String addReturningToQuery(String query) {
         return query.replace(";", " RETURNING *;");
     }
 
-    static public boolean deleteById(String stringQuery, int id) throws SQLException {
+    static public boolean deleteById(String stringQuery, Integer id) throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             statement.setInt("id", id);
@@ -46,9 +54,23 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T> T[] fetchAllByTwoParams(String stringQuery, String key1, int value1,
-                                     String key2, int value2,
-                                     ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
+    static public <T> T[] fetchAllBy(String stringQuery, String key, Integer value,
+            ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
+        try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
+                (stringQuery))) {
+            statement.setInt(key, value);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                var resultSetHandler = new ResultSetHandler<>(resultSet, iresultSetHandler);
+
+                return resultSetHandler.fetchAll();
+            }
+        }
+    }
+
+    static public <T> T[] fetchAllByTwoParams(String stringQuery, String key1, Integer value1,
+            String key2, Integer value2,
+            ResultSetHandler.IResultSetHandler<T> iresultSetHandler) throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             statement.setInt(key1, value1);
@@ -62,8 +84,8 @@ public class DatabaseHandler {
         }
     }
 
-
-    static public <T> T fetchById(String stringQuery, int id, ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
+    static public <T> T fetchById(String stringQuery, Integer id,
+            ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
             throws SQLException {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
@@ -86,6 +108,16 @@ public class DatabaseHandler {
             try (ResultSet resultSet = statement.executeQuery()) {
                 return iresultSetHandler.fetchNext(resultSet);
             }
+        }
+    }
+
+    static public void executeIncrementStateStatement(String stringQuery, Integer id) throws SQLException {
+        stringQuery = addReturningToQuery(stringQuery);
+        try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
+                (stringQuery))) {
+
+            statement.setInt("id", id);
+            statement.executeQuery();
         }
     }
 

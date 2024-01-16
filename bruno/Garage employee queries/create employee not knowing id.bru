@@ -1,0 +1,22 @@
+meta {
+  name: create employee not knowing id
+  type: http
+  seq: 4
+}
+
+post {
+  url: https://localhost/api/employees
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 1,
+    "firstName": "Joe",
+    "lastName": "Biden",
+    "phoneNo": "244303309",
+    "roleId": 5,
+    "specializationId": null
+  }
+}

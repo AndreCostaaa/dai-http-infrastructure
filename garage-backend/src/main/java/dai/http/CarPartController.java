@@ -1,5 +1,6 @@
 package dai.http;
 
+import dai.database.Car;
 import dai.database.CarPart;
 import io.javalin.http.Context;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public class CarPartController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("carPartId"));
+        Integer id = Integer.parseInt(ctx.pathParam("carPartId"));
         CarPart carPart = CarPart.fetchOne(id);
 
         if (carPart == null) {
@@ -29,30 +30,43 @@ public class CarPartController {
         ctx.json(carPart);
     }
 
-    public void save(Context ctx) throws SQLException {
-        CarPart carPart = ctx.bodyAsClass(CarPart.class);
+    public void fetchByServiceId(Context ctx) throws SQLException {
+        Integer serviceId = Integer.parseInt(ctx.pathParam("serviceId"));
+        CarPart[] carParts = CarPart.fetchByServiceId(serviceId);
 
-        if (carPart.save() != null) {
-            ctx.status(201);
+        if (carParts.length == 0) {
+            ctx.status(404);
             return;
         }
 
-        ctx.status(400);
+        ctx.json(carParts);
+    }
+
+    public void save(Context ctx) throws SQLException {
+        CarPart carPart = ctx.bodyAsClass(CarPart.class);
+        carPart = carPart.save();
+
+        if (carPart == null) {
+            ctx.status(400);
+            return;
+        }
+
+        ctx.json(carPart);
     }
 
     public void update(Context ctx) throws SQLException {
         CarPart carPart = ctx.bodyAsClass(CarPart.class);
 
-        if (carPart.update() != null) {
-            ctx.status(200);
+        if (carPart.update() == null) {
+            ctx.status(400);
             return;
         }
 
-        ctx.status(400);
+        ctx.json(carPart);
     }
 
     public void delete(Context ctx) throws SQLException {
-        int carPartId = Integer.parseInt(ctx.pathParam("carPartId"));
+        Integer carPartId = Integer.parseInt(ctx.pathParam("carPartId"));
 
         if (CarPart.delete(carPartId)) {
             ctx.status(204);

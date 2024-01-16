@@ -26,7 +26,9 @@ class EmployeeTest extends GarageTest {
         for (Employee employee : employees) {
             assertNotNull(employee);
             assertInstanceOf(Employee.class, employee);
+            assertNotNull(employee.getId());
             assertTrue(employee.getId() > 0);
+            assertNotNull(employee.getRoleId());
             assertTrue(employee.getRoleId() > 0);
         }
     }

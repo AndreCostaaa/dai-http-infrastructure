@@ -1,0 +1,29 @@
+meta {
+  name: update service
+  type: http
+  seq: 9
+}
+
+patch {
+  url: https://localhost/api/services
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 364,
+    "mechanicId": 3,
+    "clientId": 4,
+    "carId": 12,
+    "hoursWorked": 1000,
+    "comments": "how long can this go on",
+    "hasPictures": false,
+    "stateId": 3,
+    "dateCreated": 1705014000000,
+    "dateCarArrival": 1705014000000,
+    "dateCarProcessing": null,
+    "dateCarDone": null,
+    "dateCarLeft": null
+  }
+}

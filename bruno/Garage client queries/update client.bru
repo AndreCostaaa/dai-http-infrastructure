@@ -1,0 +1,25 @@
+meta {
+  name: update client
+  type: http
+  seq: 6
+}
+
+patch {
+  url: https://localhost/api/clients
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": 13,
+    "firstName": "John",
+    "lastName": "Doever",
+    "phoneNo": "244303309",
+    "email": "rene@prg2.ch",
+    "street": "rue",
+    "country": "Suisse",
+    "streetNo": 4,
+    "npa": 1024
+  }
+}
