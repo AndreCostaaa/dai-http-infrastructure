@@ -31,15 +31,15 @@ public class EmployeeController {
     }
 
     public void fetchByPhoneNo(Context ctx) throws SQLException {
-        Integer phoneNo = Integer.parseInt(ctx.pathParam("phoneNo"));
-        Employee employee = Employee.fetchByPhoneNo(phoneNo);
+        String phoneNo = ctx.pathParam("phoneNo");
+        Employee[] employee = Employee.fetchByPhoneNo(phoneNo);
 
-        if (employee == null) {
+        if (employee.length == 0) {
             ctx.status(404);
             return;
         }
 
-        ctx.json(employee);
+        ctx.json(employee[0]);
     }
 
     public void fetchMechanics(Context ctx) throws SQLException {

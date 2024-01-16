@@ -1,8 +1,6 @@
 package dai.database;
 
 import java.sql.*;
-import java.util.function.Function;
-import java.util.logging.Handler;
 
 public class DatabaseHandler {
 
@@ -18,14 +16,6 @@ public class DatabaseHandler {
             statement.setInt(objectName, (Integer) objectValue);
         else if (object instanceof Double)
             statement.setDouble(objectName, (Double) objectValue);
-    }
-
-    static protected void checkIfNull(Double object, Double objectValue, NamedParameterStatement statement,
-            String objectName) throws SQLException {
-        if (object == null || objectValue == 0.0)
-            statement.setNull(objectName, Types.DOUBLE);
-        else
-            statement.setDouble(objectName, objectValue);
     }
 
     static private String addReturningToQuery(String query) {
@@ -123,12 +113,11 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T extends IEntity> T executeIncrementStateStatement(String stringQuery, Integer id,
-            ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
-            throws SQLException {
+    static public void executeIncrementStateStatement(String stringQuery, Integer id) throws SQLException {
         stringQuery = addReturningToQuery(stringQuery);
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
+
             statement.setInt("id", id);
             statement.executeQuery();
         }

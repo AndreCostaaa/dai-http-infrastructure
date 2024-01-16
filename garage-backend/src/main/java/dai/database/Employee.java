@@ -108,8 +108,8 @@ public class Employee extends Person {
      * @param phoneNo the phoneNo of the Employee to fetch
      * @return Employee or null
      */
-    static public Employee fetchByPhoneNo(String phoneNo) throws SQLException {
-        return DatabaseHandler.fetchByPhoneNo(getEmployeeByPhoneNoQuery, phoneNo, Employee::fetchNext);
+    static public Employee[] fetchByPhoneNo(String phoneNo) throws SQLException {
+        return DatabaseHandler.fetchAllBy(getEmployeeByPhoneNoQuery, "phone_no", phoneNo, Employee::fetchNext);
     }
 
     /**

@@ -34,6 +34,23 @@ class CarPartTest extends GarageTest {
     }
 
     @Test
+    void fetchByServiceId() throws SQLException {
+        save();
+        CarPart[] carParts = CarPart.fetchByServiceId(2);
+
+        assertNotNull(carParts);
+        assertEquals(1, carParts.length);
+        for (CarPart carPart : carParts) {
+            assertNotNull(carPart);
+            assertInstanceOf(CarPart.class, carPart);
+            assertNotNull(carPart.id());
+            assertTrue(carPart.id() > 0);
+            assertTrue(carPart.buyPrice() >= 0);
+            assertTrue(carPart.sellPrice() >= 0);
+        }
+    }
+
+    @Test
     void save() throws SQLException {
         CarPart carPart = new CarPart(ghostId, 2, "Motorex", "TS-X SAE 5W-30", "Concept TS-X SAE 5W-30", "Motor Oil - 1L", 19.95, 29.95);
 
@@ -64,4 +81,5 @@ class CarPartTest extends GarageTest {
         assertTrue(CarPart.delete(19));
         assertNull(CarPart.fetchOne(19));
     }
+
 }

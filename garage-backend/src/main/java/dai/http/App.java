@@ -30,6 +30,7 @@ public class App {
         CarPartController carPartController = new CarPartController();
         app.get("/api/carParts", carPartController::fetchAll);
         app.get("/api/carParts/{carPartId}", carPartController::fetchOne);
+        app.get("/api/carParts/service/{serviceId}", carPartController::fetchByServiceId);
         app.post("/api/carParts", carPartController::save);
         app.patch("/api/carParts", carPartController::update);
         app.delete("/api/carParts/{carPartId}", carPartController::delete);

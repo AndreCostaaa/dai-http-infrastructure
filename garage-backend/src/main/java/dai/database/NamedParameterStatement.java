@@ -171,12 +171,15 @@ public class NamedParameterStatement implements AutoCloseable {
      * @throws IllegalArgumentException if the parameter does not exist
      * @see PreparedStatement#setInt(int, int)
      */
-    public void setInt(String name, int value) throws SQLException {
+    public void setInt(String name, Integer value) throws SQLException {
         int[] indexes = getIndexes(name);
 
-        for (int index : indexes) {
-            statement.setInt(index, value);
-        }
+        if (value == null || value.equals(0))
+            for (int index : indexes)
+                statement.setNull(index, Types.INTEGER);
+        else
+            for (int index : indexes)
+                statement.setInt(index, value);
     }
 
     /**
@@ -221,12 +224,15 @@ public class NamedParameterStatement implements AutoCloseable {
      * @throws IllegalArgumentException if the parameter does not exist
      * @see PreparedStatement#setInt(int, int)
      */
-    public void setDouble(String name, double value) throws SQLException {
+    public void setDouble(String name, Double value) throws SQLException {
         int[] indexes = getIndexes(name);
 
-        for (int index : indexes) {
-            statement.setDouble(index, value);
-        }
+        if (value == null || value.equals(0.0))
+            for (int index : indexes)
+                statement.setNull(index, Types.DOUBLE);
+        else
+            for (int index : indexes)
+                statement.setDouble(index, value);
     }
 
     /**

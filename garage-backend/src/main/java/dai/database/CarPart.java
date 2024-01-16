@@ -33,6 +33,7 @@ public record CarPart(Integer id,
 
     static final String getAllQuery = "SELECT * FROM car_part;",
             getCarPartByIdQuery = "SELECT * FROM car_part WHERE id = :id;",
+            getCarPartByServiceIdQuery = "SELECT * FROM car_part WHERE service_id = :service_id;",
             createCarPartQuery = "INSERT INTO car_part(service_id, supplier, supplier_ref, name, description, buy_price, sell_price) VALUES (:service_id, :supplier, :supplier_ref, :name, :description, :buy_price, :sell_price);",
             updateCarPartQuery = "UPDATE car_part SET service_id = :service_id, supplier = :supplier, supplier_ref = :supplier_ref, name = :name, description = :description, buy_price = :buy_price, sell_price = :sell_price WHERE id = :id;",
             deleteCarPartQuery = "DELETE FROM car_part WHERE id = :id;";
@@ -89,6 +90,16 @@ public record CarPart(Integer id,
      */
     static public CarPart fetchOne(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getCarPartByIdQuery, id, CarPart::fetchNext);
+    }
+
+    /**
+     * Fetch all CarParts from the database matching the given serviceId.
+     *
+     * @param serviceId the id of the Service to fetch CarParts for
+     * @return CarPart[] or null
+     */
+    static public CarPart[] fetchByServiceId(Integer serviceId) throws SQLException {
+        return DatabaseHandler.fetchAllBy(getCarPartByServiceIdQuery, "service_id", serviceId, CarPart::fetchNext);
     }
 
     /**
