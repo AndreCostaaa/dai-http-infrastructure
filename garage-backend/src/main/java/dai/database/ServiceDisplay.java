@@ -16,7 +16,8 @@ public record ServiceDisplay(int id,
                       Date dateCarArrival,
                       Date dateCarProcessing,
                       Date dateCarDone,
-                      Date dateCarLeft)  {
+                      Date dateCarLeft,
+                      ServiceState nextState)  {
     static ServiceDisplay fetchNext(ResultSet resultSet) throws SQLException {
         if (!resultSet.next())
             return null;
@@ -30,7 +31,7 @@ public record ServiceDisplay(int id,
         int roleId = resultSet.getInt("role_id");
         int specializationId = resultSet.getInt("specialization_id");
 
-        Employee mechanic = new Employee(mechanicId, mechanicFirstName, mechanicLastName, mechanicPhone, roleId, specializationId);
+        Employee mechanic = mechanicId == 0 ? null : new Employee(mechanicId, mechanicFirstName, mechanicLastName, mechanicPhone, roleId, specializationId);
 
         int clientId = resultSet.getInt("client_id");
         String clientFirstName = resultSet.getString("client_fname");
@@ -70,6 +71,8 @@ public record ServiceDisplay(int id,
         Date dateCarDone = resultSet.getDate("date_car_done");
         Date dateCarLeft = resultSet.getDate("date_car_left");
 
+        ServiceState nextState = ServiceState.fetchById(stateId + 1);
+
         return new ServiceDisplay(id,
                 mechanic,
                 client,
@@ -82,6 +85,7 @@ public record ServiceDisplay(int id,
                 dateCarArrival,
                 dateCarProcessing,
                 dateCarDone,
-                dateCarLeft);
+                dateCarLeft,
+                nextState);
     }
 }

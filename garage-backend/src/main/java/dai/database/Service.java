@@ -17,13 +17,13 @@ public record Service(Integer id,
         Date dateCarDone,
         Date dateCarLeft) implements IEntity {
 
-    static final String getAllQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id;",
-            getServiceByIdQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE s.id = :id;",
-            getServiceByCarQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE car_id = :car_id;",
-            getServiceByCarStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE car_id = :car_id AND state_id = :state_id;",
-            getServiceByMechanicQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE mechanic_id = :mechanic_id;",
-            getServiceByMechanicStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE mechanic_id = :mechanic_id AND state_id = :state_id;",
-            getServiceByStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s JOIN employee e on s.mechanic_id = e.id JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE state_id = :state_id;",
+    static final String getAllQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s LEFT JOIN employee e on s.mechanic_id = e.id LEFT JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id;",
+            getServiceByIdQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s LEFT JOIN employee e on s.mechanic_id = e.id LEFT JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE s.id = :id;",
+            getServiceByCarQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s LEFT JOIN employee e on s.mechanic_id = e.id LEFT JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE car_id = :car_id;",
+            getServiceByCarStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s LEFT JOIN employee e on s.mechanic_id = e.id LEFT JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE car_id = :car_id AND state_id = :state_id;",
+            getServiceByMechanicQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s LEFT JOIN employee e on s.mechanic_id = e.id LEFT JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE mechanic_id = :mechanic_id;",
+            getServiceByMechanicStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s LEFT JOIN employee e on s.mechanic_id = e.id LEFT JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE mechanic_id = :mechanic_id AND state_id = :state_id;",
+            getServiceByStateQuery = "SELECT *, p1.fname AS mechanic_fname, p1.lname AS mechanic_lname, p1.phone_no AS mechanic_phone, p2.fname AS client_fname, p2.lname AS client_lname, p2.phone_no AS client_phone FROM service s LEFT JOIN employee e on s.mechanic_id = e.id LEFT JOIN person p1 ON e.id = p1.id JOIN client cl on s.client_id = cl.id JOIN person p2 ON cl.id = p2.id JOIN car c on s.car_id = c.id JOIN service_state ss on s.state_id = ss.id WHERE state_id = :state_id;",
             createServiceQuery = "INSERT INTO service (mechanic_id, client_id, car_id, hours_worked, comments, has_pictures, state_id, date_car_arrival, date_car_processing, date_car_done, date_car_left) VALUES (:mechanic_id, :client_id, :car_id, 0, '', false, 0, NULL, NULL, NULL, NULL);",
             updateServiceQuery = "UPDATE service SET mechanic_id  = :mechanic_id, hours_worked = :hours_worked, comments = :comments, has_pictures = :has_pictures WHERE id = :id;",
             incrementStateQuery = "UPDATE service SET state_id = state_id + 1 WHERE id = :id;",
@@ -32,7 +32,7 @@ public record Service(Integer id,
     /**
      * creates a Service with the parameters used for the insert query
      */
-    public static Service serviceForCreate(int mechanicId, int clientId, int carId) {
+    public static Service serviceForCreate(Integer mechanicId, int clientId, int carId) {
         return new Service(0,
                 mechanicId,
                 clientId,
@@ -54,7 +54,7 @@ public record Service(Integer id,
      * tells us
      * which service to update
      */
-    public static Service serviceForUpdate(int id, int mechanicId, int hoursWorked, String comments,
+    public static Service serviceForUpdate(int id, Integer mechanicId, int hoursWorked, String comments,
             boolean hasPictures) {
         return new Service(id,
                 mechanicId,
@@ -83,12 +83,17 @@ public record Service(Integer id,
         String comments = resultSet.getString("comments");
         boolean hasPictures = resultSet.getBoolean("has_pictures");
         Integer stateId = resultSet.getObject("state_id", Integer.class);
-        Date dateCreated = new Date(resultSet.getTimestamp("date_created").getTime());
-        Date dateCarArrival = new Date(resultSet.getTimestamp("date_car_arrival").getTime());
-        Date dateCarProcessing = new Date(resultSet.getTimestamp("date_car_processing").getTime());
-        Date dateCarDone = new Date(resultSet.getTimestamp("date_car_done").getTime());
-        Date dateCarLeft = new Date(resultSet.getTimestamp("date_car_left").getTime());
 
+        Date[] dates = new Date[5];
+        String[] keys = { "date_created", "date_car_arrival", "date_car_processing", "date_car_done", "date_car_left" };
+
+        for (int i = 0; i < dates.length; ++i) {
+            Timestamp ts = resultSet.getTimestamp(keys[i]);
+            if (ts == null) {
+                continue;
+            }
+            dates[i] = new Date(ts.getTime());
+        }
         return new Service(id,
                 mechanicId,
                 clientId,
@@ -97,11 +102,11 @@ public record Service(Integer id,
                 comments,
                 hasPictures,
                 stateId,
-                dateCreated,
-                dateCarArrival,
-                dateCarProcessing,
-                dateCarDone,
-                dateCarLeft);
+                dates[0],
+                dates[1],
+                dates[2],
+                dates[3],
+                dates[4]);
     }
 
     @Override
