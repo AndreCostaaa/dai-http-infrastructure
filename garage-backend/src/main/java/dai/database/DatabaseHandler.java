@@ -130,7 +130,10 @@ public class DatabaseHandler {
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
             statement.setInt("id", id);
-            statement.executeQuery();
+            try(ResultSet resultSet = statement.executeQuery())
+            {
+                return iresultSetHandler.fetchNext(resultSet);
+            }
         }
     }
 
