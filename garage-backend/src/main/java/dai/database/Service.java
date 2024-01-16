@@ -54,7 +54,7 @@ public record Service(Integer id,
      * tells us
      * which service to update
      */
-    public static Service serviceForUpdate(int id, int mechanicId, int hoursWorked, String comments,
+    public static Service serviceForUpdate(int id, Integer mechanicId, int hoursWorked, String comments,
             boolean hasPictures) {
         return new Service(id,
                 mechanicId,
