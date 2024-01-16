@@ -2,7 +2,7 @@ package dai.database;
 
 import java.sql.*;
 
-public record Role(int id,
+public record Role(Integer id,
         String name,
         boolean canCreate,
         boolean canAssignOthers,
@@ -18,7 +18,7 @@ public record Role(int id,
         if (!resultSet.next())
             return null;
 
-        int id = resultSet.getInt("id");
+        Integer id = resultSet.getObject("id", Integer.class);
         String name = resultSet.getString("name");
         boolean canCreate = resultSet.getBoolean("can_create");
         boolean canAssignOthers = resultSet.getBoolean("can_assign_others");
@@ -62,7 +62,7 @@ public record Role(int id,
      * @param id the id of the Role to fetch
      * @return Role or null
      */
-    static public Role fetchOne(int id) throws SQLException {
+    static public Role fetchOne(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getRoleByIdQuery, id, Role::fetchNext);
     }
 
@@ -91,7 +91,7 @@ public record Role(int id,
      * @param id the id of the Role to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteRoleQuery, id);
     }
 }

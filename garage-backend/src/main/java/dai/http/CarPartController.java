@@ -18,7 +18,7 @@ public class CarPartController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("carPartId"));
+        Integer id = Integer.parseInt(ctx.pathParam("carPartId"));
         CarPart carPart = CarPart.fetchOne(id);
 
         if (carPart == null) {
@@ -32,10 +32,12 @@ public class CarPartController {
     public void save(Context ctx) throws SQLException {
         CarPart carPart = ctx.bodyAsClass(CarPart.class);
         carPart = carPart.save();
+
         if (carPart == null) {
             ctx.status(400);
             return;
         }
+
         ctx.json(carPart);
     }
 
@@ -46,11 +48,12 @@ public class CarPartController {
             ctx.status(400);
             return;
         }
+
         ctx.json(carPart);
     }
 
     public void delete(Context ctx) throws SQLException {
-        int carPartId = Integer.parseInt(ctx.pathParam("carPartId"));
+        Integer carPartId = Integer.parseInt(ctx.pathParam("carPartId"));
 
         if (CarPart.delete(carPartId)) {
             ctx.status(204);

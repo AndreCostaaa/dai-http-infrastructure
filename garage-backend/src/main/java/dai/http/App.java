@@ -21,6 +21,7 @@ public class App {
         CarController carController = new CarController();
         app.get("/api/cars", carController::fetchAll);
         app.get("/api/cars/{carId}", carController::fetchOne);
+        app.get("/api/cars/owner/{ownerId}", carController::fetchByOwnerId);
         app.post("/api/cars", carController::save);
         app.patch("/api/cars", carController::update);
         app.delete("/api/cars/{carId}", carController::delete);
@@ -47,6 +48,7 @@ public class App {
         EmployeeController employeeController = new EmployeeController();
         app.get("/api/employees", employeeController::fetchAll);
         app.get("/api/employees/{employeeId}", employeeController::fetchOne);
+        app.get("/api/employees/phone/{phoneNo}", employeeController::fetchByPhoneNo);
         app.get("/api/mechanics", employeeController::fetchMechanics);
         app.post("/api/employees", employeeController::saveNotKnowingId);
         app.post("/api/employees/knownId/", employeeController::saveKnowingId);

@@ -2,8 +2,8 @@ package dai.database;
 
 import java.sql.*;
 
-public record Car(int id,
-        int ownerId,
+public record Car(Integer id,
+        Integer ownerId,
         String chassisNo,
         String recType,
         String brand,
@@ -12,6 +12,7 @@ public record Car(int id,
 
     static final String getAllCarsQuery = "SELECT * FROM car;",
             getCarByIdQuery = "SELECT * FROM car WHERE id = :id;",
+            getCarByOwnerIdQuery = "SELECT * FROM car WHERE owner_id = :owner_id;",
             createCarQuery = "INSERT INTO car(owner_id, chassis_no, rec_type, brand, model, color) VALUES (:owner_id, :chassis_no, :rec_type, :brand, :model, :color);",
             updateCarQuery = "UPDATE car SET owner_id = :owner_id, chassis_no = :chassis_no, rec_type = :rec_type, brand = :brand, model = :model, color = :color WHERE id = :id;",
             deleteCarQuery = "DELETE FROM car WHERE id = :id;";
@@ -24,8 +25,8 @@ public record Car(int id,
         if (!resultSet.next())
             return null;
 
-        int id = resultSet.getInt("id");
-        int ownerId = resultSet.getInt("owner_id");
+        Integer id = resultSet.getObject("id", Integer.class);
+        Integer ownerId = resultSet.getObject("owner_id", Integer.class);
         String chassisNo = resultSet.getString("chassis_no");
         String recType = resultSet.getString("rec_type");
         String brand = resultSet.getString("brand");
@@ -36,13 +37,12 @@ public record Car(int id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        statement.setInt("owner_id", ownerId());
+        DatabaseHandler.checkIfNull(ownerId, ownerId(), statement, "owner_id", Types.DOUBLE);
         statement.setString("chassis_no", chassisNo());
         statement.setString("rec_type", recType());
         statement.setString("brand", brand());
         statement.setString("model", model());
         statement.setString("color", color());
-
     }
 
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
@@ -69,8 +69,18 @@ public record Car(int id,
      * @param id the id of the Car to fetch
      * @return Car or null
      */
-    static public Car fetchOne(int id) throws SQLException {
+    static public Car fetchOne(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getCarByIdQuery, id, Car::fetchNext);
+    }
+
+    /**
+     * Fetch all Cars from the database matching the given owenerId.
+     *
+     * @param ownerId the id of the Client to fetch Cars for
+     * @return Car[] or null
+     */
+    static public Car[] fetchByOwnerId(Integer ownerId) throws SQLException {
+        return DatabaseHandler.fetchAllBy(getCarByOwnerIdQuery, "owner_id", ownerId, Car::fetchNext);
     }
 
     /**
@@ -97,7 +107,7 @@ public record Car(int id,
      * @param id the id of the Car to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteCarQuery, id);
     }
 

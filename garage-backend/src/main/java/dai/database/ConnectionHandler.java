@@ -35,7 +35,6 @@ public class ConnectionHandler {
             String schema = System.getenv("JDBC_SCHEMA");
 
             connection = createConnection(dbms, url, dbName, user, password, schema);
-
         }
         return connection;
     }
