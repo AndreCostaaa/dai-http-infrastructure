@@ -78,5 +78,6 @@ public class App {
         app.get("/api/serviceBills/{serviceBillId}", serviceBillController::fetchOne);
         app.patch("/api/serviceBills", serviceBillController::update);
         app.delete("/api/serviceBills/{serviceBillId}", serviceBillController::delete);
+        app.post("/api/serviceBills/{serviceBillId}", serviceBillController::send);
     }
 }

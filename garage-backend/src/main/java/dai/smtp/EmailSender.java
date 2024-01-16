@@ -5,35 +5,23 @@
 package dai.smtp;
 
 import java.util.Date;
-import java.io.UnsupportedEncodingException;
 
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.mail.BodyPart;
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 
 import java.util.Properties;
 
-import javax.mail.Session;
-
 public class EmailSender {
 
-    final static String password = "mypassword";
-    final static String fromEmail = "myemailid@gmail.com";
+    final static String password = "pnol clkt rrlo mhcp";
+    final static String fromEmail = "groupe8bdr24@gmail.com";
     public static void tlsEmailSend(String toEmail, String subject, String body) {
-        toEmail = "myemail@yahoo.com"; // temp
 
         System.out.println("TLSEmail Start");
         Properties props = new Properties();
@@ -51,7 +39,7 @@ public class EmailSender {
         };
         Session session = Session.getInstance(props, auth);
 
-        sendEmail(session, toEmail,"TLSEmail Testing Subject", "TLSEmail Testing Body");
+        sendEmail(session, toEmail,subject, body);
 
     }
 
@@ -80,8 +68,7 @@ public class EmailSender {
 
             System.out.println("EMail Sent Successfully!!");
         }
-        catch (Exception e) {
-            return;
+        catch (Exception ignored) {
         }
     }
 
