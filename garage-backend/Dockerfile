@@ -1,8 +1,19 @@
-FROM openjdk:21-slim
+FROM maven:3.9.6-eclipse-temurin-21 as builder
 
 
 WORKDIR /app
+COPY ./src ./src
+RUN rm -r ./src/test
+COPY ./pom.xml ./pom.xml 
 
-COPY target/*.jar ./app.jar
+RUN mvn clean package
 
-CMD ["java", "-jar", "app.jar"]
+FROM openjdk:21-slim
+
+EXPOSE 5000
+
+WORKDIR /app
+
+COPY --from=builder /app/target/app.jar app.jar
+
+CMD ["java", "-jar","app.jar"]

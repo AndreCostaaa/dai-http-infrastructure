@@ -18,7 +18,7 @@ public class RoleController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("roleId"));
+        Integer id = Integer.parseInt(ctx.pathParam("roleId"));
         Role role = Role.fetchOne(id);
 
         if (role == null) {
@@ -32,10 +32,13 @@ public class RoleController {
     public void save(Context ctx) throws SQLException {
         Role role = ctx.bodyAsClass(Role.class);
         role = role.save();
+
         if (role == null) {
             ctx.status(400);
+
             return;
         }
+
         ctx.json(role);
     }
 
@@ -49,7 +52,7 @@ public class RoleController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("roleId"));
+        Integer id = Integer.parseInt(ctx.pathParam("roleId"));
 
         if (Role.delete(id)) {
             ctx.status(204);

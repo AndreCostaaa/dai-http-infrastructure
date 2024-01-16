@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 public class PersonController {
 
-
     public void fetchAll(Context ctx) throws SQLException {
         Person[] people = Person.fetchAll();
 
@@ -18,9 +17,8 @@ public class PersonController {
         ctx.json(people);
     }
 
-
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("personId"));
+        Integer id = Integer.parseInt(ctx.pathParam("personId"));
         Person person = Person.fetchById(id);
 
         if (person == null) {
@@ -51,13 +49,12 @@ public class PersonController {
     }
 
     public void delete(Context ctx) throws SQLException {
-        int personId = Integer.parseInt(ctx.pathParam("personId"));
+        Integer personId = Integer.parseInt(ctx.pathParam("personId"));
         boolean success = false;
 
-        try{
+        try {
             success = Person.delete(personId);
-        }
-        catch(SQLException e){
+        } catch (SQLException e) {
             String[] errorMessage = e.getMessage().split(": ");
             ctx.result(errorMessage[0] + ": " + errorMessage[2]);
         }

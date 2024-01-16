@@ -1,25 +1,48 @@
 version: "3.8"
+
+volumes:
+  database-volume:
+    external: false
+
 services:
+  reverse-proxy:
+    image: traefik:v2.10
+    ports:
+      - 80:80
+      - 443:443
+      - 8081:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./ssl:/etc/traefik/certificates
+      - ./traefik/conf.yaml:/etc/traefik/traefik.yaml
   database:
     image: "bitnami/postgresql:13"
     env_file:
       - .env
+    volumes:
+      - database-volume:/bitnami/postgresql
     ports:
       - 127.0.0.1:5434:5432
   backend:
     image: garage/back-end
     build:
-      context: garage-backend
+      context: ./garage-backend
+      dockerfile: ./Dockerfile
     env_file:
       - .env
-    ports:
-      - 7000:7000
-  front-end:
+    volumes:
+      - ./backend-media:/app/media
+    labels:
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api/`)"
+      - "traefik.http.services.backend-service.loadBalancer.sticky.cookie=true"
+      - "traefik.http.services.backend-service.loadBalancer.sticky.cookie.name=api_session"
+      - "traefik.http.routers.backend.tls=true"
+  frontend:
     container_name: garage-front-end
     image: garage/front-end
     build:
       context: ./garage-frontend
       dockerfile: ./Dockerfile
-    ports:
-      - 5111:80
-
+    labels:
+      - "traefik.http.routers.frontend.rule=Host(`localhost`)"
+      - "traefik.http.routers.frontend.tls=true"

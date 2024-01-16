@@ -7,21 +7,21 @@ public class Client extends Person {
     private String email;
     private String street;
     private String country;
-    private int streetNo;
-    private int npa;
+    private Integer streetNo;
+    private Integer npa;
 
-    public Client(){
+    public Client() {
         super();
     }
 
-    public Client(int id,
+    public Client(Integer id,
             String firstName,
             String lastName,
             String phoneNo,
             String email,
             String street,
-            int streetNo,
-            int npa,
+            Integer streetNo,
+            Integer npa,
             String country) {
         super(id, firstName, lastName, phoneNo);
         this.email = email;
@@ -43,11 +43,11 @@ public class Client extends Person {
         this.street = street;
     }
 
-    public void setStreetNo(int streetNo) {
+    public void setStreetNo(Integer streetNo) {
         this.streetNo = streetNo;
     }
 
-    public void setNpa(int npa) {
+    public void setNpa(Integer npa) {
         this.npa = npa;
     }
 
@@ -59,11 +59,11 @@ public class Client extends Person {
         return street;
     }
 
-    public int getStreetNo() {
+    public Integer getStreetNo() {
         return streetNo;
     }
 
-    public int getNpa() {
+    public Integer getNpa() {
         return npa;
     }
 
@@ -87,15 +87,16 @@ public class Client extends Person {
             return super.equals(otherClient)
                     && getEmail().equals(otherClient.getEmail())
                     && getStreet().equals(otherClient.getStreet())
-                    && getStreetNo() == otherClient.getStreetNo()
-                    && getNpa() == otherClient.getNpa()
+                    && getStreetNo().equals(otherClient.getStreetNo())
+                    && getNpa().equals(otherClient.getNpa())
                     && getCountry().equals(otherClient.getCountry());
         }
         return false;
     }
 
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo(), getEmail(), getStreet(), getStreetNo(),
+        return Objects.hash(getId(), getFirstName(), getLastName(), getPhoneNo(), getEmail(), getStreet(),
+                getStreetNo(),
                 getNpa(),
                 getCountry());
     }
@@ -112,8 +113,8 @@ public class Client extends Person {
 
         String email = resultSet.getString("email");
         String street = resultSet.getString("street");
-        int streetNo = resultSet.getInt("street_no");
-        int npa = resultSet.getInt("npa");
+        Integer streetNo = resultSet.getObject("street_no", Integer.class);
+        Integer npa = resultSet.getObject("npa", Integer.class);
         String country = resultSet.getString("country");
 
         return new Client(client.getId(), client.getFirstName(), client.getLastName(), client.getPhoneNo(),
@@ -123,8 +124,8 @@ public class Client extends Person {
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
         statement.setString("email", getEmail());
         statement.setString("street", getStreet());
-        statement.setInt("street_no", getStreetNo());
-        statement.setInt("npa", getNpa());
+        DatabaseHandler.checkIfNull(streetNo, getStreetNo(), statement, "street_no", Types.INTEGER);
+        DatabaseHandler.checkIfNull(npa, getNpa(), statement, "npa", Types.INTEGER);
         statement.setString("country", getCountry());
     }
 
@@ -157,7 +158,7 @@ public class Client extends Person {
      * @param id the id of the Client to fetch
      * @return Client or null
      */
-    static public Client fetchById(int id) throws SQLException {
+    static public Client fetchById(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getClientByIdQuery, id, Client::fetchNext);
     }
 
@@ -235,7 +236,7 @@ public class Client extends Person {
      * @param id the id of the Client to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteClientQuery, id);
     }
 }

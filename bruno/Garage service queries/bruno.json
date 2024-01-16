@@ -1,5 +1,16 @@
 {
   "version": "1",
   "name": "Garage service queries",
-  "type": "collection"
+  "type": "collection",
+  "clientCertificates": {
+    "enabled": true,
+    "certs": [
+      {
+        "domain": "localhost",
+        "certFilePath": "/home/andre/dev/heig-vd/dai/5-http-infrastructure/ssl/cert.pem",
+        "keyFilePath": "/home/andre/dev/heig-vd/dai/5-http-infrastructure/ssl/key.pem",
+        "passphrase": ""
+      }
+    ]
+  }
 }
