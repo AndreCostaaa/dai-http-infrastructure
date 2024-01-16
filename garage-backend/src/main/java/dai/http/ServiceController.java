@@ -160,20 +160,19 @@ public class ServiceController {
         ctx.status(400);
     }
 
-    public void upload(Context ctx){
+    public void upload(Context ctx) {
         int serviceId = Integer.parseInt(ctx.pathParam("serviceId"));
-        ctx.uploadedFiles().forEach(uploadedFile ->
-                FileUtil.streamToFile(uploadedFile.content(),
-                        "services/media/" + serviceId + "/" + uploadedFile.filename()));
+        ctx.uploadedFiles().forEach(uploadedFile -> FileUtil.streamToFile(uploadedFile.content(),
+                "media/" + serviceId + "/" + uploadedFile.filename()));
     }
+
     public void download(Context ctx) throws IOException {
         int serviceId = Integer.parseInt(ctx.pathParam("serviceId"));
         String imageId = ctx.pathParam("imageName");
 
-        String imagePath = "services/media/" + serviceId + "/" + imageId;
+        String imagePath = "media/" + serviceId + "/" + imageId;
         File imageFile = new File(imagePath);
-        if(!imageFile.exists())
-        {
+        if (!imageFile.exists()) {
             ctx.status(404);
             return;
         }
@@ -182,21 +181,20 @@ public class ServiceController {
         ctx.header("Content-Length", String.valueOf(imageFile.length()));
         ctx.result(is);
     }
-    public void getImagesNames(Context ctx)
-    {
+
+    public void getImagesNames(Context ctx) {
         int serviceId = Integer.parseInt(ctx.pathParam("serviceId"));
 
-        String dirPath = "services/media/" + serviceId + "/";
+        String dirPath = "media/" + serviceId + "/";
         File directory = new File(dirPath);
 
-        if(!directory.exists())
-        {
+        if (!directory.exists()) {
             ctx.status(404);
             return;
         }
 
         String[] filNames = directory.list();
-        if(filNames == null){
+        if (filNames == null) {
             ctx.status(404);
             return;
         }
