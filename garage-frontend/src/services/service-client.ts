@@ -17,6 +17,7 @@ export interface Service {
   comments: string;
   hasPictures: boolean;
   state: ServiceState;
+  nextState: ServiceState;
   dateCreated: Date;
   dateCarArrival: Date | null;
   dateCarProcessing: Date | null;
