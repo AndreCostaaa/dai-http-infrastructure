@@ -31,7 +31,7 @@ public class EmployeeController {
     }
 
     public void fetchByPhoneNo(Context ctx) throws SQLException {
-        Integer phoneNo = Integer.parseInt(ctx.pathParam("phoneNo"));
+        String phoneNo = ctx.pathParam("phoneNo");
         Employee employee = Employee.fetchByPhoneNo(phoneNo);
 
         if (employee == null) {

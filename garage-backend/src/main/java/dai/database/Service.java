@@ -237,7 +237,7 @@ public record Service(Integer id,
      * @return ServiceDisplay or null
      */
     public static ServiceDisplay incrementState(int id) throws SQLException {
-        DatabaseHandler.executeIncrementStateStatement(incrementStateQuery, id);
+        DatabaseHandler.executeIncrementStateStatement(incrementStateQuery, id, Service::fetchNext);
         return fetchById(id);
     }
 
