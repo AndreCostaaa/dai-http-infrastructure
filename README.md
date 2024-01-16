@@ -1,10 +1,90 @@
 # dai-http-infrastructure
 
+André Costa, Amir Mouti
+
+# Introduction
+
+This project groups two major semester projects for BDR and DAI.
+
+This is mainly the reason you can see there are 3 contributors in the github page.
+
+The DAI part of the project was exclusively implemented by André Costa and Amir Mouti.
+
+Yanis Ouadahi only worked on the jdbc wrapper (database) interface
+
+## BDR
+
+For BDR the main goals were to create a database and interface with it
+
+## DAI
+
+For DAI the main goals can be found in the [original repo](https://github.com/HEIGVD-Course-DAI/dai-lab-http-infrastructure)
+
+---
+
+This readme documents the implementation that was done mainly for the DAI part of the project
+
+# Build/ Deploy
+
+## Setup Environnement
+
+First, create a self-signed certificate so we can enable TLS
+
+```bash
+mkdir ssl
+cd ssl
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=Vaud/L=Yverdon/O=HEIG-VD/OU=DAI/CN=localhost"
+cd ..
+```
+
+Secondly, setup your environnement variables
+
+```bash
+echo "POSTGRESQL_USERNAME=jdbc
+POSTGRESQL_PASSWORD=super_secret
+POSTGRESQL_DATABASE=garage
+POSTGRESQL_POSTGRES_PASSWORD=root
+JDBC_DBMS=postgresql
+JDBC_URL=database
+JDBC_DATABASE_NAME=garage
+JDBC_USER=jdbc
+JDBC_PASSWORD=super_secret
+JDBC_SCHEMA=garage" >> .env
+```
+
+Third: Launch and Build
+
+```bash
+docker compose up [-d]
+```
+
+For linux a setup script is available:
+
+```bash
+chmod +x setup
+./setup
+docker compose up [-d]
+```
+
+## Setup Database
+
+Scripts in [this folder](./db_scripts/) can be used to create and insert values to the database.
+
+### /!\ Database needs to be setup by user before any request is done to the backend /!\
+
+You can now see the website [here](https://localhost)
+
+Your browser will probably warn you that the connection is not safe, this is because the certificate is self-signed. You can ignore this error.
+
+The website:
+
+![](./media/frontend-demo.png)
+
 # Implementation
 
 ## Docker Compose
 
-### FrontEnd
+### Static FrontEnd
 
 1. We start by defining the container-name and the image-name
 2. For the building we can define a build directive, we set our context to the frontend folder and indicate the name of the dockerfile
@@ -15,6 +95,14 @@
 ![](media/compose-build.png)
 
 ![](media/result-compose.png)
+
+### Dynamic FrontEnd
+
+Please check the frontend documentation [here](./garage-frontend/README.md)
+
+### Rest API
+
+Please check the backend documentation [here](./garage-backend/README.md)
 
 ### Reverse Proxy
 
@@ -28,7 +116,7 @@ For this project we use Traefik as our reverse proxy
 4. We can also map one of the host ports to traefiks's 's port 8080 if we want to have access to traefik's dashboard
 5. At this point, the ports that were open for others services may be closed
 
-## Vertical Scaling and Load Balancing
+### Vertical Scaling and Load Balancing
 
 With traefik, this step is very easy. In the [docker compose file](compose.yml) we can setup the replicas directly using the replicas tag:
 
@@ -61,9 +149,9 @@ We can also check using the traefik's dashboard that we have the correct number 
 
 ![](media/traefik-scale.png)
 
-## Sticky Session
+### Sticky Session
 
-### Configuration
+#### Configuration
 
 Sticky session configuration can be done using labels
 
@@ -131,3 +219,72 @@ We can now connect using https.
 ![](media/https-connection.png)
 
 Note: The browser warns us because the certificate is self signed
+
+## Extra features DAI
+
+### 1. Docker stage builds
+
+Allows us to build and launch everything using docker. Also no need to have dependencies (maven, npm) installed
+
+```bash
+docker compose up
+```
+
+This is done by having a image that builds and another that runs the actual compiled code, for instance:
+
+For the backend, we use maven to package our code and then we use an openjdk image that runs this compiled code
+
+```Dockerfile
+FROM maven:3.9.6-eclipse-temurin-21 as builder
+
+WORKDIR /app
+COPY ./src ./src
+RUN rm -r ./src/test
+COPY ./pom.xml ./pom.xml
+
+RUN mvn clean package
+
+FROM openjdk:21-slim
+
+EXPOSE 5000
+
+WORKDIR /app
+
+COPY --from=builder /app/target/app.jar app.jar
+
+CMD ["java", "-jar","app.jar"]
+```
+
+The same thing is done in the frontend using npm and nginx respectively.
+
+```Dockerfile
+FROM node:21 AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+FROM nginx:1.25.3
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY ./nginx/nginx.conf /etc/nginx/conf.d/nginx.conf
+```
+
+### 2. A modern frontend that does much more than a simple GET request
+
+![](./media/frontend-demo.png)
+
+### 3. SMTP integration with backend that sends real emails to real people.
+
+Although outlook doesn't like us and mail goes to spam :(
+
+### 4. API is actually connected to a real database
