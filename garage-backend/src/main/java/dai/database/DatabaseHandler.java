@@ -123,17 +123,14 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T extends IEntity> T executeIncrementStateStatement(String stringQuery, Integer id,
-            ResultSetHandler.IResultSetHandler<T> iresultSetHandler)
+    static public void executeIncrementStateStatement(String stringQuery, Integer id)
             throws SQLException {
         stringQuery = addReturningToQuery(stringQuery);
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
+
             statement.setInt("id", id);
-            try(ResultSet resultSet = statement.executeQuery())
-            {
-                return iresultSetHandler.fetchNext(resultSet);
-            }
+            statement.executeQuery();
         }
     }
 
