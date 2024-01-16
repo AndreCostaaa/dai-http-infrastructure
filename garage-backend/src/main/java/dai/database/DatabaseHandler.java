@@ -113,11 +113,11 @@ public class DatabaseHandler {
         }
     }
 
-    static public <T extends IEntity> void executeIncrementStateStatement(String stringQuery, Integer id)
-            throws SQLException {
+    static public void executeIncrementStateStatement(String stringQuery, Integer id) throws SQLException {
         stringQuery = addReturningToQuery(stringQuery);
         try (NamedParameterStatement statement = new NamedParameterStatement(ConnectionHandler.getConnection(),
                 (stringQuery))) {
+
             statement.setInt("id", id);
             statement.executeQuery();
         }
