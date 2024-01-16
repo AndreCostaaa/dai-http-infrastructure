@@ -33,7 +33,7 @@ public record ServiceBill(Integer id,
     @Override
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         statement.setInt("id", id());
-        DatabaseHandler.checkIfNull(price, price(), statement, "price");
+        DatabaseHandler.checkIfNull(price, price(), statement, "price", Types.DOUBLE);
         statement.setBoolean("delivered", delivered());
         statement.setBoolean("paid", paid());
         DatabaseHandler.checkIfNull(discountPercentage, discountPercentage(), statement, "discount_percentage", Types.INTEGER);
