@@ -26,6 +26,7 @@ class CarPartTest extends GarageTest {
         for (CarPart carPart : carParts) {
             assertNotNull(carPart);
             assertInstanceOf(CarPart.class, carPart);
+            assertNotNull(carPart.id());
             assertTrue(carPart.id() > 0);
             assertTrue(carPart.buyPrice() >= 0);
             assertTrue(carPart.sellPrice() >= 0);

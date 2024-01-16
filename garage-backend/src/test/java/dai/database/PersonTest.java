@@ -25,6 +25,7 @@ class PersonTest extends GarageTest {
         for (Person person : persons) {
             assertNotNull(person);
             assertInstanceOf(Person.class, person);
+            assertNotNull(person.getId());
             assertTrue(person.getId() > 0);
         }
     }

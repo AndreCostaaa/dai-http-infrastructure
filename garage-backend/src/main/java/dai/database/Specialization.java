@@ -3,7 +3,7 @@ package dai.database;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public record Specialization(int id,
+public record Specialization(Integer id,
                              String name,
                              double hourlyRate) implements IEntity{
 
@@ -14,10 +14,10 @@ public record Specialization(int id,
             deleteSpecializationQuery = "DELETE FROM specialization WHERE id = :id;";
 
     private static Specialization fetchNext(ResultSet resultSet) throws SQLException{
-        if(!resultSet.next()){
+        if (!resultSet.next())
             return null;
-        }
-        int id = resultSet.getInt("id");
+
+        Integer id = resultSet.getObject("id", Integer.class);
         String name = resultSet.getString("name");
         double hourlyRate = resultSet.getDouble("hourly_rate");
 
@@ -44,7 +44,7 @@ public record Specialization(int id,
         return DatabaseHandler.fetchAll(getAllQuery, Specialization::fetchNext);
     }
 
-    static public Specialization fetchById(int id) throws SQLException {
+    static public Specialization fetchById(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getSpecializationByIdQuery, id, Specialization::fetchNext);
     }
 
@@ -56,7 +56,7 @@ public record Specialization(int id,
         return DatabaseHandler.executeUpdateStatement(updateSpecializationQuery, this, Specialization::fetchNext);
     }
 
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deleteSpecializationQuery, id);
     }
     

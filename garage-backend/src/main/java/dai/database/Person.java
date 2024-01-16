@@ -4,14 +4,14 @@ import java.sql.*;
 import java.util.Objects;
 
 public class Person implements IEntity {
-    private int id;
+    private Integer id;
     private String firstName, lastName, phoneNo;
 
     public Person(){
 
     }
 
-    public Person(int id,
+    public Person(Integer id,
             String firstName,
             String lastName,
             String phoneNo) {
@@ -21,7 +21,7 @@ public class Person implements IEntity {
         this.phoneNo = phoneNo;
     }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(Integer id) { this.id = id; }
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
@@ -35,7 +35,7 @@ public class Person implements IEntity {
         this.lastName = lastName;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -55,7 +55,7 @@ public class Person implements IEntity {
         if (this == object)
             return true;
         if (object instanceof Person otherPerson) {
-            return getId() == otherPerson.getId()
+            return getId().equals(otherPerson.getId())
                     && getFirstName().equals(otherPerson.getFirstName())
                     && getLastName().equals(otherPerson.getLastName())
                     && getPhoneNo().equals(otherPerson.getPhoneNo());
@@ -81,7 +81,7 @@ public class Person implements IEntity {
         if (!resultSet.next())
             return null;
 
-        int id = resultSet.getInt("id");
+        Integer id = resultSet.getObject("id", Integer.class);
         String firstName = resultSet.getString("fname");
         String lastName = resultSet.getString("lname");
         String phoneNo = resultSet.getString("phone_no");
@@ -119,7 +119,7 @@ public class Person implements IEntity {
      * @param id the id of the Car to fetch
      * @return Car or null
      */
-    static public Person fetchById(int id) throws SQLException {
+    static public Person fetchById(Integer id) throws SQLException {
         return DatabaseHandler.fetchById(getPersonByIdQuery, id, Person::fetchNext);
     }
 
@@ -147,7 +147,7 @@ public class Person implements IEntity {
      * @param id the id of the Person to delete
      * @return true if successful
      */
-    static public boolean delete(int id) throws SQLException {
+    static public boolean delete(Integer id) throws SQLException {
         return DatabaseHandler.deleteById(deletePersonQuery, id);
     }
 }

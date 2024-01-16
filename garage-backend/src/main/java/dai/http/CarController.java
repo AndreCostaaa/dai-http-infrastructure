@@ -1,6 +1,7 @@
 package dai.http;
 
 import dai.database.Car;
+import dai.database.Service;
 import io.javalin.http.Context;
 import java.sql.SQLException;
 
@@ -18,7 +19,7 @@ public class CarController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("carId"));
+        Integer id = Integer.parseInt(ctx.pathParam("carId"));
         Car car = Car.fetchOne(id);
 
         if (car == null) {
@@ -29,13 +30,27 @@ public class CarController {
         ctx.json(car);
     }
 
+    public void fetchByOwnerId(Context ctx) throws SQLException {
+        Integer ownerId = Integer.parseInt(ctx.pathParam("ownerId"));
+        Car[] cars = Car.fetchByOwnerId(ownerId);
+
+        if (cars.length == 0) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(cars);
+    }
+
     public void save(Context ctx) throws SQLException {
         Car car = ctx.bodyAsClass(Car.class);
+
         car = car.save();
         if (car == null) {
             ctx.status(400);
             return;
         }
+
         ctx.json(car);
     }
 
@@ -46,11 +61,12 @@ public class CarController {
             ctx.status(400);
             return;
         }
+
         ctx.json(car);
     }
 
     public void delete(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("carId"));
+        Integer id = Integer.parseInt(ctx.pathParam("carId"));
 
         if (Car.delete(id)) {
             ctx.status(204);

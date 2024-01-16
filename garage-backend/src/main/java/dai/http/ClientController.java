@@ -19,7 +19,7 @@ public class ClientController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("clientId"));
+        Integer id = Integer.parseInt(ctx.pathParam("clientId"));
         Client client = Client.fetchById(id);
 
         if (client == null) {
@@ -44,20 +44,24 @@ public class ClientController {
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
         client = client.saveNotKnowingId();
+
         if (client == null) {
             ctx.status(400);
             return;
         }
+
         ctx.json(client);
     }
 
     public void saveKnowingId(Context ctx) throws SQLException {
         Client client = ctx.bodyAsClass(Client.class);
         client = client.saveKnowingId();
+
         if (client == null) {
             ctx.status(400);
             return;
         }
+
         ctx.json(client);
     }
 
@@ -69,16 +73,18 @@ public class ClientController {
             ctx.status(400);
             return;
         }
+
         ctx.json(client);
     }
 
     public void delete(Context ctx) throws SQLException {
-        int clientId = Integer.parseInt(ctx.pathParam("clientId"));
+        Integer clientId = Integer.parseInt(ctx.pathParam("clientId"));
 
         if (!Client.delete(clientId)) {
             ctx.status(400);
             return;
         }
+
         ctx.status(204);
     }
 }

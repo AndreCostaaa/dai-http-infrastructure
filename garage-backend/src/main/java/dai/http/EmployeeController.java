@@ -6,6 +6,7 @@ import io.javalin.http.Context;
 import java.sql.SQLException;
 
 public class EmployeeController {
+
     public void fetchAll(Context ctx) throws SQLException {
         Employee[] employees = Employee.fetchAll();
 
@@ -18,8 +19,20 @@ public class EmployeeController {
     }
 
     public void fetchOne(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("employeeId"));
+        Integer id = Integer.parseInt(ctx.pathParam("employeeId"));
         Employee employee = Employee.fetchById(id);
+
+        if (employee == null) {
+            ctx.status(404);
+            return;
+        }
+
+        ctx.json(employee);
+    }
+
+    public void fetchByPhoneNo(Context ctx) throws SQLException {
+        Integer phoneNo = Integer.parseInt(ctx.pathParam("phoneNo"));
+        Employee employee = Employee.fetchByPhoneNo(phoneNo);
 
         if (employee == null) {
             ctx.status(404);
@@ -43,23 +56,26 @@ public class EmployeeController {
     public void saveNotKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
         employee = employee.saveNotKnowingId();
+
         if (employee == null) {
             ctx.status(400);
             return;
         }
+
         ctx.json(employee);
     }
 
     public void saveKnowingId(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
         employee = employee.saveKnowingId();
+
         if (employee == null) {
             ctx.status(400);
             return;
         }
+
         ctx.json(employee);
     }
-
 
     public void update(Context ctx) throws SQLException {
         Employee employee = ctx.bodyAsClass(Employee.class);
@@ -68,11 +84,12 @@ public class EmployeeController {
             ctx.status(400);
             return;
         }
+
         ctx.json(employee);
     }
 
     public void delete(Context ctx) throws SQLException {
-        int employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
+        Integer employeeId = Integer.parseInt(ctx.pathParam("employeeId"));
 
         if (Employee.delete(employeeId)) {
             ctx.status(204);

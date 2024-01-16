@@ -81,7 +81,7 @@ public class ServiceController {
     }
 
     public void fetchServiceByState(Context ctx) throws SQLException {
-        int stateId = Integer.parseInt(ctx.pathParam("stateId"));
+        Integer stateId = Integer.parseInt(ctx.pathParam("stateId"));
 
         if (stateId > 4 || stateId < 0) {
             ctx.status(400);
@@ -139,11 +139,12 @@ public class ServiceController {
             ctx.status(400);
             return;
         }
+
         ctx.json(service);
     }
 
     public void delete(Context ctx) throws SQLException {
-        int id = Integer.parseInt(ctx.pathParam("serviceId"));
+        Integer id = Integer.parseInt(ctx.pathParam("serviceId"));
 
         if (Service.delete(id)) {
             ctx.status(204);
