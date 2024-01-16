@@ -5,7 +5,7 @@ const headers = {
 
 export function apiDomain() {
   const { hostname } = window.location;
-  return `https://api.${hostname}/api`;
+  return `https://${hostname}/api`;
 }
 
 export default axios.create({
