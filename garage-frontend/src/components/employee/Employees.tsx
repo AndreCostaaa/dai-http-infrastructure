@@ -12,10 +12,10 @@ import { Employee } from "../../services/employee-service";
 import EmployeeRow from "./EmployeeRow";
 interface Props {
   employeeList: Employee[];
-  onClick?: (employee: Employee) => void;
+  onSelect?: (employee: Employee) => void;
 }
 
-const Employees = ({ employeeList, onClick }: Props) => {
+const Employees = ({ employeeList, onSelect }: Props) => {
   const headers = (onClick: boolean) => {
     let headers = [
       "id",
@@ -35,7 +35,7 @@ const Employees = ({ employeeList, onClick }: Props) => {
       <Table>
         <Thead>
           <Tr>
-            {headers(Boolean(onClick)).map((key, i) => (
+            {headers(Boolean(onSelect)).map((key, i) => (
               <Th key={i}>{key}</Th>
             ))}
           </Tr>
@@ -44,9 +44,9 @@ const Employees = ({ employeeList, onClick }: Props) => {
           {employeeList.map((employee, i) => (
             <Tr>
               <EmployeeRow key={i} employee={employee} />
-              {onClick && (
+              {onSelect && (
                 <Td>
-                  <Button onClick={() => onClick(employee)}>
+                  <Button onClick={() => onSelect(employee)}>
                     Selectionner
                   </Button>
                 </Td>
