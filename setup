@@ -1,0 +1,16 @@
+#!/bin/bash
+
+mkdir ssl
+cd ssl
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 3650 -nodes -subj "/C=XX/ST=Vaud/L=Yverdon/O=HEIG-VD/OU=DAI/CN=localhost"
+cd ..
+echo "POSTGRESQL_USERNAME=jdbc
+POSTGRESQL_PASSWORD=super_secret
+POSTGRESQL_DATABASE=garage
+POSTGRESQL_POSTGRES_PASSWORD=root
+JDBC_DBMS=postgresql
+JDBC_URL=database
+JDBC_DATABASE_NAME=garage
+JDBC_USER=jdbc
+JDBC_PASSWORD=super_secret
+JDBC_SCHEMA=garage" >> .env
