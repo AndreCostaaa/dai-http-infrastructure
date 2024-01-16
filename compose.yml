@@ -33,7 +33,7 @@ services:
     volumes:
       - ./backend-media:/app/media
     labels:
-      - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.backend.rule=PathPrefix(`/api/`)"
       - "traefik.http.services.backend-service.loadBalancer.sticky.cookie=true"
       - "traefik.http.services.backend-service.loadBalancer.sticky.cookie.name=api_session"
       - "traefik.http.routers.backend.tls=true"
