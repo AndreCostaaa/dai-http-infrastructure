@@ -19,13 +19,6 @@ public class DatabaseHandler {
             statement.setDouble(objectName, (Double) objectValue);
     }
 
-    static protected void checkIfNull(Double object, Double objectValue, NamedParameterStatement statement, String objectName) throws SQLException {
-        if (object == null || objectValue == 0.0)
-            statement.setNull(objectName, Types.DOUBLE);
-        else
-            statement.setDouble(objectName, objectValue);
-    }
-
     static private String addReturningToQuery(String query) {
         return query.replace(";", " RETURNING *;");
     }
