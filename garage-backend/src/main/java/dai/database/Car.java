@@ -37,7 +37,7 @@ public record Car(Integer id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        DatabaseHandler.checkIfNull(ownerId, ownerId(), statement, "owner_id", Types.DOUBLE);
+        DatabaseHandler.setNullOrValue(ownerId, ownerId(), statement, "owner_id", Types.DOUBLE);
         statement.setString("chassis_no", chassisNo());
         statement.setString("rec_type", recType());
         statement.setString("brand", brand());

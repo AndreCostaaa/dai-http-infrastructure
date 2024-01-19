@@ -36,7 +36,7 @@ public record ServiceBill(Integer id,
         statement.setDouble("price", price());
         statement.setBoolean("delivered", delivered());
         statement.setBoolean("paid", paid());
-        DatabaseHandler.checkIfNull(discountPercentage, discountPercentage(), statement, "discount_percentage", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(discountPercentage, discountPercentage(), statement, "discount_percentage", Types.INTEGER);
     }
 
     static public ServiceBill[] fetchAll() throws SQLException {

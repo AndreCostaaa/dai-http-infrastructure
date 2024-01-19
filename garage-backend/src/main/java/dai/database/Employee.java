@@ -1,6 +1,5 @@
 package dai.database;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 
 public class Employee extends Person {
@@ -65,8 +64,8 @@ public class Employee extends Person {
     }
 
     public void completeCommonStatement(NamedParameterStatement statement) throws SQLException {
-        DatabaseHandler.checkIfNull(roleId, getRoleId(), statement, "role_id", Types.INTEGER);
-        DatabaseHandler.checkIfNull(specializationId, getSpecializationId(), statement, "specialization_id",
+        DatabaseHandler.setNullOrValue(roleId, getRoleId(), statement, "role_id", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(specializationId, getSpecializationId(), statement, "specialization_id",
                 Types.INTEGER);
     }
 

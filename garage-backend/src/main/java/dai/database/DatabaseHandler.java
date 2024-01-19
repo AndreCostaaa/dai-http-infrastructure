@@ -8,12 +8,27 @@ public class DatabaseHandler {
         void completeStatement(T element, NamedParameterStatement statement) throws SQLException;
     }
 
-    static protected void checkIfNull(Integer object, Integer objectValue, NamedParameterStatement statement, String objectName,
-            int sqlType) throws SQLException {
+    static protected void setNullOrValue(Integer object, Integer objectValue, NamedParameterStatement statement, String objectName,
+                                         int sqlType) throws SQLException {
         if (object == null || objectValue.equals(0))
             statement.setNull(objectName, sqlType);
         else
             statement.setInt(objectName, objectValue);
+    }
+
+    static protected Date[] getTimestampDates(ResultSet resultSet) throws SQLException {
+        Date[] dates = new Date[5];
+        String[] keys = { "date_created", "date_car_arrival", "date_car_processing", "date_car_done", "date_car_left" };
+
+        for (int i = 0; i < dates.length; ++i) {
+            Timestamp ts = resultSet.getTimestamp(keys[i]);
+            if (ts == null) {
+                continue;
+            }
+            dates[i] = new Date(ts.getTime());
+        }
+
+        return dates;
     }
 
     static private String addReturningToQuery(String query) {

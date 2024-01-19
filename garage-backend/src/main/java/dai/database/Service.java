@@ -1,6 +1,5 @@
 package dai.database;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 
 public record Service(Integer id,
@@ -84,16 +83,8 @@ public record Service(Integer id,
         boolean hasPictures = resultSet.getBoolean("has_pictures");
         Integer stateId = resultSet.getObject("state_id", Integer.class);
 
-        Date[] dates = new Date[5];
-        String[] keys = { "date_created", "date_car_arrival", "date_car_processing", "date_car_done", "date_car_left" };
+        Date[] dates = DatabaseHandler.getTimestampDates(resultSet);
 
-        for (int i = 0; i < dates.length; ++i) {
-            Timestamp ts = resultSet.getTimestamp(keys[i]);
-            if (ts == null) {
-                continue;
-            }
-            dates[i] = new Date(ts.getTime());
-        }
         return new Service(id,
                 mechanicId,
                 clientId,
@@ -111,16 +102,16 @@ public record Service(Integer id,
 
     @Override
     public void completeCreateStatement(NamedParameterStatement statement) throws SQLException {
-        DatabaseHandler.checkIfNull(mechanicId, mechanicId(), statement, "mechanic_id", Types.INTEGER);
-        DatabaseHandler.checkIfNull(clientId, clientId(), statement, "client_id", Types.INTEGER);
-        DatabaseHandler.checkIfNull(carId, carId(), statement, "car_id", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(mechanicId, mechanicId(), statement, "mechanic_id", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(clientId, clientId(), statement, "client_id", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(carId, carId(), statement, "car_id", Types.INTEGER);
     }
 
     @Override
     public void completeUpdateStatement(NamedParameterStatement statement) throws SQLException {
         statement.setInt("id", id());
-        DatabaseHandler.checkIfNull(mechanicId, mechanicId(), statement, "mechanic_id", Types.INTEGER);
-        DatabaseHandler.checkIfNull(hoursWorked, hoursWorked(), statement, "hours_worked", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(mechanicId, mechanicId(), statement, "mechanic_id", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(hoursWorked, hoursWorked(), statement, "hours_worked", Types.INTEGER);
         statement.setString("comments", comments());
         statement.setBoolean("has_pictures", hasPictures());
     }

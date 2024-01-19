@@ -123,8 +123,8 @@ public class Client extends Person {
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
         statement.setString("email", getEmail());
         statement.setString("street", getStreet());
-        DatabaseHandler.checkIfNull(streetNo, getStreetNo(), statement, "street_no", Types.INTEGER);
-        DatabaseHandler.checkIfNull(npa, getNpa(), statement, "npa", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(streetNo, getStreetNo(), statement, "street_no", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(npa, getNpa(), statement, "npa", Types.INTEGER);
         statement.setString("country", getCountry());
     }
 

@@ -1,6 +1,5 @@
 package dai.database;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.Objects;
 
@@ -55,7 +54,7 @@ public record CarPart(Integer id,
     }
 
     private void completeStatementCommon(NamedParameterStatement statement) throws SQLException {
-        DatabaseHandler.checkIfNull(serviceId, serviceId(), statement, "service_id", Types.INTEGER);
+        DatabaseHandler.setNullOrValue(serviceId, serviceId(), statement, "service_id", Types.INTEGER);
         statement.setString("supplier", supplier());
         statement.setString("supplier_ref", supplierRef());
         statement.setString("name", name());

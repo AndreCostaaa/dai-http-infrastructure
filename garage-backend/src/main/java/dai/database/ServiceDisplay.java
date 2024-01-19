@@ -3,6 +3,7 @@ package dai.database;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public record ServiceDisplay(int id,
                       Employee mechanic,
@@ -65,12 +66,7 @@ public record ServiceDisplay(int id,
 
         ServiceState state = new ServiceState(stateId, title, description);
 
-        Date dateCreated = resultSet.getDate("date_created");
-        Date dateCarArrival = resultSet.getDate("date_car_arrival");
-        Date dateCarProcessing = resultSet.getDate("date_car_processing");
-        Date dateCarDone = resultSet.getDate("date_car_done");
-        Date dateCarLeft = resultSet.getDate("date_car_left");
-
+        Date[] dates = DatabaseHandler.getTimestampDates(resultSet);
         ServiceState nextState = ServiceState.fetchById(stateId + 1);
 
         return new ServiceDisplay(id,
@@ -81,11 +77,11 @@ public record ServiceDisplay(int id,
                 comments,
                 hasPictures,
                 state,
-                dateCreated,
-                dateCarArrival,
-                dateCarProcessing,
-                dateCarDone,
-                dateCarLeft,
+                dates[0],
+                dates[1],
+                dates[2],
+                dates[3],
+                dates[4],
                 nextState);
     }
 }
