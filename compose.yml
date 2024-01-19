@@ -1,16 +1,10 @@
-<<<<<<< HEAD
-=======
 version: "3.8"
->>>>>>> origin/feat-http
 services:
   database:
     image: "bitnami/postgresql:13"
     env_file:
       - .env
     ports:
-<<<<<<< HEAD
-      - 5434:5432
-=======
       - 127.0.0.1:5434:5432
   backend:
     image: garage/back-end
@@ -28,5 +22,3 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 5111:80
-
->>>>>>> origin/feat-http
